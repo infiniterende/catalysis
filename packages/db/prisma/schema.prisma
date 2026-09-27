@@ -1,0 +1,448 @@
+// Catalysis data model. Dates of the form YYYY-MM-DD and times HH:mm are kept
+// as text: they are calendar values in the user's own time zone, not instants.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id                String   @id @default(cuid())
+  email             String   @unique
+  /// Null for seeded community members, who cannot sign in.
+  passwordHash      String?
+  name              String
+  handle            String   @unique
+  parish            String   @default("")
+  portraitUrl       String?
+  quoteText         String?
+  quoteAttribution  String?
+  booksRead         Int      @default(0)
+  /// Longest streak reached before logs were kept.
+  bestStreak        Int      @default(0)
+  /// Prayers logged before logs were kept.
+  prayerCountOffset Int      @default(0)
+  readingBook       String   @default("JHN")
+  readingChapter    Int      @default(1)
+  readerScale       Float    @default(1)
+  readerSpacing     Float    @default(1)
+  /// `member` or `moderator`. Moderators decide which TikTok videos appear in Reels.
+  role              String   @default("member")
+  createdAt         DateTime @default(now())
+
+  sessions      Session[]
+  milestones    Milestone[]
+  prayers       Prayer[]
+  prayerLogs    PrayerLog[]
+  highlights    Highlight[]
+  notes         Note[]
+  journal       JournalEntry[]
+  groupsOwned   Group[]            @relation("groupOwner")
+  uploads       Upload[]
+  bookmarks     Bookmark[]
+  memberships   Membership[]
+  posts         Post[]
+  postPrayers   PostPrayer[]
+  comments      Comment[]
+  reports       Report[]
+  blocks        Block[]            @relation("blocker")
+  blockedBy     Block[]            @relation("blocked")
+  following     Follow[]           @relation("follower")
+  followers     Follow[]           @relation("followed")
+  intentions    IntentionPrayer[]
+  rsvps         Rsvp[]
+  reelLikes     ReelLike[]
+  reelSaves     ReelSave[]
+  reminders     Reminder[]
+  conversations Conversation[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  /// SHA-256 of the session token; the token itself is never stored.
+  tokenHash String   @unique
+  userId    String
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model Milestone {
+  id       String  @id @default(cuid())
+  userId   String
+  title    String
+  /// Short date label once achieved, e.g. "Aug 26".
+  achieved String?
+  current  Int?
+  total    Int?
+  position Int     @default(0)
+  user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Prayer {
+  id              String      @id
+  userId          String
+  title           String
+  shortTitle      String?
+  scheduledTime   String
+  guidedContentId String?
+  position        Int         @default(0)
+  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  logs            PrayerLog[]
+
+  @@index([userId])
+}
+
+model PrayerLog {
+  id          String   @id @default(cuid())
+  userId      String
+  prayerId    String
+  date        String
+  completedAt DateTime
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  prayer      Prayer   @relation(fields: [prayerId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, prayerId, date])
+  @@index([userId, date])
+}
+
+model Highlight {
+  id         String   @id
+  userId     String
+  bookId     String
+  chapter    Int
+  verseStart Int
+  verseEnd   Int
+  text       String?
+  color      String?
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, bookId, chapter])
+}
+
+model Note {
+  id         String   @id
+  userId     String
+  bookId     String
+  chapter    Int
+  verseStart Int
+  verseEnd   Int
+  text       String
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, bookId, chapter, verseStart])
+}
+
+model Bookmark {
+  userId  String
+  bookId  String
+  chapter Int
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, bookId, chapter])
+}
+
+model Group {
+  id          String       @id
+  name        String
+  shortName   String
+  description String?
+  /// The member who started the group. Null for groups that came with the app.
+  ownerId     String?
+  createdAt   DateTime     @default(now())
+  owner       User?        @relation("groupOwner", fields: [ownerId], references: [id], onDelete: SetNull)
+  members     Membership[]
+  posts       Post[]
+  events      Event[]
+}
+
+model Membership {
+  userId  String
+  groupId String
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  group   Group  @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@id([userId, groupId])
+}
+
+model Post {
+  id         String       @id
+  /// reflection | request | photo | reel
+  type       String
+  authorId   String
+  groupId    String?
+  body       String?
+  pullQuote  String?
+  mediaKind  String?
+  mediaAsset String?
+  mediaUrl   String?
+  mediaFocus String?
+  /// Attached verse: { bookId, chapter, verse, text, label }
+  verse      Json?
+  /// everyone | parish | followers
+  audience   String       @default("everyone")
+  createdAt  DateTime     @default(now())
+  /// Counts carried by seeded content, on top of what is recorded in the tables.
+  basePrayed Int          @default(0)
+  baseReply  Int          @default(0)
+  /// Set when moderation removes the post, or its author does.
+  removedAt  DateTime?
+  author     User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  group      Group?       @relation(fields: [groupId], references: [id], onDelete: SetNull)
+  prayers    PostPrayer[]
+  comments   Comment[]
+  reports    Report[]
+
+  @@index([createdAt])
+  @@index([authorId])
+}
+
+/// "I prayed" on a post.
+model PostPrayer {
+  postId    String
+  userId    String
+  createdAt DateTime @default(now())
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([postId, userId])
+}
+
+model Comment {
+  id        String   @id
+  postId    String
+  authorId  String
+  body      String
+  createdAt DateTime @default(now())
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([postId, createdAt])
+}
+
+/// The moderation queue. A report also hides the content from its reporter.
+model Report {
+  id         String    @id @default(cuid())
+  reporterId String
+  postId     String?
+  /// A seeded reel's id, or the post id of a member's reel.
+  reelId     String?
+  createdAt  DateTime  @default(now())
+  resolvedAt DateTime?
+  reporter   User      @relation(fields: [reporterId], references: [id], onDelete: Cascade)
+  post       Post?     @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([reporterId, postId])
+  @@unique([reporterId, reelId])
+  @@index([resolvedAt])
+}
+
+model Block {
+  blockerId String
+  blockedId String
+  createdAt DateTime @default(now())
+  blocker   User     @relation("blocker", fields: [blockerId], references: [id], onDelete: Cascade)
+  blocked   User     @relation("blocked", fields: [blockedId], references: [id], onDelete: Cascade)
+
+  @@id([blockerId, blockedId])
+}
+
+model Follow {
+  followerId String
+  followedId String
+  createdAt  DateTime @default(now())
+  follower   User     @relation("follower", fields: [followerId], references: [id], onDelete: Cascade)
+  followed   User     @relation("followed", fields: [followedId], references: [id], onDelete: Cascade)
+
+  @@id([followerId, followedId])
+}
+
+model Intention {
+  id          String            @id
+  title       String
+  basePraying Int               @default(0)
+  position    Int               @default(0)
+  prayers     IntentionPrayer[]
+}
+
+model IntentionPrayer {
+  intentionId String
+  userId      String
+  intention   Intention @relation(fields: [intentionId], references: [id], onDelete: Cascade)
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([intentionId, userId])
+}
+
+model Event {
+  id         String  @id
+  title      String
+  shortTitle String?
+  date       String
+  time       String
+  location   String
+  groupId    String?
+  baseGoing  Int     @default(0)
+  note       String?
+  tone       String?
+  group      Group?  @relation(fields: [groupId], references: [id], onDelete: SetNull)
+  rsvps      Rsvp[]
+
+  @@index([date])
+}
+
+model Rsvp {
+  eventId   String
+  userId    String
+  createdAt DateTime @default(now())
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([eventId, userId])
+}
+
+/// `reelId` is a seeded reel's id, or the post id of a member's reel.
+model ReelLike {
+  reelId String
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([reelId, userId])
+}
+
+model ReelSave {
+  reelId String
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([reelId, userId])
+}
+
+/// Things a member asked to be reminded of, e.g. tonight's Rosary.
+model Reminder {
+  userId String
+  key    String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, key])
+}
+
+model Conversation {
+  id        String    @id
+  userId    String
+  title     String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages  Message[]
+
+  @@index([userId, updatedAt])
+}
+
+model Message {
+  id             String       @id
+  conversationId String
+  /// user | assistant
+  role           String
+  content        String
+  /// [{ type, reference, description }]
+  citations      Json         @default("[]")
+  followUps      Json         @default("[]")
+  demo           Boolean      @default(false)
+  saved          Boolean      @default(false)
+  /// up | down
+  feedback       String?
+  createdAt      DateTime     @default(now())
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId, createdAt])
+}
+
+/// A private entry in a member's prayer journal. Never shown to anyone else.
+model JournalEntry {
+  id         String   @id
+  userId     String
+  /// YYYY-MM-DD, the day the entry belongs to.
+  date       String
+  /// free | gratitude | petition | examen | lectio
+  kind       String
+  title      String?
+  body       String
+  /// The prayer-book prayer the entry followed.
+  prayerId   String?
+  scripture  String?
+  /// YYYY-MM-DD, for a petition marked answered.
+  answeredOn String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, date])
+}
+
+/// A TikTok video put forward for Reels. The video stays on TikTok and plays in
+/// TikTok's own player; only what its oEmbed record says about it is kept here.
+model TikTokVideo {
+  /// TikTok's id for the video.
+  id            String    @id
+  url           String
+  /// Creator's handle, without the `@`.
+  handle        String
+  authorName    String
+  caption       String
+  topic         String    @default("Faith")
+  /// pending | approved | rejected
+  status        String    @default("pending")
+  /// What the screening made of the caption, for the moderator.
+  screening     String?
+  submittedById String?
+  reviewedById  String?
+  createdAt     DateTime  @default(now())
+  reviewedAt    DateTime?
+
+  @@index([status, reviewedAt])
+}
+
+/// Creators whose videos go into Reels without waiting for a moderator,
+/// provided the caption passes screening.
+model TikTokCreator {
+  /// Handle, without the `@`, in lower case.
+  handle    String   @id
+  name      String
+  addedById String?
+  createdAt DateTime @default(now())
+}
+
+/// A photo a member added: a portrait, or the picture on a post. Kept in the
+/// database so that other members can see it. Videos are not kept here.
+model Upload {
+  id          String   @id @default(cuid())
+  userId      String
+  contentType String
+  size        Int
+  bytes       Bytes
+  createdAt   DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+/// A counter with a time limit, for allowances that must hold across servers,
+/// such as the questions a visitor trying the demo may ask Lumen in a day.
+/// The key never holds an address itself, only a hash of one.
+model Allowance {
+  key     String   @id
+  count   Int      @default(0)
+  resetAt DateTime
+}

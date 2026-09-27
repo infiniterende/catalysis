@@ -1,0 +1,34 @@
+{
+  "name": "@catalysis/db",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "generate": "prisma generate",
+    "migrate": "prisma migrate deploy",
+    "migrate:new": "prisma migrate dev --create-only",
+    "studio": "prisma studio",
+    "postinstall": "prisma generate",
+    "seed": "node --experimental-strip-types src/seed.ts",
+    "moderator": "node --experimental-strip-types src/moderator.ts"
+  },
+  "dependencies": {
+    "@catalysis/api": "workspace:*",
+    "@prisma/adapter-pg": "7.10.0",
+    "@prisma/client": "7.10.0",
+    "pg": "^8.23.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.3",
+    "@types/pg": "^8.23.1",
+    "dotenv": "^18.0.4",
+    "prisma": "7.10.0",
+    "typescript": "^7.0.2"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "@catalysis/bible-nabre",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "New American Bible, Revised Edition — text imported by scripts/import-nabre.mjs. Copyrighted; see README.",
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": { "types": "./index.d.ts", "default": "./index.js" },
+    "./books/*.json": "./books/*.json"
+  },
+  "sideEffects": false
+}

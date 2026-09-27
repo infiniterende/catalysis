@@ -1,0 +1,78 @@
+{
+  "expo": {
+    "name": "Catalysis",
+    "slug": "catalysis",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "catalysis",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "icon": "./assets/expo.icon",
+      "bundleIdentifier": "app.catalysis.mobile",
+      "supportsTablet": false
+    },
+    "android": {
+      "package": "app.catalysis.mobile",
+      "adaptiveIcon": {
+        "backgroundColor": "#1B1F3B",
+        "foregroundImage": "./assets/images/android-icon-foreground.png",
+        "backgroundImage": "./assets/images/android-icon-background.png",
+        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#1B1F3B",
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 76
+        }
+      ],
+      "expo-video",
+      "expo-sharing",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Catalysis uses the camera so you can take photos and record reels to share.",
+          "microphonePermission": "Catalysis uses the microphone to record sound for your reels.",
+          "recordAudioAndroid": true,
+          "barcodeScannerEnabled": false
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Catalysis opens your photo library so you can choose a photo or video to share.",
+          "cameraPermission": "Catalysis uses the camera so you can take photos and record reels to share.",
+          "microphonePermission": "Catalysis uses the microphone to record sound for your reels."
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "color": "#F2553A"
+        }
+      ],
+      [
+        "expo-calendar",
+        {
+          "writeOnlyAccess": true,
+          "writeOnlyCalendarPermission": "Catalysis adds the events you choose to your calendar.",
+          "remindersPermission": false
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    }
+  }
+}

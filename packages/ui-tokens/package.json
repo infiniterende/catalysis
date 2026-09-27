@@ -1,0 +1,21 @@
+{
+  "name": "@catalysis/ui-tokens",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./tokens.css": "./tokens.css",
+    "./genz.css": "./genz.css"
+  },
+  "scripts": {
+    "build:css": "node --experimental-strip-types scripts/build-css.ts",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.9.0"
+  }
+}

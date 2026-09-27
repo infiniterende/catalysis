@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "web",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "@catalysis/web", "exec", "next", "dev", "--port", "3100"],
+      "port": 3100
+    },
+    {
+      "name": "mobile-web",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "@catalysis/mobile", "exec", "expo", "start", "--web", "--port", "8090"],
+      "port": 8090
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+
+# Expo / React Native resolve best with a flat node_modules layout.
+nodeLinker: hoisted
+
+allowBuilds:
+  sharp: true
+  unrs-resolver: true
+  esbuild: true
+  '@prisma/engines': true
+  prisma: true

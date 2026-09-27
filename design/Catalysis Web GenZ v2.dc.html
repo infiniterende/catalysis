@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+  body { margin:0; background:#DCDCE0; }
+  * { box-sizing:border-box; }
+  a { color:var(--ink,#1B1F3B); } a:hover { color:var(--a1,#F2553A); }
+  [data-theme="light"] { --bg:#FFFFFF; --card:#FFFFFF; --inset:#F6F3F2; --line:#EFE9E7; --ink:#1B1F3B; --muted:#55586E; --subtle:#8A8CA0; --faint:#C6C7D2; --solid:#1B1F3B; --btn:#1B1F3B; --btnText:#FFFFFF; --onA:#1B1F3B; --onAm:#3A3D55; --logoBg:#1B1F3B; --logoIc:#F2553A; --mqBg:#1B1F3B; --mqText:#F4F4F6; --a1:#F2553A; --a2:#FFC857; --a3:#DCE1F5; --a4:#FFE1D6; --a5:#FFCFC2; --a6:#FFE9E1; }
+  [data-theme="dark"] { --bg:#0C0C0F; --card:#16161B; --inset:#1F1F26; --line:#2A2A32; --ink:#FFFFFF; --muted:#A0A0AA; --subtle:#7C7C87; --faint:#4A4A52; --solid:#22222A; --btn:#C6FF3D; --btnText:#0C0C0F; --onA:#0C0C0F; --onAm:#2A2A30; --logoBg:#C6FF3D; --logoIc:#0C0C0F; --mqBg:#C6FF3D; --mqText:#0C0C0F; --mqStar:#0C0C0F; --a1:#FF8CC6; --a2:#C6FF3D; --a3:#F2F2F5; --a4:#FF8CC6; --a5:#FFB8DC; --a6:#FFD6EA; }
+  .bq { font-family:'Outfit',sans-serif; }
+  .is { font-family:'Outfit',sans-serif; font-style:normal; }
+  .gs { font-family:'DM Sans',sans-serif; }
+  .nr { font-family:'Newsreader',serif; }
+  .mn { font-family:'DM Sans',sans-serif; font-weight:600; text-transform:uppercase; letter-spacing:.08em; font-size:11px; }
+  @keyframes cx-marquee { from { transform:translateX(0); } to { transform:translateX(-50%); } }
+  .ic { display:inline-flex; }
+  .ic svg { width:1em; height:1em; stroke-width:2; }
+  .frame-label { font-family:'Geist',sans-serif; cursor:grab; margin-bottom:13px; display:flex; align-items:baseline; gap:9px; }
+  .frame-label b { font-weight:700; font-size:14px; color:#121212; }
+  .frame-label span { font-size:12px; color:#6B6B72; }
+</style>
+</helmet>
+<div data-theme="{{ theme }}">
+
+<!-- ===== 01 · LANDING ===== -->
+<div style="position:absolute; left:80px; top:120px; width:1320px;">
+  <div class="frame-label" data-drags-parent="1"><b>Home / Landing</b><span>web · Gen Z direction</span></div>
+  <div style="width:1320px; background:var(--bg); border-radius:20px; overflow:hidden; box-shadow:0 10px 40px rgba(0,0,0,.10);">
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:22px 32px;">
+      <div style="display:flex; align-items:center; gap:10px;"><div style="width:36px; height:36px; border-radius:11px; background:var(--logoBg); display:flex; align-items:center; justify-content:center;"><span class="ic" style="color:var(--logoIc); font-size:19px;"><i data-lucide="flame"></i></span></div><span class="bq" style="font-size:24px; font-weight:700; letter-spacing:-.04em; color:var(--ink);">catalysis</span></div>
+      <div class="gs" style="display:flex; gap:34px; font-size:15px; font-weight:500; color:var(--ink);"><span>Scripture</span><span>Prayer</span><span>Community</span><span>Reels</span><span>Lumen AI</span></div>
+      <div style="display:flex; align-items:center; gap:18px;"><span onClick="{{ toggleTheme }}" class="ic" style="width:40px; height:40px; border-radius:50%; background:var(--card); border:1px solid var(--line); align-items:center; justify-content:center; font-size:17px; color:var(--ink); cursor:pointer;"><i data-lucide="sun-moon"></i></span><span class="gs" style="font-size:15px; font-weight:500; color:var(--ink);">Log in</span><span class="gs" style="font-size:15px; font-weight:600; color:var(--btnText); background:var(--btn); padding:12px 22px; border-radius:999px;">Get the app</span></div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1.05fr .95fr; gap:24px; padding:36px 32px 56px; align-items:center;">
+      <div>
+        <div class="gs" style="display:inline-flex; align-items:center; gap:9px; background:var(--card); border:1px solid var(--line); border-radius:999px; padding:8px 15px 8px 9px; font-size:14px; font-weight:500; color:var(--ink);"><span style="background:var(--a1); color:var(--onA); font-size:12px; font-weight:700; padding:3px 9px; border-radius:999px;">New</span>Reels are here. Share your faith in 60s.</div>
+        <div class="bq" style="font-size:118px; line-height:.9; font-weight:700; letter-spacing:-.04em; color:var(--ink); margin-top:26px;">Grow in faith, <span class="is" style="letter-spacing:-.02em; color:var(--a1);">every</span> day.</div>
+        <div class="gs" style="font-size:19px; line-height:1.55; color:var(--muted); margin-top:26px; max-width:520px;">Daily scripture, prayer streaks, a community that shows up for you, and Lumen, an AI that answers your questions from Scripture and the Catechism.</div>
+        <div style="display:flex; gap:12px; margin-top:32px;">
+          <span class="gs" style="display:inline-flex; align-items:center; gap:10px; font-size:16px; font-weight:600; color:var(--btnText); background:var(--btn); padding:17px 28px; border-radius:999px;">Start free<span class="ic"><i data-lucide="arrow-right"></i></span></span>
+          <span class="gs" style="display:inline-flex; align-items:center; gap:10px; font-size:16px; font-weight:600; color:var(--ink); background:var(--card); border:1px solid var(--line); padding:16px 26px; border-radius:999px;"><span class="ic"><i data-lucide="play"></i></span>Watch the 60s tour</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:12px; margin-top:30px;">
+          <div style="display:flex;"><div style="width:34px; height:34px; border-radius:50%; background:var(--a2); border:2.5px solid var(--bg); color:var(--onA);"></div><div style="width:34px; height:34px; border-radius:50%; background:var(--a3); border:2.5px solid var(--bg); margin-left:-10px; color:var(--onA);"></div><div style="width:34px; height:34px; border-radius:50%; background:var(--a4); border:2.5px solid var(--bg); margin-left:-10px; color:var(--onA);"></div><div style="width:34px; height:34px; border-radius:50%; background:var(--a5); border:2.5px solid var(--bg); margin-left:-10px; color:var(--onA);"></div></div>
+          <span class="gs" style="font-size:14px; color:var(--muted);"><b style="color:var(--ink);">12k+ students</b> praying daily</span>
+        </div>
+      </div>
+      <div style="position:relative; height:580px;">
+        <div style="position:absolute; left:10px; top:10px; width:330px; height:450px; border-radius:30px; background:#121212 url('assets/angel.webp') 50% 30% / cover no-repeat; transform:rotate(-3deg); box-shadow:0 20px 40px rgba(0,0,0,.18);"></div>
+        <div style="position:absolute; right:10px; top:40px; width:250px; height:330px; border-radius:26px; background:url('assets/st-joseph.webp') 50% 25% / cover no-repeat; transform:rotate(4deg); box-shadow:0 20px 40px rgba(0,0,0,.18);">
+          <div style="position:absolute; left:14px; bottom:14px; display:flex; align-items:center; gap:7px; background:rgba(18,18,18,.78); color:#fff; padding:8px 13px; border-radius:999px;" class="gs"><span class="ic" style="font-size:13px;"><i data-lucide="play"></i></span><span style="font-size:13px; font-weight:600;">2.4k views</span></div>
+        </div>
+        <div style="position:absolute; left:250px; bottom:10px; width:260px; height:190px; border-radius:24px; background:url('assets/monstrance.jpg') 50% 42% / cover no-repeat; transform:rotate(-1.5deg); box-shadow:0 20px 40px rgba(0,0,0,.16); border:5px solid var(--bg);"></div>
+        <div class="gs" style="position:absolute; right:40px; top:0; display:flex; align-items:center; gap:8px; background:var(--a2); color:var(--onA); padding:11px 17px; border-radius:999px; transform:rotate(6deg); font-size:15px; font-weight:700; box-shadow:0 8px 18px rgba(0,0,0,.12);"><span class="ic"><i data-lucide="flame"></i></span>12-day streak</div>
+        <div style="position:absolute; left:0; bottom:40px; width:250px; background:var(--card); border-radius:20px; padding:18px 20px; transform:rotate(2.5deg); box-shadow:0 14px 30px rgba(0,0,0,.14);">
+          <div class="mn" style="color:var(--a1);">Verse of the day</div>
+          <div class="is" style="font-size:24px; line-height:1.15; color:var(--ink); margin-top:8px;">The light shines in the darkness.</div>
+          <div class="gs" style="font-size:13px; font-weight:600; color:var(--muted); margin-top:8px;">John 1:5</div>
+        </div>
+        <div class="bq" style="position:absolute; right:0; bottom:120px; width:108px; height:108px; border-radius:50%; background:var(--a1); color:var(--onA); display:flex; flex-direction:column; align-items:center; justify-content:center; transform:rotate(-10deg); font-weight:700; font-size:17px; line-height:1.05; text-align:center; box-shadow:0 10px 22px rgba(255,90,31,.35);"><span class="ic" style="font-size:20px; margin-bottom:4px;"><i data-lucide="sparkles"></i></span>ask<br>lumen</div>
+      </div>
+    </div>
+
+    <div class="bq" style="background:var(--mqBg); color:var(--mqText); padding:24px 0; font-size:40px; letter-spacing:-.03em; white-space:nowrap; overflow:hidden;">
+      <div style="display:flex; width:max-content; animation:cx-marquee 32s linear infinite;">
+        <div style="display:flex; gap:34px; align-items:center; padding-right:34px;"><span style="font-weight:800;">scripture</span><span style="color:var(--mqStar, var(--a1)); font-weight:400;">✦</span><span style="font-weight:300; font-style:italic;">prayer</span><span style="color:var(--mqStar, var(--a2)); font-weight:400;">✦</span><span style="font-weight:800;">community</span><span style="color:var(--mqStar, var(--a4)); font-weight:400;">✦</span><span style="font-weight:300; font-style:italic;">reels</span><span style="color:var(--mqStar, var(--a3)); font-weight:400;">✦</span><span style="font-weight:800;">events</span><span style="color:var(--mqStar, var(--a1)); font-weight:400;">✦</span><span style="font-weight:300; font-style:italic;">lumen ai</span><span style="color:var(--mqStar, var(--a2)); font-weight:400;">✦</span><span style="font-weight:800;">rosary</span><span style="color:var(--mqStar, var(--a4)); font-weight:400;">✦</span><span style="font-weight:300; font-style:italic;">adoration</span><span style="color:var(--mqStar, var(--a3)); font-weight:400;">✦</span><span style="font-weight:800;">saints</span><span style="color:var(--mqStar, var(--a1)); font-weight:400;">✦</span><span style="font-weight:300; font-style:italic;">testimony</span><span style="color:var(--mqStar, var(--a2)); font-weight:400;">✦</span></div>
+        <div style="display:flex; gap:34px; align-items:center; padding-right:34px;"><span style="font-weight:800;">scripture</span><span style="color:var(--mqStar, var(--a1)); font-weight:400;">✦</span><span style="font-weight:300; font-style:italic;">prayer</span><span style="color:var(--mqStar, var(--a2)); font-weight:400;">✦</span><span style="font-weight:800;">community</span><span style="color:var(--mqStar, var(--a4)); font-weight:400;">✦</span><span style="font-weight:300; font-style:italic;">reels</span><span style="color:var(--mqStar, var(--a3)); font-weight:400;">✦</span><span style="font-weight:800;">events</span><span style="color:var(--mqStar, var(--a1)); font-weight:400;">✦</span><span style="font-weight:300; font-style:italic;">lumen ai</span><span style="color:var(--mqStar, var(--a2)); font-weight:400;">✦</span><span style="font-weight:800;">rosary</span><span style="color:var(--mqStar, var(--a4)); font-weight:400;">✦</span><span style="font-weight:300; font-style:italic;">adoration</span><span style="color:var(--mqStar, var(--a3)); font-weight:400;">✦</span><span style="font-weight:800;">saints</span><span style="color:var(--mqStar, var(--a1)); font-weight:400;">✦</span><span style="font-weight:300; font-style:italic;">testimony</span><span style="color:var(--mqStar, var(--a2)); font-weight:400;">✦</span></div>
+      </div>
+    </div>
+
+    <div style="padding:72px 32px 32px;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-end;">
+        <div class="bq" style="font-size:64px; line-height:.95; font-weight:700; letter-spacing:-.03em; color:var(--ink); max-width:760px;">Everything your faith life needs, <span class="is" style="letter-spacing:-.01em;">in one app.</span></div>
+        <div class="gs" style="font-size:16px; color:var(--muted); max-width:300px; line-height:1.5;">Built with students at Newman Centers across the country.</div>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(4,1fr); grid-auto-rows:270px; gap:16px; margin-top:40px;">
+        <div style="grid-column:span 2; background:var(--card); border:1px solid var(--line); border-radius:28px; padding:28px; display:flex; flex-direction:column; justify-content:space-between;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start;"><div class="bq" style="font-size:32px; font-weight:700; letter-spacing:-.035em; color:var(--ink); line-height:1;">A Bible that<br>explains itself</div><span class="mn" style="background:var(--inset); color:var(--ink); padding:7px 11px; border-radius:999px;">RSV-CE</span></div>
+          <div style="background:var(--inset); border-radius:18px; padding:16px 18px; display:flex; align-items:center; gap:16px;"><div class="nr" style="flex:1; font-size:18px; line-height:1.5; color:var(--ink);">In him was life, and <span style="background:var(--a2); border-radius:5px; padding:1px 4px; color:var(--onA);">the life was the light of men.</span></div><span class="gs" style="display:inline-flex; align-items:center; gap:7px; font-size:14px; font-weight:600; color:var(--onA); background:var(--a1); padding:10px 15px; border-radius:999px; white-space:nowrap;"><span class="ic"><i data-lucide="sparkles"></i></span>Explain</span></div>
+        </div>
+        <div style="background:var(--a2); border-radius:28px; padding:28px; display:flex; flex-direction:column; justify-content:space-between; color:var(--onA);">
+          <div class="bq" style="font-size:28px; font-weight:700; letter-spacing:-.03em; color:var(--onA); line-height:1;">Prayer streaks</div>
+          <div><div class="bq" style="font-size:96px; font-weight:800; letter-spacing:-.03em; color:var(--onA); line-height:.85;">12</div><div style="display:flex; gap:6px; margin-top:14px;"><span style="flex:1; height:10px; border-radius:99px; background:var(--onA);"></span><span style="flex:1; height:10px; border-radius:99px; background:var(--onA);"></span><span style="flex:1; height:10px; border-radius:99px; background:var(--onA);"></span><span style="flex:1; height:10px; border-radius:99px; background:var(--onA);"></span><span style="flex:1; height:10px; border-radius:99px; background:var(--onA);"></span><span style="flex:1; height:10px; border-radius:99px; background:rgba(18,18,18,.18);"></span><span style="flex:1; height:10px; border-radius:99px; background:rgba(18,18,18,.18);"></span></div></div>
+        </div>
+        <div style="background:var(--a1); border-radius:28px; padding:28px; display:flex; flex-direction:column; justify-content:space-between; color:var(--onA);">
+          <div class="bq" style="font-size:28px; font-weight:700; letter-spacing:-.03em; color:var(--onA); line-height:1;">Ask Lumen anything</div>
+          <div style="display:flex; flex-direction:column; gap:8px;"><div class="gs" style="align-self:flex-end; background:var(--onA); color:#fff; font-size:14px; padding:10px 14px; border-radius:16px 16px 4px 16px;">Who were the archangels?</div><div class="gs" style="background:#fff; color:var(--onA); font-size:14px; line-height:1.4; padding:10px 14px; border-radius:16px 16px 16px 4px;">Michael, Gabriel and Raphael. Their feast is Sept 29 (CCC 335).</div></div>
+        </div>
+        <div style="background:var(--a3); border-radius:28px; padding:28px; display:flex; flex-direction:column; justify-content:space-between; color:var(--onA);">
+          <div class="bq" style="font-size:28px; font-weight:700; letter-spacing:-.03em; color:var(--onA); line-height:1;">Pray for each other</div>
+          <div><div class="gs" style="font-size:15px; line-height:1.45; color:var(--onA);">“Finals week. Could use prayers for peace and focus.”</div><span class="gs" style="display:inline-flex; align-items:center; gap:7px; margin-top:12px; background:var(--onA); color:#fff; font-size:13px; font-weight:600; padding:9px 14px; border-radius:999px;"><span class="ic"><i data-lucide="hand-heart"></i></span>I prayed · 24</span></div>
+        </div>
+        <div style="position:relative; border-radius:28px; overflow:hidden; background:#121212 url('assets/st-joseph.webp') 50% 25% / cover no-repeat;">
+          <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,0) 40%, rgba(0,0,0,.7));"></div>
+          <div class="bq" style="position:absolute; left:28px; top:28px; font-size:28px; font-weight:700; letter-spacing:-.03em; color:#fff; line-height:1;">Reels</div>
+          <div class="gs" style="position:absolute; left:28px; bottom:26px; right:28px; font-size:15px; color:#fff; line-height:1.4;">Testimonies, saints and 60-second reflections.</div>
+        </div>
+        <div style="grid-column:span 2; background:var(--a4); border-radius:28px; padding:28px; display:flex; flex-direction:column; justify-content:space-between; color:var(--onA);">
+          <div class="bq" style="font-size:32px; font-weight:700; letter-spacing:-.035em; color:var(--onA); line-height:1;">Never miss<br>Theology on Tap</div>
+          <div style="background:#fff; border-radius:18px; padding:14px 16px; display:flex; align-items:center; gap:16px;"><div style="width:56px; height:56px; border-radius:14px; background:var(--onA); color:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center;"><span class="mn" style="font-size:9px; color:#D7F75B;">Sep</span><span class="bq" style="font-size:24px; font-weight:700; line-height:1;">29</span></div><div style="flex:1;"><div class="gs" style="font-size:16px; font-weight:600; color:var(--onA);">Theology on Tap</div><div class="gs" style="font-size:13px; color:var(--onAm); margin-top:2px;">9:00 PM · The Library Pub · 31 going</div></div><span class="gs" style="font-size:14px; font-weight:600; color:#fff; background:var(--onA); padding:10px 18px; border-radius:999px;">RSVP</span></div>
+        </div>
+      </div>
+      <div style="margin-top:16px; background:var(--solid); border-radius:32px; padding:56px; display:flex; align-items:center; justify-content:space-between;">
+        <div class="bq" style="font-size:60px; line-height:.95; font-weight:700; letter-spacing:-.03em; color:#F4F4F6;">Your first 7 days<br><span class="is" style="color:var(--a2); letter-spacing:-.01em;">start today.</span></div>
+        <div style="display:flex; gap:12px;"><span class="gs" style="font-size:16px; font-weight:600; color:var(--onA); background:var(--a2); padding:17px 28px; border-radius:999px;">Start free</span><span class="gs" style="font-size:16px; font-weight:600; color:#fff; border:1px solid rgba(255,255,255,.3); padding:16px 26px; border-radius:999px;">Download for iOS</span></div>
+      </div>
+      <div class="gs" style="display:flex; justify-content:space-between; padding:28px 4px 4px; font-size:13px; color:var(--muted);"><span>© 2026 Catalysis</span><span>Ad Maiorem Dei Gloriam</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 02 · DASHBOARD ===== -->
+<div style="position:absolute; left:1480px; top:120px; width:1320px;">
+  <div class="frame-label" data-drags-parent="1"><b>Dashboard</b><span>web · home</span></div>
+  <div style="width:1320px; height:900px; background:var(--bg); border-radius:20px; overflow:hidden; box-shadow:0 10px 40px rgba(0,0,0,.10);">
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:20px 28px;">
+      <div style="display:flex; align-items:center; gap:10px;"><div style="width:34px; height:34px; border-radius:11px; background:var(--logoBg); display:flex; align-items:center; justify-content:center;"><span class="ic" style="color:var(--logoIc); font-size:18px;"><i data-lucide="flame"></i></span></div><span class="bq" style="font-size:22px; font-weight:700; letter-spacing:-.04em; color:var(--ink);">catalysis</span></div>
+      <div class="gs" style="display:flex; gap:2px; background:var(--card); border:1px solid var(--line); border-radius:999px; padding:5px; font-size:14px; font-weight:500; color:var(--ink);"><span style="padding:9px 17px; border-radius:999px; background:var(--btn); color:var(--btnText);">Home</span><span style="padding:9px 17px;">Bible</span><span style="padding:9px 17px;">Prayer</span><span style="padding:9px 17px;">Community</span><span style="padding:9px 17px;">Events</span><span style="padding:9px 17px; display:inline-flex; align-items:center; gap:6px;"><span class="ic" style="color:var(--a1);"><i data-lucide="sparkles"></i></span>Lumen</span></div>
+      <div style="display:flex; align-items:center; gap:10px;"><span class="gs" style="display:inline-flex; align-items:center; gap:6px; background:var(--a2); color:var(--onA); font-size:14px; font-weight:700; padding:9px 14px; border-radius:999px;"><span class="ic"><i data-lucide="flame"></i></span>12</span><span onClick="{{ toggleTheme }}" class="ic" style="width:40px; height:40px; border-radius:50%; background:var(--card); border:1px solid var(--line); align-items:center; justify-content:center; font-size:17px; color:var(--ink); cursor:pointer;"><i data-lucide="sun-moon"></i></span><span class="ic" style="width:40px; height:40px; border-radius:50%; background:var(--card); border:1px solid var(--line); align-items:center; justify-content:center; font-size:17px; color:var(--ink);"><i data-lucide="bell"></i></span><span class="bq" style="width:40px; height:40px; border-radius:50%; background:var(--a3); color:var(--onA); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:16px;">M</span></div>
+    </div>
+    <div style="padding:8px 28px 28px;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:22px;">
+        <div><div class="mn" style="color:var(--muted);">Sat, Sept 26 · Sts. Cosmas &amp; Damian</div><div class="bq" style="font-size:52px; font-weight:700; letter-spacing:-.03em; color:var(--ink); line-height:1; margin-top:8px;">Good morning, <span class="is" style="letter-spacing:-.01em;">Maria</span></div></div>
+        <div class="gs" style="display:flex; align-items:center; gap:10px; width:420px; background:var(--card); border:1px solid var(--line); border-radius:999px; padding:7px 7px 7px 20px;"><span class="ic" style="color:var(--a1); font-size:17px;"><i data-lucide="sparkles"></i></span><span style="flex:1; font-size:15px; color:var(--subtle);">Ask Lumen about today's Gospel…</span><span class="ic" style="width:38px; height:38px; border-radius:50%; background:var(--btn); color:var(--btnText); align-items:center; justify-content:center; font-size:17px;"><i data-lucide="arrow-up"></i></span></div>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(12,1fr); gap:16px;">
+        <div style="grid-column:1/7; height:300px; background:var(--solid); border-radius:28px; padding:30px; display:flex; flex-direction:column; justify-content:space-between;">
+          <div style="display:flex; justify-content:space-between;"><span class="mn" style="color:var(--a2);">Verse of the day</span><span class="mn" style="color:#8A8A92;">John 1:5 · RSV-CE</span></div>
+          <div class="is" style="font-size:46px; line-height:1.05; color:#F4F4F6;">The light shines in the darkness, and the darkness has not overcome it.</div>
+          <div style="display:flex; gap:10px;"><span class="gs" style="font-size:14px; font-weight:600; color:var(--onA); background:var(--a2); padding:11px 20px; border-radius:999px;">Reflect</span><span class="gs" style="display:inline-flex; align-items:center; gap:7px; font-size:14px; font-weight:600; color:#fff; border:1px solid rgba(255,255,255,.25); padding:10px 18px; border-radius:999px;"><span class="ic"><i data-lucide="share-2"></i></span>Share</span></div>
+        </div>
+        <div style="grid-column:7/10; height:300px; background:var(--a2); border-radius:28px; padding:26px; display:flex; flex-direction:column; justify-content:space-between; color:var(--onA);">
+          <div style="display:flex; justify-content:space-between; align-items:center;"><span class="gs" style="font-size:15px; font-weight:600; color:var(--onA);">Prayer streak</span><span class="ic" style="font-size:22px; color:var(--onA);"><i data-lucide="flame"></i></span></div>
+          <div><div class="bq" style="font-size:120px; font-weight:800; letter-spacing:-.03em; line-height:.8; color:var(--onA);">12</div><div class="gs" style="font-size:14px; color:var(--onA); margin-top:10px;">days · best is 31</div></div>
+          <div style="display:flex; gap:6px;"><div style="flex:1; text-align:center;"><div style="height:26px; border-radius:8px; background:var(--onA);"></div><div class="mn" style="font-size:9px; margin-top:5px; color:var(--onA);">M</div></div><div style="flex:1; text-align:center;"><div style="height:26px; border-radius:8px; background:var(--onA);"></div><div class="mn" style="font-size:9px; margin-top:5px; color:var(--onA);">T</div></div><div style="flex:1; text-align:center;"><div style="height:26px; border-radius:8px; background:var(--onA);"></div><div class="mn" style="font-size:9px; margin-top:5px; color:var(--onA);">W</div></div><div style="flex:1; text-align:center;"><div style="height:26px; border-radius:8px; background:var(--onA);"></div><div class="mn" style="font-size:9px; margin-top:5px; color:var(--onA);">T</div></div><div style="flex:1; text-align:center;"><div style="height:26px; border-radius:8px; background:var(--onA);"></div><div class="mn" style="font-size:9px; margin-top:5px; color:var(--onA);">F</div></div><div style="flex:1; text-align:center;"><div style="height:26px; border-radius:8px; background:#fff; border:2px solid var(--onA);"></div><div class="mn" style="font-size:9px; margin-top:5px; color:var(--onA); font-weight:700;">S</div></div><div style="flex:1; text-align:center;"><div style="height:26px; border-radius:8px; background:rgba(18,18,18,.14);"></div><div class="mn" style="font-size:9px; margin-top:5px; color:var(--onA);">S</div></div></div>
+        </div>
+        <div style="grid-column:10/13; height:300px; background:var(--a4); border-radius:28px; padding:26px; display:flex; flex-direction:column; justify-content:space-between; color:var(--onA);">
+          <div style="display:flex; justify-content:space-between; align-items:center;"><span class="gs" style="font-size:15px; font-weight:600; color:var(--onA);">Next up</span><span class="mn" style="color:var(--onA);">in 3 days</span></div>
+          <div><div class="bq" style="font-size:52px; font-weight:700; letter-spacing:-.03em; line-height:.9; color:var(--onA);">Tue 29</div><div class="gs" style="font-size:18px; font-weight:600; color:var(--onA); margin-top:12px;">Adoration &amp; Confession</div><div class="gs" style="font-size:14px; color:var(--onAm); margin-top:3px;">7:00 PM · Newman Center</div></div>
+          <div style="display:flex; justify-content:space-between; align-items:center;"><div style="display:flex; align-items:center;"><div style="width:28px; height:28px; border-radius:50%; background:var(--a3); border:2px solid var(--a4); color:var(--onA);"></div><div style="width:28px; height:28px; border-radius:50%; background:var(--a5); border:2px solid var(--a4); margin-left:-8px; color:var(--onA);"></div><div style="width:28px; height:28px; border-radius:50%; background:var(--a2); border:2px solid var(--a4); margin-left:-8px; color:var(--onA);"></div><span class="gs" style="font-size:13px; font-weight:600; color:var(--onA); margin-left:8px;">48 going</span></div><span class="gs" style="font-size:13px; font-weight:600; color:#fff; background:var(--onA); padding:9px 15px; border-radius:999px;">Going</span></div>
+        </div>
+        <div style="grid-column:1/5; height:326px; background:var(--card); border:1px solid var(--line); border-radius:28px; padding:26px;">
+          <div style="display:flex; justify-content:space-between; align-items:baseline;"><span class="bq" style="font-size:24px; font-weight:700; letter-spacing:-.03em; color:var(--ink);">Today's prayers</span><span class="gs" style="font-size:15px; font-weight:700; color:var(--ink);">3/4</span></div>
+          <div style="height:8px; border-radius:99px; background:var(--inset); margin-top:14px; overflow:hidden;"><div style="width:75%; height:100%; background:var(--a1); border-radius:99px; color:var(--onA);"></div></div>
+          <div style="display:flex; flex-direction:column; gap:6px; margin-top:16px;" class="gs">
+            <div style="display:flex; align-items:center; gap:12px; padding:9px 0;"><span class="ic" style="width:24px; height:24px; border-radius:50%; background:var(--btn); color:var(--btnText); align-items:center; justify-content:center; font-size:13px;"><i data-lucide="check"></i></span><span style="flex:1; font-size:15px; color:var(--subtle); text-decoration:line-through;">Morning Offering</span><span style="font-size:13px; color:var(--subtle);">7:14</span></div>
+            <div style="display:flex; align-items:center; gap:12px; padding:9px 0;"><span class="ic" style="width:24px; height:24px; border-radius:50%; background:var(--btn); color:var(--btnText); align-items:center; justify-content:center; font-size:13px;"><i data-lucide="check"></i></span><span style="flex:1; font-size:15px; color:var(--subtle); text-decoration:line-through;">The Angelus</span><span style="font-size:13px; color:var(--subtle);">12:02</span></div>
+            <div style="display:flex; align-items:center; gap:12px; padding:9px 0;"><span class="ic" style="width:24px; height:24px; border-radius:50%; background:var(--btn); color:var(--btnText); align-items:center; justify-content:center; font-size:13px;"><i data-lucide="check"></i></span><span style="flex:1; font-size:15px; color:var(--subtle); text-decoration:line-through;">Rosary</span><span style="font-size:13px; color:var(--subtle);">17:30</span></div>
+            <div style="display:flex; align-items:center; gap:12px; padding:9px 12px; margin:0 -12px; background:var(--inset); border-radius:14px;"><span style="width:24px; height:24px; border-radius:50%; border:2px solid var(--ink);"></span><span style="flex:1; font-size:15px; font-weight:600; color:var(--ink);">Evening Examen</span><span style="font-size:13px; font-weight:600; color:#fff; background:var(--a1); padding:6px 12px; border-radius:999px; color:var(--onA);">Start</span></div>
+          </div>
+        </div>
+        <div style="grid-column:5/9; height:326px; background:var(--card); border:1px solid var(--line); border-radius:28px; padding:26px; display:flex; flex-direction:column;">
+          <div style="display:flex; justify-content:space-between; align-items:baseline;"><span class="bq" style="font-size:24px; font-weight:700; letter-spacing:-.03em; color:var(--ink);">Keep reading</span><span class="mn" style="color:var(--muted);">12% of John</span></div>
+          <div class="bq" style="font-size:44px; font-weight:700; letter-spacing:-.03em; color:var(--ink); margin-top:18px; line-height:1;">John 1</div>
+          <div class="nr" style="font-size:17px; line-height:1.55; color:var(--muted); margin-top:10px;">In the beginning was the Word, and the Word was with God, and the Word was God…</div>
+          <div style="height:8px; border-radius:99px; background:var(--inset); margin-top:auto; overflow:hidden;"><div style="width:12%; height:100%; background:var(--btn); border-radius:99px;"></div></div>
+          <span class="gs" style="align-self:flex-start; display:inline-flex; align-items:center; gap:8px; font-size:14px; font-weight:600; color:var(--btnText); background:var(--btn); padding:11px 18px; border-radius:999px; margin-top:16px;">Continue<span class="ic"><i data-lucide="arrow-right"></i></span></span>
+        </div>
+        <div style="grid-column:9/13; height:326px; background:var(--solid); border-radius:28px; padding:22px; display:flex; flex-direction:column;">
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:4px 4px 0;"><span class="bq" style="font-size:24px; font-weight:700; letter-spacing:-.03em; color:#fff;">Trending reels</span><span class="gs" style="font-size:13px; font-weight:600; color:var(--a2);">See all</span></div>
+          <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:16px; flex:1;">
+            <div style="position:relative; border-radius:16px; background:url('assets/st-joseph.webp') 50% 25% / cover no-repeat;"><span class="gs" style="position:absolute; left:8px; bottom:8px; font-size:11px; font-weight:600; color:#fff; background:rgba(0,0,0,.55); padding:4px 8px; border-radius:999px;">2.4k</span></div>
+            <div style="position:relative; border-radius:16px; background:#333 url('assets/angel.webp') 50% 40% / cover no-repeat;"><span class="gs" style="position:absolute; left:8px; bottom:8px; font-size:11px; font-weight:600; color:#fff; background:rgba(0,0,0,.55); padding:4px 8px; border-radius:999px;">5.1k</span></div>
+            <div style="position:relative; border-radius:16px; background:url('assets/monstrance.jpg') 50% 42% / cover no-repeat;"><span class="gs" style="position:absolute; left:8px; bottom:8px; font-size:11px; font-weight:600; color:#fff; background:rgba(0,0,0,.55); padding:4px 8px; border-radius:999px;">980</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===== 03 · BIBLE ===== -->
+<div style="position:absolute; left:2880px; top:120px; width:1320px;">
+  <div class="frame-label" data-drags-parent="1"><b>Bible Reader</b><span>web · RSV-CE</span></div>
+  <div style="width:1320px; height:900px; background:var(--bg); border-radius:20px; overflow:hidden; box-shadow:0 10px 40px rgba(0,0,0,.10); display:flex; flex-direction:column;">
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:20px 28px;">
+      <div style="display:flex; align-items:center; gap:10px;"><div style="width:34px; height:34px; border-radius:11px; background:var(--logoBg); display:flex; align-items:center; justify-content:center;"><span class="ic" style="color:var(--logoIc); font-size:18px;"><i data-lucide="flame"></i></span></div><span class="bq" style="font-size:22px; font-weight:700; letter-spacing:-.04em; color:var(--ink);">catalysis</span></div>
+      <div class="gs" style="display:flex; gap:2px; background:var(--card); border:1px solid var(--line); border-radius:999px; padding:5px; font-size:14px; font-weight:500; color:var(--ink);"><span style="padding:9px 17px;">Home</span><span style="padding:9px 17px; border-radius:999px; background:var(--btn); color:var(--btnText);">Bible</span><span style="padding:9px 17px;">Prayer</span><span style="padding:9px 17px;">Community</span><span style="padding:9px 17px;">Events</span><span style="padding:9px 17px; display:inline-flex; align-items:center; gap:6px;"><span class="ic" style="color:var(--a1);"><i data-lucide="sparkles"></i></span>Lumen</span></div>
+      <div style="display:flex; align-items:center; gap:10px;"><span class="gs" style="display:inline-flex; align-items:center; gap:6px; background:var(--a2); color:var(--onA); font-size:14px; font-weight:700; padding:9px 14px; border-radius:999px;"><span class="ic"><i data-lucide="flame"></i></span>12</span><span onClick="{{ toggleTheme }}" class="ic" style="width:40px; height:40px; border-radius:50%; background:var(--card); border:1px solid var(--line); align-items:center; justify-content:center; font-size:17px; color:var(--ink); cursor:pointer;"><i data-lucide="sun-moon"></i></span><span class="ic" style="width:40px; height:40px; border-radius:50%; background:var(--card); border:1px solid var(--line); align-items:center; justify-content:center; font-size:17px; color:var(--ink);"><i data-lucide="bell"></i></span><span class="bq" style="width:40px; height:40px; border-radius:50%; background:var(--a3); color:var(--onA); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:16px;">M</span></div>
+    </div>
+    <div style="flex:1; display:grid; grid-template-columns:260px 1fr 340px; gap:16px; padding:4px 28px 28px; min-height:0;">
+      <div style="background:var(--card); border:1px solid var(--line); border-radius:28px; padding:20px; overflow:hidden;">
+        <div class="gs" style="display:flex; align-items:center; gap:9px; background:var(--inset); border-radius:999px; padding:11px 15px; font-size:14px; color:var(--subtle);"><span class="ic"><i data-lucide="search"></i></span>Search the Bible</div>
+        <div class="gs" style="display:flex; background:var(--inset); border-radius:999px; padding:4px; margin-top:14px; font-size:13px; font-weight:600;"><span style="flex:1; text-align:center; padding:8px; color:var(--muted);">Old</span><span style="flex:1; text-align:center; padding:8px; background:var(--btn); color:var(--btnText); border-radius:999px;">New</span></div>
+        <div class="gs" style="display:flex; flex-direction:column; gap:2px; margin-top:14px; font-size:15px; color:var(--ink);">
+          <div style="padding:10px 12px; border-radius:12px;">Matthew</div><div style="padding:10px 12px; border-radius:12px;">Mark</div><div style="padding:10px 12px; border-radius:12px;">Luke</div>
+          <div style="padding:10px 12px; border-radius:12px; background:var(--a2); font-weight:600; display:flex; justify-content:space-between; color:var(--onA);">John<span class="mn" style="font-size:10px;">21 ch</span></div>
+          <div style="padding:10px 12px; border-radius:12px;">Acts</div><div style="padding:10px 12px; border-radius:12px;">Romans</div>
+        </div>
+        <div class="mn" style="color:var(--muted); margin-top:18px;">Chapters</div>
+        <div class="gs" style="display:grid; grid-template-columns:repeat(5,1fr); gap:6px; margin-top:10px; font-size:13px; font-weight:500; color:var(--ink); text-align:center;">
+          <span style="padding:8px 0; border-radius:10px; background:var(--a1); font-weight:700; color:var(--onA);">1</span><span style="padding:8px 0; border-radius:10px; background:var(--inset);">2</span><span style="padding:8px 0; border-radius:10px; background:var(--inset);">3</span><span style="padding:8px 0; border-radius:10px; background:var(--inset);">4</span><span style="padding:8px 0; border-radius:10px; background:var(--inset);">5</span><span style="padding:8px 0; border-radius:10px; background:var(--inset);">6</span><span style="padding:8px 0; border-radius:10px; background:var(--inset);">7</span><span style="padding:8px 0; border-radius:10px; background:var(--inset);">8</span><span style="padding:8px 0; border-radius:10px; background:var(--inset);">9</span><span style="padding:8px 0; border-radius:10px; background:var(--inset);">10</span>
+        </div>
+      </div>
+      <div style="position:relative; background:var(--card); border:1px solid var(--line); border-radius:28px; padding:34px 60px; overflow:hidden;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div style="display:flex; gap:8px;"><span class="mn" style="background:var(--inset); color:var(--ink); padding:8px 12px; border-radius:999px;">RSV-CE</span><span class="gs" style="background:var(--inset); color:var(--ink); padding:6px 12px; border-radius:999px; font-size:14px; font-weight:600;">Aa</span></div>
+          <div style="display:flex; gap:8px; align-items:center;"><span class="gs" style="display:inline-flex; align-items:center; gap:8px; background:var(--btn); color:var(--btnText); padding:9px 15px; border-radius:999px; font-size:13px; font-weight:600;"><span class="ic"><i data-lucide="headphones"></i></span>Listen · 4 min</span><span class="ic" style="width:38px; height:38px; border-radius:50%; background:var(--inset); align-items:center; justify-content:center; color:var(--ink); font-size:16px;"><i data-lucide="bookmark"></i></span></div>
+        </div>
+        <div class="mn" style="color:var(--a1); margin-top:36px;">The Gospel according to</div>
+        <div class="bq" style="font-size:88px; font-weight:700; letter-spacing:-.04em; line-height:.9; color:var(--ink); margin-top:6px;">John <span class="is" style="letter-spacing:0;">1</span></div>
+        <div class="gs" style="font-size:15px; color:var(--muted); margin-top:10px;">The Word Became Flesh</div>
+        <p class="nr" style="font-size:22px; line-height:1.75; color:var(--ink); margin:24px 0 0; max-width:640px;"><sup class="mn" style="font-size:10px; color:var(--a1);">1</sup> In the beginning was the Word, and the Word was with God, and the Word was God. <sup class="mn" style="font-size:10px; color:var(--a1);">2</sup> He was in the beginning with God; <sup class="mn" style="font-size:10px; color:var(--a1);">3</sup> all things were made through him, and without him was not anything made that was made. <sup class="mn" style="font-size:10px; color:var(--a1);">4</sup> In him was life, and <span style="background:var(--a2); border-radius:6px; padding:2px 5px; color:var(--onA);">the life was the light of men.</span> <sup class="mn" style="font-size:10px; color:var(--a1);">5</sup> The light shines in the darkness, and the darkness has not overcome it.</p>
+        <div class="gs" style="position:absolute; left:50%; bottom:28px; transform:translateX(-50%); display:flex; align-items:center; gap:4px; background:var(--btn); border-radius:999px; padding:6px; font-size:14px; font-weight:600; color:var(--btnText); box-shadow:0 12px 28px rgba(0,0,0,.22);">
+          <span style="display:flex; gap:5px; padding:0 10px;"><span style="width:16px; height:16px; border-radius:50%; background:var(--a2); color:var(--onA);"></span><span style="width:16px; height:16px; border-radius:50%; background:var(--a3); color:var(--onA);"></span><span style="width:16px; height:16px; border-radius:50%; background:var(--a5); color:var(--onA);"></span></span>
+          <span style="padding:9px 14px;">Note</span><span style="padding:9px 14px;">Share</span><span style="display:inline-flex; align-items:center; gap:7px; background:var(--a1); color:var(--onA); padding:9px 16px; border-radius:999px;"><span class="ic"><i data-lucide="sparkles"></i></span>Explain</span>
+        </div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:16px; min-height:0;">
+        <div style="background:var(--a6); border-radius:28px; padding:24px; color:var(--onA);">
+          <div style="display:flex; align-items:center; gap:10px;"><span class="ic" style="width:34px; height:34px; border-radius:50%; background:var(--a1); color:var(--onA); align-items:center; justify-content:center; font-size:16px;"><i data-lucide="sparkles"></i></span><span class="bq" style="font-size:20px; font-weight:700; letter-spacing:-.03em; color:var(--onA);">Lumen explains</span></div>
+          <div class="gs" style="font-size:15px; line-height:1.6; color:var(--onA); margin-top:14px;">“Light” here is Christ himself, the Word entering a world in shadow. John deliberately echoes Genesis 1: a new creation begins.</div>
+          <div style="display:flex; gap:6px; margin-top:14px;"><span class="gs" style="font-size:12px; font-weight:600; color:var(--onA); background:#fff; padding:6px 11px; border-radius:999px;">CCC 241</span><span class="gs" style="font-size:12px; font-weight:600; color:var(--onA); background:#fff; padding:6px 11px; border-radius:999px;">Gen 1:3</span></div>
+        </div>
+        <div style="background:var(--card); border:1px solid var(--line); border-radius:28px; padding:24px;">
+          <div class="bq" style="font-size:20px; font-weight:700; letter-spacing:-.03em; color:var(--ink);">Cross references</div>
+          <div class="gs" style="display:flex; flex-direction:column; gap:8px; margin-top:14px;">
+            <div style="display:flex; justify-content:space-between; background:var(--inset); border-radius:14px; padding:12px 14px; font-size:14px;"><b style="color:var(--ink);">Genesis 1:3</b><span style="color:var(--muted);">Let there be light</span></div>
+            <div style="display:flex; justify-content:space-between; background:var(--inset); border-radius:14px; padding:12px 14px; font-size:14px;"><b style="color:var(--ink);">John 8:12</b><span style="color:var(--muted);">I am the light</span></div>
+            <div style="display:flex; justify-content:space-between; background:var(--inset); border-radius:14px; padding:12px 14px; font-size:14px;"><b style="color:var(--ink);">1 John 1:5</b><span style="color:var(--muted);">God is light</span></div>
+          </div>
+        </div>
+        <div style="flex:1; background:var(--a4); border-radius:28px; padding:24px; color:var(--onA);">
+          <div style="display:flex; justify-content:space-between;"><span class="bq" style="font-size:20px; font-weight:700; letter-spacing:-.03em; color:var(--onA);">My note</span><span class="mn" style="color:var(--onA);">v.4</span></div>
+          <div class="gs" style="font-size:15px; line-height:1.55; color:var(--onA); margin-top:10px;">Light as life. Pray with this before the Examen tonight.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 04 · PRAYER ===== -->
+<div style="position:absolute; left:4280px; top:120px; width:1320px;">
+  <div class="frame-label" data-drags-parent="1"><b>Prayer Guide &amp; Tracker</b><span>web</span></div>
+  <div style="width:1320px; height:900px; background:var(--bg); border-radius:20px; overflow:hidden; box-shadow:0 10px 40px rgba(0,0,0,.10);">
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:20px 28px;">
+      <div style="display:flex; align-items:center; gap:10px;"><div style="width:34px; height:34px; border-radius:11px; background:var(--logoBg); display:flex; align-items:center; justify-content:center;"><span class="ic" style="color:var(--logoIc); font-size:18px;"><i data-lucide="flame"></i></span></div><span class="bq" style="font-size:22px; font-weight:700; letter-spacing:-.04em; color:var(--ink);">catalysis</span></div>
+      <div class="gs" style="display:flex; gap:2px; background:var(--card); border:1px solid var(--line); border-radius:999px; padding:5px; font-size:14px; font-weight:500; color:var(--ink);"><span style="padding:9px 17px;">Home</span><span style="padding:9px 17px;">Bible</span><span style="padding:9px 17px; border-radius:999px; background:var(--btn); color:var(--btnText);">Prayer</span><span style="padding:9px 17px;">Community</span><span style="padding:9px 17px;">Events</span><span style="padding:9px 17px; display:inline-flex; align-items:center; gap:6px;"><span class="ic" style="color:var(--a1);"><i data-lucide="sparkles"></i></span>Lumen</span></div>
+      <div style="display:flex; align-items:center; gap:10px;"><span class="gs" style="display:inline-flex; align-items:center; gap:6px; background:var(--a2); color:var(--onA); font-size:14px; font-weight:700; padding:9px 14px; border-radius:999px;"><span class="ic"><i data-lucide="flame"></i></span>12</span><span onClick="{{ toggleTheme }}" class="ic" style="width:40px; height:40px; border-radius:50%; background:var(--card); border:1px solid var(--line); align-items:center; justify-content:center; font-size:17px; color:var(--ink); cursor:pointer;"><i data-lucide="sun-moon"></i></span><span class="ic" style="width:40px; height:40px; border-radius:50%; background:var(--card); border:1px solid var(--line); align-items:center; justify-content:center; font-size:17px; color:var(--ink);"><i data-lucide="bell"></i></span><span class="bq" style="width:40px; height:40px; border-radius:50%; background:var(--a3); color:var(--onA); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:16px;">M</span></div>
+    </div>
+    <div style="padding:8px 28px 28px;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:22px;">
+        <div class="bq" style="font-size:56px; font-weight:700; letter-spacing:-.035em; color:var(--ink); line-height:1;">Prayer <span class="is" style="letter-spacing:-.01em; color:var(--muted);">one day at a time</span></div>
+        <span class="gs" style="display:inline-flex; align-items:center; gap:8px; font-size:15px; font-weight:600; color:var(--btnText); background:var(--btn); padding:13px 22px; border-radius:999px;"><span class="ic"><i data-lucide="plus"></i></span>Add a prayer</span>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(12,1fr); gap:16px;">
+        <div style="grid-column:1/5; height:330px; background:var(--a2); border-radius:28px; padding:26px; display:flex; flex-direction:column; justify-content:space-between; color:var(--onA);">
+          <div style="display:flex; justify-content:space-between;"><span class="gs" style="font-size:15px; font-weight:600; color:var(--onA);">Current streak</span><span class="gs" style="font-size:13px; font-weight:600; color:var(--onA); background:rgba(255,255,255,.6); padding:5px 11px; border-radius:999px;">Best 31</span></div>
+          <div style="display:flex; align-items:flex-end; gap:12px;"><span class="bq" style="font-size:120px; font-weight:800; letter-spacing:-.03em; line-height:.8; color:var(--onA);">12</span><span class="gs" style="font-size:16px; font-weight:600; color:var(--onA); padding-bottom:6px;">days</span></div>
+          <div>
+            <div class="mn" style="color:var(--onA); margin-bottom:8px;">September</div>
+            <div style="display:grid; grid-template-columns:repeat(15,1fr); gap:4px;">
+              <span style="aspect-ratio:1; border-radius:5px; background:rgba(18,18,18,.35);"></span><span style="aspect-ratio:1; border-radius:5px; background:var(--onA);"></span><span style="aspect-ratio:1; border-radius:5px; background:rgba(18,18,18,.6);"></span><span style="aspect-ratio:1; border-radius:5px; background:rgba(18,18,18,.12);"></span><span style="aspect-ratio:1; border-radius:5px; background:rgba(18,18,18,.35);"></span><span style="aspect-ratio:1; border-radius:5px; background:var(--onA);"></span><span style="aspect-ratio:1; border-radius:5px; background:var(--onA);"></span><span style="aspect-ratio:1; border-radius:5px; background:rgba(18,18,18,.6);"></span><span style="aspect-ratio:1; border-radius:5px; background:rgba(18,18,18,.12);"></span><span style="aspect-ratio:1; border-radius:5px; background:rgba(18,18,18,.12);"></span><span style="aspect-ratio:1; border-radius:5px; background:rgba(18,18,18,.35);"></span><span style="aspect-ratio:1; border-radius:5px; background:rgba(18,18,18,.6);"></span><span style="aspect-ratio:1; border-radius:5px; background:rgba(18,18,18,.12);"></span><span style="aspect-ratio:1; border-radius:5px; background:rgba(18,18,18,.35);"></span><span style="aspect-ratio:1; border-radius:5px; background:var(--onA);"></span>
+              <span style="aspect-ratio:1; border-radius:5px; background:var(--onA);"></span><span style="aspect-ratio:1; border-radius:5px; background:rgba(18,18,18,.6);"></span><span style="aspect-ratio:1; border-radius:5px; background:var(--onA);"></span><span style="aspect-ratio:1; border-radius:5px; background:rgba(18,18,18,.6);"></span><span style="aspect-ratio:1; border-radius:5px; background:var(--onA);"></span><span style="aspect-ratio:1; border-radius:5px; background:var(--onA);"></span><span style="aspect-ratio:1; border-radius:5px; background:rgba(18,18,18,.6);"></span><span style="aspect-ratio:1; border-radius:5px; background:var(--onA);"></span><span style="aspect-ratio:1; border-radius:5px; background:var(--onA);"></span><span style="aspect-ratio:1; border-radius:5px; background:rgba(18,18,18,.6);"></span><span style="aspect-ratio:1; border-radius:5px; background:var(--a1); box-shadow:0 0 0 2px var(--onA); color:var(--onA);"></span><span style="aspect-ratio:1; border-radius:5px; border:1.5px dashed rgba(18,18,18,.3);"></span><span style="aspect-ratio:1; border-radius:5px; border:1.5px dashed rgba(18,18,18,.3);"></span><span style="aspect-ratio:1; border-radius:5px; border:1.5px dashed rgba(18,18,18,.3);"></span><span style="aspect-ratio:1; border-radius:5px; border:1.5px dashed rgba(18,18,18,.3);"></span>
+            </div>
+          </div>
+        </div>
+        <div style="grid-column:5/9; height:330px; background:var(--card); border:1px solid var(--line); border-radius:28px; padding:26px;">
+          <div style="display:flex; justify-content:space-between; align-items:baseline;"><span class="bq" style="font-size:24px; font-weight:700; letter-spacing:-.03em; color:var(--ink);">Today</span><span class="gs" style="font-size:15px; font-weight:700; color:var(--ink);">3 of 4</span></div>
+          <div class="gs" style="display:flex; flex-direction:column; gap:8px; margin-top:16px;">
+            <div style="display:flex; align-items:center; gap:12px; background:var(--inset); border-radius:16px; padding:12px 14px;"><span class="ic" style="width:26px; height:26px; border-radius:50%; background:var(--btn); color:var(--btnText); align-items:center; justify-content:center; font-size:14px;"><i data-lucide="check"></i></span><span style="flex:1; font-size:15px; color:var(--subtle); text-decoration:line-through;">Morning Offering</span><span style="font-size:13px; color:var(--subtle);">7:14 AM</span></div>
+            <div style="display:flex; align-items:center; gap:12px; background:var(--inset); border-radius:16px; padding:12px 14px;"><span class="ic" style="width:26px; height:26px; border-radius:50%; background:var(--btn); color:var(--btnText); align-items:center; justify-content:center; font-size:14px;"><i data-lucide="check"></i></span><span style="flex:1; font-size:15px; color:var(--subtle); text-decoration:line-through;">The Angelus</span><span style="font-size:13px; color:var(--subtle);">12:02 PM</span></div>
+            <div style="display:flex; align-items:center; gap:12px; background:var(--inset); border-radius:16px; padding:12px 14px;"><span class="ic" style="width:26px; height:26px; border-radius:50%; background:var(--btn); color:var(--btnText); align-items:center; justify-content:center; font-size:14px;"><i data-lucide="check"></i></span><span style="flex:1; font-size:15px; color:var(--subtle); text-decoration:line-through;">Rosary · Glorious</span><span style="font-size:13px; color:var(--subtle);">5:30 PM</span></div>
+            <div style="display:flex; align-items:center; gap:12px; border:2px solid var(--ink); border-radius:16px; padding:10px 12px;"><span style="width:26px; height:26px; border-radius:50%; border:2px solid var(--ink);"></span><span style="flex:1; font-size:15px; font-weight:600; color:var(--ink);">Evening Examen</span><span style="font-size:13px; font-weight:600; background:var(--a1); color:var(--onA); padding:7px 13px; border-radius:999px;">9:00 PM</span></div>
+          </div>
+        </div>
+        <div style="grid-column:9/13; grid-row:span 2; position:relative; border-radius:28px; overflow:hidden; background:url('assets/monstrance.jpg') 50% 42% / cover no-repeat;">
+          <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,0) 35%, rgba(0,0,0,.85));"></div>
+          <span class="gs" style="position:absolute; left:22px; top:22px; font-size:13px; font-weight:700; color:var(--onA); background:var(--a4); padding:7px 13px; border-radius:999px;">Tonight · 8 PM</span>
+          <div style="position:absolute; left:26px; right:26px; bottom:26px;">
+            <div class="bq" style="font-size:44px; font-weight:700; letter-spacing:-.03em; line-height:.95; color:#fff;">Rosary<br><span class="is" style="letter-spacing:0;">together</span></div>
+            <div class="gs" style="font-size:15px; color:#EDEDF0; margin-top:12px;">Glorious Mysteries, live with 214 people from your parish.</div>
+            <div class="gs" style="display:flex; align-items:center; justify-content:center; gap:9px; margin-top:20px; font-size:15px; font-weight:600; color:var(--onA); background:#fff; padding:15px; border-radius:999px;"><span class="ic"><i data-lucide="bell"></i></span>Remind me</div>
+          </div>
+        </div>
+        <div style="grid-column:1/9; display:grid; grid-template-columns:repeat(3,1fr); gap:16px;">
+          <div style="height:236px; background:var(--a3); border-radius:28px; padding:24px; display:flex; flex-direction:column; justify-content:space-between; color:var(--onA);"><div style="display:flex; justify-content:space-between;"><span class="mn" style="color:var(--onA);">10 min · guided</span><span class="ic" style="font-size:20px; color:var(--onA);"><i data-lucide="moon"></i></span></div><div><div class="bq" style="font-size:30px; font-weight:700; letter-spacing:-.04em; line-height:1; color:var(--onA);">The Examen</div><div class="gs" style="font-size:14px; color:var(--onA); margin-top:6px;">St. Ignatius, five steps</div></div><span class="ic" style="width:46px; height:46px; border-radius:50%; background:var(--onA); color:#fff; align-items:center; justify-content:center; font-size:18px;"><i data-lucide="play"></i></span></div>
+          <div style="height:236px; background:var(--a4); border-radius:28px; padding:24px; display:flex; flex-direction:column; justify-content:space-between; color:var(--onA);"><div style="display:flex; justify-content:space-between;"><span class="mn" style="color:var(--onA);">15 min · audio</span><span class="ic" style="font-size:20px; color:var(--onA);"><i data-lucide="book-open"></i></span></div><div><div class="bq" style="font-size:30px; font-weight:700; letter-spacing:-.04em; line-height:1; color:var(--onA);">Lectio Divina</div><div class="gs" style="font-size:14px; color:var(--onA); margin-top:6px;">On Sunday's Gospel</div></div><span class="ic" style="width:46px; height:46px; border-radius:50%; background:var(--onA); color:#fff; align-items:center; justify-content:center; font-size:18px;"><i data-lucide="play"></i></span></div>
+          <div style="height:236px; background:var(--a5); border-radius:28px; padding:24px; display:flex; flex-direction:column; justify-content:space-between; color:var(--onA);"><div style="display:flex; justify-content:space-between;"><span class="mn" style="color:var(--onA);">8 min · chaplet</span><span class="ic" style="font-size:20px; color:var(--onA);"><i data-lucide="heart"></i></span></div><div><div class="bq" style="font-size:30px; font-weight:700; letter-spacing:-.04em; line-height:1; color:var(--onA);">Divine Mercy</div><div class="gs" style="font-size:14px; color:var(--onA); margin-top:6px;">Pray it at 3 PM</div></div><span class="ic" style="width:46px; height:46px; border-radius:50%; background:var(--onA); color:#fff; align-items:center; justify-content:center; font-size:18px;"><i data-lucide="play"></i></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 05 · COMMUNITY ===== -->
+<div style="position:absolute; left:5680px; top:120px; width:1320px;">
+  <div class="frame-label" data-drags-parent="1"><b>Community</b><span>web · feed + reels</span></div>
+  <div style="width:1320px; height:900px; background:var(--bg); border-radius:20px; overflow:hidden; box-shadow:0 10px 40px rgba(0,0,0,.10); display:flex; flex-direction:column;">
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:20px 28px;">
+      <div style="display:flex; align-items:center; gap:10px;"><div style="width:34px; height:34px; border-radius:11px; background:var(--logoBg); display:flex; align-items:center; justify-content:center;"><span class="ic" style="color:var(--logoIc); font-size:18px;"><i data-lucide="flame"></i></span></div><span class="bq" style="font-size:22px; font-weight:700; letter-spacing:-.04em; color:var(--ink);">catalysis</span></div>
+      <div class="gs" style="display:flex; gap:2px; background:var(--card); border:1px solid var(--line); border-radius:999px; padding:5px; font-size:14px; font-weight:500; color:var(--ink);"><span style="padding:9px 17px;">Home</span><span style="padding:9px 17px;">Bible</span><span style="padding:9px 17px;">Prayer</span><span style="padding:9px 17px; border-radius:999px; background:var(--btn); color:var(--btnText);">Community</span><span style="padding:9px 17px;">Events</span><span style="padding:9px 17px; display:inline-flex; align-items:center; gap:6px;"><span class="ic" style="color:var(--a1);"><i data-lucide="sparkles"></i></span>Lumen</span></div>
+      <div style="display:flex; align-items:center; gap:10px;"><span class="gs" style="display:inline-flex; align-items:center; gap:6px; background:var(--a2); color:var(--onA); font-size:14px; font-weight:700; padding:9px 14px; border-radius:999px;"><span class="ic"><i data-lucide="flame"></i></span>12</span><span onClick="{{ toggleTheme }}" class="ic" style="width:40px; height:40px; border-radius:50%; background:var(--card); border:1px solid var(--line); align-items:center; justify-content:center; font-size:17px; color:var(--ink); cursor:pointer;"><i data-lucide="sun-moon"></i></span><span class="ic" style="width:40px; height:40px; border-radius:50%; background:var(--card); border:1px solid var(--line); align-items:center; justify-content:center; font-size:17px; color:var(--ink);"><i data-lucide="bell"></i></span><span class="bq" style="width:40px; height:40px; border-radius:50%; background:var(--a3); color:var(--onA); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:16px;">M</span></div>
+    </div>
+    <div style="flex:1; display:grid; grid-template-columns:230px 1fr 330px; gap:16px; padding:4px 28px 28px; min-height:0;">
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        <div style="background:var(--card); border:1px solid var(--line); border-radius:28px; padding:14px;">
+          <div class="gs" style="display:flex; flex-direction:column; gap:4px; font-size:15px; font-weight:500; color:var(--ink);">
+            <div style="display:flex; align-items:center; gap:10px; padding:11px 13px; border-radius:14px; background:var(--btn); color:var(--btnText);"><span class="ic"><i data-lucide="sparkles"></i></span>For you</div>
+            <div style="display:flex; align-items:center; gap:10px; padding:11px 13px;"><span class="ic"><i data-lucide="users"></i></span>Following</div>
+            <div style="display:flex; align-items:center; gap:10px; padding:11px 13px;"><span class="ic"><i data-lucide="hand-heart"></i></span>Intentions<span style="margin-left:auto; font-size:12px; font-weight:700; background:var(--a1); padding:2px 8px; border-radius:999px; color:var(--onA);">12</span></div>
+            <div style="display:flex; align-items:center; gap:10px; padding:11px 13px;"><span class="ic"><i data-lucide="clapperboard"></i></span>Reels</div>
+          </div>
+        </div>
+        <div style="background:var(--card); border:1px solid var(--line); border-radius:28px; padding:20px; flex:1;">
+          <div class="mn" style="color:var(--muted);">Your groups</div>
+          <div class="gs" style="display:flex; flex-direction:column; gap:12px; margin-top:14px; font-size:14px; font-weight:500; color:var(--ink);">
+            <div style="display:flex; align-items:center; gap:11px;"><span class="bq" style="width:36px; height:36px; border-radius:12px; background:var(--a2); display:flex; align-items:center; justify-content:center; font-weight:700; color:var(--onA);">N</span>Newman Center</div>
+            <div style="display:flex; align-items:center; gap:11px;"><span class="bq" style="width:36px; height:36px; border-radius:12px; background:var(--a5); display:flex; align-items:center; justify-content:center; font-weight:700; color:var(--onA);">W</span>Women's Bible Study</div>
+            <div style="display:flex; align-items:center; gap:11px;"><span class="bq" style="width:36px; height:36px; border-radius:12px; background:var(--a3); display:flex; align-items:center; justify-content:center; font-weight:700; color:var(--onA);">Y</span>Young Adults, St. Joseph's</div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:14px; min-height:0; overflow:hidden;">
+        <div style="display:flex; gap:14px; align-items:flex-start;">
+          <div style="text-align:center;"><div class="ic" style="width:66px; height:66px; border-radius:50%; border:2px dashed var(--ink); align-items:center; justify-content:center; font-size:22px; color:var(--ink);"><i data-lucide="plus"></i></div><div class="gs" style="font-size:12px; font-weight:500; color:var(--ink); margin-top:6px;">Your reel</div></div>
+          <div style="text-align:center;"><div style="width:66px; height:66px; border-radius:50%; padding:3px; background:var(--a1); color:var(--onA);"><div style="width:100%; height:100%; border-radius:50%; border:3px solid var(--bg); background:url('assets/st-joseph.webp') 50% 25% / cover;"></div></div><div class="gs" style="font-size:12px; font-weight:500; color:var(--ink); margin-top:6px;">fr.xavier</div></div>
+          <div style="text-align:center;"><div style="width:66px; height:66px; border-radius:50%; padding:3px; background:var(--a1); color:var(--onA);"><div style="width:100%; height:100%; border-radius:50%; border:3px solid var(--bg); background:#333 url('assets/angel.webp') 50% 35% / cover;"></div></div><div class="gs" style="font-size:12px; font-weight:500; color:var(--ink); margin-top:6px;">ana.ng</div></div>
+          <div style="text-align:center;"><div style="width:66px; height:66px; border-radius:50%; padding:3px; background:var(--a1); color:var(--onA);"><div style="width:100%; height:100%; border-radius:50%; border:3px solid var(--bg); background:url('assets/monstrance.jpg') 50% 42% / cover;"></div></div><div class="gs" style="font-size:12px; font-weight:500; color:var(--ink); margin-top:6px;">newman.nyu</div></div>
+          <div style="text-align:center;"><div style="width:66px; height:66px; border-radius:50%; padding:3px; background:var(--line);"><div class="bq" style="width:100%; height:100%; border-radius:50%; border:3px solid var(--bg); background:var(--a4); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:20px; color:var(--onA);">JT</div></div><div class="gs" style="font-size:12px; font-weight:500; color:var(--ink); margin-top:6px;">jacob.t</div></div>
+        </div>
+        <div class="gs" style="display:flex; align-items:center; gap:12px; background:var(--inset); border-radius:999px; padding:8px 8px 8px 10px;"><span class="bq" style="width:38px; height:38px; border-radius:50%; background:var(--a3); display:flex; align-items:center; justify-content:center; font-weight:700; color:var(--onA);">M</span><span style="flex:1; font-size:15px; color:var(--subtle);">Share a reflection, photo or intention…</span><span class="ic" style="font-size:19px; color:var(--muted); padding:0 6px;"><i data-lucide="image"></i></span><span style="font-size:14px; font-weight:600; color:var(--btnText); background:var(--btn); padding:11px 20px; border-radius:999px;">Post</span></div>
+        <div style="background:var(--card); border:1px solid var(--line); border-radius:28px; padding:22px 24px;">
+          <div style="display:flex; align-items:center; gap:12px;"><span class="bq" style="width:42px; height:42px; border-radius:50%; background:var(--a4); display:flex; align-items:center; justify-content:center; font-weight:700; color:var(--onA);">JT</span><div class="gs" style="flex:1;"><div style="font-size:15px; font-weight:600; color:var(--ink);">Jacob Torres</div><div style="font-size:13px; color:var(--subtle);">Newman Center · 2h</div></div><span class="gs" style="font-size:12px; font-weight:700; color:var(--onA); background:var(--a6); padding:6px 12px; border-radius:999px;">Prayer request</span></div>
+          <div class="gs" style="font-size:17px; line-height:1.55; color:var(--ink); margin-top:14px;">Starting finals week and feeling the weight of it. Could use prayers for peace and focus. Trusting that He's got me.</div>
+          <div class="gs" style="display:flex; gap:8px; margin-top:16px; font-size:14px; font-weight:600;"><span style="display:inline-flex; align-items:center; gap:7px; background:var(--a2); color:var(--onA); padding:9px 15px; border-radius:999px;"><span class="ic"><i data-lucide="hand-heart"></i></span>I prayed · 24</span><span style="display:inline-flex; align-items:center; gap:7px; background:var(--inset); color:var(--ink); padding:9px 15px; border-radius:999px;"><span class="ic"><i data-lucide="message-circle"></i></span>7</span><span style="display:inline-flex; align-items:center; gap:7px; background:var(--inset); color:var(--ink); padding:9px 15px; border-radius:999px;"><span class="ic"><i data-lucide="send"></i></span>Share</span></div>
+        </div>
+        <div style="background:var(--card); border:1px solid var(--line); border-radius:28px; padding:22px 24px; display:grid; grid-template-columns:1fr 190px; gap:20px;">
+          <div>
+            <div style="display:flex; align-items:center; gap:12px;"><span class="bq" style="width:42px; height:42px; border-radius:50%; background:var(--a5); display:flex; align-items:center; justify-content:center; font-weight:700; color:var(--onA);">AN</span><div class="gs"><div style="font-size:15px; font-weight:600; color:var(--ink);">Ana Nguyen</div><div style="font-size:13px; color:var(--subtle);">Reflection · 5h</div></div></div>
+            <div class="is" style="font-size:34px; line-height:1.05; color:var(--ink); margin-top:14px;">“Go to Joseph.”</div>
+            <div class="gs" style="font-size:15px; line-height:1.5; color:var(--muted); margin-top:8px;">Found this window after Mass. Asking his intercession for everyone waiting on a door to open.</div>
+          </div>
+          <div style="border-radius:20px; background:url('assets/st-joseph.webp') 50% 25% / cover no-repeat; min-height:190px;"></div>
+        </div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        <div style="background:var(--card); border:1px solid var(--line); border-radius:28px; padding:22px;">
+          <div class="bq" style="font-size:22px; font-weight:700; letter-spacing:-.03em; color:var(--ink);">Intentions this week</div>
+          <div class="gs" style="display:flex; flex-direction:column; gap:10px; margin-top:14px;">
+            <div style="background:var(--inset); border-radius:16px; padding:14px;"><div style="font-size:15px; line-height:1.4; color:var(--ink);">For a grandmother entering hospice</div><div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;"><span style="font-size:13px; color:var(--muted);">112 praying</span><span style="font-size:13px; font-weight:600; color:var(--ink); background:var(--card); border:1px solid var(--line); padding:6px 12px; border-radius:999px;">Pray</span></div></div>
+            <div style="background:var(--inset); border-radius:16px; padding:14px;"><div style="font-size:15px; line-height:1.4; color:var(--ink);">Discernment for three RCIA candidates</div><div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;"><span style="font-size:13px; color:var(--muted);">87 praying</span><span style="font-size:13px; font-weight:600; color:var(--onA); background:var(--a2); padding:6px 12px; border-radius:999px;">Prayed</span></div></div>
+            <div style="background:var(--inset); border-radius:16px; padding:14px;"><div style="font-size:15px; line-height:1.4; color:var(--ink);">Peace for students during midterms</div><div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;"><span style="font-size:13px; color:var(--muted);">64 praying</span><span style="font-size:13px; font-weight:600; color:var(--ink); background:var(--card); border:1px solid var(--line); padding:6px 12px; border-radius:999px;">Pray</span></div></div>
+          </div>
+        </div>
+        <div style="flex:1; background:var(--solid); border-radius:28px; padding:24px; display:flex; flex-direction:column; justify-content:space-between;">
+          <span class="mn" style="color:var(--a2);">Group spotlight</span>
+          <div><div class="bq" style="font-size:30px; font-weight:700; letter-spacing:-.04em; line-height:1; color:#fff;">Young Adults, St. Joseph's</div><div class="gs" style="font-size:14px; color:#B4B4BA; margin-top:8px;">Holy Hour + dinner, Thursdays at 7</div></div>
+          <span class="gs" style="text-align:center; font-size:15px; font-weight:600; color:var(--onA); background:var(--a2); padding:14px; border-radius:999px;">Join group</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 06 · EVENTS ===== -->
+<div style="position:absolute; left:7080px; top:120px; width:1320px;">
+  <div class="frame-label" data-drags-parent="1"><b>Events &amp; Calendar</b><span>web</span></div>
+  <div style="width:1320px; height:900px; background:var(--bg); border-radius:20px; overflow:hidden; box-shadow:0 10px 40px rgba(0,0,0,.10); display:flex; flex-direction:column;">
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:20px 28px;">
+      <div style="display:flex; align-items:center; gap:10px;"><div style="width:34px; height:34px; border-radius:11px; background:var(--logoBg); display:flex; align-items:center; justify-content:center;"><span class="ic" style="color:var(--logoIc); font-size:18px;"><i data-lucide="flame"></i></span></div><span class="bq" style="font-size:22px; font-weight:700; letter-spacing:-.04em; color:var(--ink);">catalysis</span></div>
+      <div class="gs" style="display:flex; gap:2px; background:var(--card); border:1px solid var(--line); border-radius:999px; padding:5px; font-size:14px; font-weight:500; color:var(--ink);"><span style="padding:9px 17px;">Home</span><span style="padding:9px 17px;">Bible</span><span style="padding:9px 17px;">Prayer</span><span style="padding:9px 17px;">Community</span><span style="padding:9px 17px; border-radius:999px; background:var(--btn); color:var(--btnText);">Events</span><span style="padding:9px 17px; display:inline-flex; align-items:center; gap:6px;"><span class="ic" style="color:var(--a1);"><i data-lucide="sparkles"></i></span>Lumen</span></div>
+      <div style="display:flex; align-items:center; gap:10px;"><span class="gs" style="display:inline-flex; align-items:center; gap:6px; background:var(--a2); color:var(--onA); font-size:14px; font-weight:700; padding:9px 14px; border-radius:999px;"><span class="ic"><i data-lucide="flame"></i></span>12</span><span onClick="{{ toggleTheme }}" class="ic" style="width:40px; height:40px; border-radius:50%; background:var(--card); border:1px solid var(--line); align-items:center; justify-content:center; font-size:17px; color:var(--ink); cursor:pointer;"><i data-lucide="sun-moon"></i></span><span class="ic" style="width:40px; height:40px; border-radius:50%; background:var(--card); border:1px solid var(--line); align-items:center; justify-content:center; font-size:17px; color:var(--ink);"><i data-lucide="bell"></i></span><span class="bq" style="width:40px; height:40px; border-radius:50%; background:var(--a3); color:var(--onA); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:16px;">M</span></div>
+    </div>
+    <div style="flex:1; display:grid; grid-template-columns:1fr 380px; gap:16px; padding:4px 28px 28px; min-height:0;">
+      <div style="background:var(--card); border:1px solid var(--line); border-radius:28px; padding:26px; display:flex; flex-direction:column;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div class="bq" style="font-size:52px; font-weight:700; letter-spacing:-.035em; line-height:1; color:var(--ink);">September <span class="is" style="letter-spacing:0; color:var(--subtle);">2026</span></div>
+          <div style="display:flex; gap:8px; align-items:center;"><div class="gs" style="display:flex; background:var(--inset); border-radius:999px; padding:4px; font-size:13px; font-weight:600;"><span style="padding:8px 14px; background:var(--btn); color:var(--btnText); border-radius:999px;">Month</span><span style="padding:8px 14px; color:var(--ink);">List</span></div><span class="ic" style="width:38px; height:38px; border-radius:50%; background:var(--inset); align-items:center; justify-content:center; color:var(--ink);"><i data-lucide="chevron-left"></i></span><span class="ic" style="width:38px; height:38px; border-radius:50%; background:var(--inset); align-items:center; justify-content:center; color:var(--ink);"><i data-lucide="chevron-right"></i></span></div>
+        </div>
+        <div class="mn" style="display:grid; grid-template-columns:repeat(7,1fr); gap:6px; margin-top:20px; color:var(--muted); font-size:10px;"><span style="padding-left:10px;">Sun</span><span style="padding-left:10px;">Mon</span><span style="padding-left:10px;">Tue</span><span style="padding-left:10px;">Wed</span><span style="padding-left:10px;">Thu</span><span style="padding-left:10px;">Fri</span><span style="padding-left:10px;">Sat</span></div>
+        <div class="gs" style="flex:1; display:grid; grid-template-columns:repeat(7,1fr); grid-template-rows:repeat(5,1fr); gap:6px; margin-top:8px; font-size:14px; font-weight:600; color:var(--ink);">
+          <div style="border-radius:14px; padding:10px; color:var(--faint);">30</div><div style="border-radius:14px; padding:10px; color:var(--faint);">31</div>
+          <div style="border-radius:14px; padding:10px; background:var(--inset);">1</div><div style="border-radius:14px; padding:10px; background:var(--inset);">2</div>
+          <div style="border-radius:14px; padding:10px; background:var(--inset);">3<div style="font-size:11px; font-weight:600; background:var(--a3); padding:4px 7px; border-radius:7px; margin-top:6px; color:var(--onA);">Welcome Mass</div></div>
+          <div style="border-radius:14px; padding:10px; background:var(--inset);">4</div><div style="border-radius:14px; padding:10px; background:var(--inset);">5</div>
+          <div style="border-radius:14px; padding:10px; background:var(--inset);">6</div><div style="border-radius:14px; padding:10px; background:var(--inset);">7</div>
+          <div style="border-radius:14px; padding:10px; background:var(--inset);">8<div class="is" style="font-size:14px; color:var(--a1); margin-top:4px; line-height:1.1;">Nativity of Mary</div></div>
+          <div style="border-radius:14px; padding:10px; background:var(--inset);">9</div>
+          <div style="border-radius:14px; padding:10px; background:var(--inset);">10<div style="font-size:11px; font-weight:600; background:var(--a4); padding:4px 7px; border-radius:7px; margin-top:6px; color:var(--onA);">Bible Study</div></div>
+          <div style="border-radius:14px; padding:10px; background:var(--inset);">11</div><div style="border-radius:14px; padding:10px; background:var(--inset);">12</div>
+          <div style="border-radius:14px; padding:10px; background:var(--inset);">13</div>
+          <div style="border-radius:14px; padding:10px; background:var(--inset);">14<div class="is" style="font-size:14px; color:var(--a1); margin-top:4px; line-height:1.1;">Exaltation of the Cross</div></div>
+          <div style="border-radius:14px; padding:10px; background:var(--inset);">15</div><div style="border-radius:14px; padding:10px; background:var(--inset);">16</div>
+          <div style="border-radius:14px; padding:10px; background:var(--inset);">17<div style="font-size:11px; font-weight:600; background:var(--a4); padding:4px 7px; border-radius:7px; margin-top:6px; color:var(--onA);">Bible Study</div></div>
+          <div style="border-radius:14px; padding:10px; background:var(--inset);">18</div>
+          <div style="border-radius:14px; padding:10px; background:var(--inset);">19<div style="font-size:11px; font-weight:600; background:var(--a2); padding:4px 7px; border-radius:7px; margin-top:6px; color:var(--onA);">Service Day</div></div>
+          <div style="border-radius:14px; padding:10px; background:var(--inset);">20</div><div style="border-radius:14px; padding:10px; background:var(--inset);">21</div><div style="border-radius:14px; padding:10px; background:var(--inset);">22</div><div style="border-radius:14px; padding:10px; background:var(--inset);">23</div>
+          <div style="border-radius:14px; padding:10px; background:var(--inset);">24<div style="font-size:11px; font-weight:600; background:var(--a4); padding:4px 7px; border-radius:7px; margin-top:6px; color:var(--onA);">Bible Study</div></div>
+          <div style="border-radius:14px; padding:10px; background:var(--inset);">25</div>
+          <div style="border-radius:14px; padding:8px; border:2px solid var(--ink);">26<div class="mn" style="font-size:9px; margin-top:6px; color:var(--muted);">Today</div></div>
+          <div style="border-radius:14px; padding:10px; background:var(--inset);">27</div><div style="border-radius:14px; padding:10px; background:var(--inset);">28</div>
+          <div style="border-radius:14px; padding:10px; background:var(--btn); color:var(--btnText);">29<div class="is" style="font-size:14px; color:var(--btnText); margin-top:4px; line-height:1.1;">The Archangels</div><div style="display:flex; gap:4px; margin-top:6px;"><span style="width:8px; height:8px; border-radius:50%; background:var(--a2); color:var(--onA);"></span><span style="width:8px; height:8px; border-radius:50%; background:var(--a4); color:var(--onA);"></span></div></div>
+          <div style="border-radius:14px; padding:10px; background:var(--inset);">30</div>
+          <div style="border-radius:14px; padding:10px; color:var(--faint);">1</div><div style="border-radius:14px; padding:10px; color:var(--faint);">2</div><div style="border-radius:14px; padding:10px; color:var(--faint);">3</div>
+        </div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:12px; min-height:0;">
+        <div style="position:relative; height:230px; border-radius:28px; overflow:hidden; background:#121212 url('assets/angel.webp') 50% 35% / cover no-repeat;">
+          <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,.82));"></div>
+          <span class="gs" style="position:absolute; left:18px; top:18px; font-size:13px; font-weight:700; color:var(--onA); background:#fff; padding:6px 12px; border-radius:999px;">Tue, Sept 29</span>
+          <div class="bq" style="position:absolute; left:22px; right:22px; bottom:20px; font-size:30px; font-weight:700; letter-spacing:-.04em; line-height:1; color:#fff;">Feast of the <span class="is" style="letter-spacing:0;">Archangels</span></div>
+        </div>
+        <div style="background:var(--card); border:1px solid var(--line); border-radius:24px; padding:18px; display:flex; gap:14px; align-items:center;">
+          <div style="width:58px; height:58px; border-radius:16px; background:var(--a2); display:flex; flex-direction:column; align-items:center; justify-content:center; color:var(--onA);"><span class="bq" style="font-size:20px; font-weight:700; line-height:1; color:var(--onA);">7:00</span><span class="mn" style="font-size:9px; color:var(--onA);">PM</span></div>
+          <div class="gs" style="flex:1;"><div style="font-size:16px; font-weight:600; color:var(--ink);">Adoration &amp; Confession</div><div style="font-size:13px; color:var(--muted); margin-top:2px;">Newman Center · 48 going</div></div>
+          <span class="gs" style="display:inline-flex; align-items:center; gap:5px; font-size:13px; font-weight:600; color:var(--onA); background:var(--a2); padding:9px 13px; border-radius:999px;"><span class="ic"><i data-lucide="check"></i></span>Going</span>
+        </div>
+        <div style="background:var(--card); border:1px solid var(--line); border-radius:24px; padding:18px; display:flex; gap:14px; align-items:center;">
+          <div style="width:58px; height:58px; border-radius:16px; background:var(--a4); display:flex; flex-direction:column; align-items:center; justify-content:center; color:var(--onA);"><span class="bq" style="font-size:20px; font-weight:700; line-height:1; color:var(--onA);">9:00</span><span class="mn" style="font-size:9px; color:var(--onA);">PM</span></div>
+          <div class="gs" style="flex:1;"><div style="font-size:16px; font-weight:600; color:var(--ink);">Theology on Tap</div><div style="font-size:13px; color:var(--muted); margin-top:2px;">The Library Pub · 31 going</div></div>
+          <span class="gs" style="font-size:13px; font-weight:600; color:var(--btnText); background:var(--btn); padding:10px 16px; border-radius:999px;">RSVP</span>
+        </div>
+        <div style="flex:1; background:var(--inset); border-radius:24px; padding:20px;">
+          <div class="mn" style="color:var(--muted);">Coming in October</div>
+          <div class="gs" style="display:flex; flex-direction:column; gap:12px; margin-top:14px;">
+            <div style="display:flex; align-items:center; gap:12px;"><span class="bq" style="width:40px; font-size:24px; font-weight:700; color:var(--a1);">04</span><span style="flex:1; font-size:15px; color:var(--ink);">Blessing of the Animals</span><span class="ic" style="color:var(--subtle);"><i data-lucide="chevron-right"></i></span></div>
+            <div style="display:flex; align-items:center; gap:12px;"><span class="bq" style="width:40px; font-size:24px; font-weight:700; color:var(--a1);">07</span><span style="flex:1; font-size:15px; color:var(--ink);">Rosary Walk in the Park</span><span class="ic" style="color:var(--subtle);"><i data-lucide="chevron-right"></i></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 07 · LUMEN AI ===== -->
+<div style="position:absolute; left:8480px; top:120px; width:1320px;">
+  <div class="frame-label" data-drags-parent="1"><b>Lumen AI</b><span>web · scripture &amp; catechism</span></div>
+  <div style="width:1320px; height:900px; background:var(--bg); border-radius:20px; overflow:hidden; box-shadow:0 10px 40px rgba(0,0,0,.10); display:flex; flex-direction:column;">
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:20px 28px;">
+      <div style="display:flex; align-items:center; gap:10px;"><div style="width:34px; height:34px; border-radius:11px; background:var(--logoBg); display:flex; align-items:center; justify-content:center;"><span class="ic" style="color:var(--logoIc); font-size:18px;"><i data-lucide="flame"></i></span></div><span class="bq" style="font-size:22px; font-weight:700; letter-spacing:-.04em; color:var(--ink);">catalysis</span></div>
+      <div class="gs" style="display:flex; gap:2px; background:var(--card); border:1px solid var(--line); border-radius:999px; padding:5px; font-size:14px; font-weight:500; color:var(--ink);"><span style="padding:9px 17px;">Home</span><span style="padding:9px 17px;">Bible</span><span style="padding:9px 17px;">Prayer</span><span style="padding:9px 17px;">Community</span><span style="padding:9px 17px;">Events</span><span style="padding:9px 17px; display:inline-flex; align-items:center; gap:6px; border-radius:999px; background:var(--btn); color:var(--btnText);"><span class="ic" style="color:var(--btnText);"><i data-lucide="sparkles"></i></span>Lumen</span></div>
+      <div style="display:flex; align-items:center; gap:10px;"><span class="gs" style="display:inline-flex; align-items:center; gap:6px; background:var(--a2); color:var(--onA); font-size:14px; font-weight:700; padding:9px 14px; border-radius:999px;"><span class="ic"><i data-lucide="flame"></i></span>12</span><span onClick="{{ toggleTheme }}" class="ic" style="width:40px; height:40px; border-radius:50%; background:var(--card); border:1px solid var(--line); align-items:center; justify-content:center; font-size:17px; color:var(--ink); cursor:pointer;"><i data-lucide="sun-moon"></i></span><span class="ic" style="width:40px; height:40px; border-radius:50%; background:var(--card); border:1px solid var(--line); align-items:center; justify-content:center; font-size:17px; color:var(--ink);"><i data-lucide="bell"></i></span><span class="bq" style="width:40px; height:40px; border-radius:50%; background:var(--a3); color:var(--onA); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:16px;">M</span></div>
+    </div>
+    <div style="flex:1; display:grid; grid-template-columns:250px 1fr 310px; gap:16px; padding:4px 28px 28px; min-height:0;">
+      <div style="background:var(--inset); border-radius:28px; padding:18px;">
+        <div class="gs" style="display:flex; align-items:center; justify-content:center; gap:8px; font-size:15px; font-weight:600; color:var(--btnText); background:var(--btn); padding:14px; border-radius:999px;"><span class="ic"><i data-lucide="plus"></i></span>New chat</div>
+        <div class="mn" style="color:var(--muted); margin:22px 0 10px 8px;">This week</div>
+        <div class="gs" style="display:flex; flex-direction:column; gap:2px; font-size:14px; color:var(--ink);">
+          <div style="padding:11px 12px; border-radius:14px; background:var(--card); font-weight:600;">Forgiveness when it's hard</div>
+          <div style="padding:11px 12px;">Who were the archangels?</div>
+          <div style="padding:11px 12px;">How to pray the Examen</div>
+          <div style="padding:11px 12px;">Purgatory in the Catechism</div>
+        </div>
+        <div class="mn" style="color:var(--muted); margin:22px 0 10px 8px;">Try asking</div>
+        <div class="gs" style="display:flex; flex-direction:column; gap:8px; font-size:13px; font-weight:500; color:var(--ink);">
+          <span style="background:var(--a4); padding:10px 12px; border-radius:14px; color:var(--onA);">Explain today's Gospel simply</span>
+          <span style="background:var(--a3); padding:10px 12px; border-radius:14px; color:var(--onA);">A prayer before an exam</span>
+          <span style="background:var(--a5); padding:10px 12px; border-radius:14px; color:var(--onA);">Saints for anxiety</span>
+        </div>
+      </div>
+      <div style="background:var(--card); border:1px solid var(--line); border-radius:28px; display:flex; flex-direction:column; min-height:0; overflow:hidden;">
+        <div style="display:flex; align-items:center; gap:12px; padding:18px 26px; border-bottom:1px solid var(--line);"><span class="ic" style="width:40px; height:40px; border-radius:50%; background:var(--a1); color:var(--onA); align-items:center; justify-content:center; font-size:19px;"><i data-lucide="sparkles"></i></span><div><div class="bq" style="font-size:22px; font-weight:700; letter-spacing:-.03em; color:var(--ink); line-height:1;">Lumen</div><div class="gs" style="font-size:13px; color:var(--muted); margin-top:3px;">Answers from Scripture &amp; the Catechism, with sources</div></div></div>
+        <div style="flex:1; padding:26px 40px; display:flex; flex-direction:column; gap:20px; overflow:hidden;">
+          <div class="gs" style="align-self:flex-end; max-width:70%; background:var(--solid); color:#fff; font-size:16px; line-height:1.5; padding:14px 18px; border-radius:22px 22px 6px 22px;">What does the Church teach about forgiveness when it's really hard?</div>
+          <div style="max-width:88%;">
+            <div class="gs" style="font-size:16px; line-height:1.65; color:var(--ink);">Forgiveness is at the heart of the Gospel. Jesus tells Peter to forgive “seventy times seven” <span style="font-size:12px; font-weight:600; background:var(--a3); padding:3px 8px; border-radius:999px; color:var(--onA);">Mt 18:22</span> meaning without limit.</div>
+            <div style="background:var(--a4); border-radius:20px; padding:18px 20px; margin:14px 0; color:var(--onA);"><div class="is" style="font-size:26px; line-height:1.2; color:var(--onA);">“Forgive us our trespasses, as we forgive those who trespass against us.”</div><span class="gs" style="display:inline-block; margin-top:10px; font-size:12px; font-weight:600; color:var(--onA); background:#fff; padding:4px 10px; border-radius:999px;">CCC 2838–2845</span></div>
+            <div class="gs" style="font-size:16px; line-height:1.65; color:var(--ink);">It doesn't mean the hurt wasn't real. It means choosing not to be ruled by it. Want a short prayer for a forgiving heart?</div>
+            <div style="display:flex; gap:14px; margin-top:12px; color:var(--subtle); font-size:16px;" class="ic"><i data-lucide="copy"></i><i data-lucide="bookmark"></i><i data-lucide="thumbs-up"></i><i data-lucide="thumbs-down"></i></div>
+          </div>
+          <div class="gs" style="display:flex; gap:8px; flex-wrap:wrap; font-size:14px; font-weight:500; color:var(--ink);"><span style="border:1px solid var(--line); padding:9px 15px; border-radius:999px;">Yes, a prayer</span><span style="border:1px solid var(--line); padding:9px 15px; border-radius:999px;">A related passage</span><span style="border:1px solid var(--line); padding:9px 15px; border-radius:999px;">Saints who forgave</span></div>
+        </div>
+        <div style="padding:16px 22px 20px;">
+          <div class="gs" style="display:flex; align-items:center; gap:12px; background:var(--inset); border-radius:999px; padding:8px 8px 8px 20px;"><span class="ic" style="color:var(--muted); font-size:18px;"><i data-lucide="paperclip"></i></span><span style="flex:1; font-size:15px; color:var(--subtle);">Ask about scripture, prayer, the saints…</span><span class="ic" style="color:var(--muted); font-size:18px; padding:0 4px;"><i data-lucide="mic"></i></span><span class="ic" style="width:42px; height:42px; border-radius:50%; background:var(--a1); color:var(--onA); align-items:center; justify-content:center; font-size:18px;"><i data-lucide="arrow-up"></i></span></div>
+        </div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <div class="bq" style="font-size:22px; font-weight:700; letter-spacing:-.03em; color:var(--ink); padding:6px 4px 0;">Sources</div>
+        <div style="background:var(--card); border:1px solid var(--line); border-radius:22px; padding:16px 18px;"><span class="gs" style="font-size:11px; font-weight:700; background:var(--a3); color:var(--onA); padding:4px 9px; border-radius:999px;">Scripture</span><div class="gs" style="font-size:16px; font-weight:600; color:var(--ink); margin-top:10px;">Matthew 18:21–22</div><div class="gs" style="font-size:13px; color:var(--muted); margin-top:2px;">Seventy times seven</div></div>
+        <div style="background:var(--card); border:1px solid var(--line); border-radius:22px; padding:16px 18px;"><span class="gs" style="font-size:11px; font-weight:700; background:var(--a4); color:var(--onA); padding:4px 9px; border-radius:999px;">Catechism</span><div class="gs" style="font-size:16px; font-weight:600; color:var(--ink); margin-top:10px;">CCC 2838–2845</div><div class="gs" style="font-size:13px; color:var(--muted); margin-top:2px;">The fifth petition of the Our Father</div></div>
+        <div style="background:var(--card); border:1px solid var(--line); border-radius:22px; padding:16px 18px;"><span class="gs" style="font-size:11px; font-weight:700; background:var(--a3); color:var(--onA); padding:4px 9px; border-radius:999px;">Scripture</span><div class="gs" style="font-size:16px; font-weight:600; color:var(--ink); margin-top:10px;">Luke 23:34</div><div class="gs" style="font-size:13px; color:var(--muted); margin-top:2px;">Father, forgive them</div></div>
+        <div class="gs" style="margin-top:auto; background:var(--inset); border-radius:22px; padding:16px 18px; font-size:13px; line-height:1.5; color:var(--muted);">Lumen is a study aid, not a substitute for a priest or spiritual director.</div>
+      </div>
+    </div>
+  </div>
+</div></div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;light&quot;,&quot;tsType&quot;:&quot;'light' | 'dark'&quot;}}">
+class Component extends DCLogic {
+  state = { theme: null };
+  renderVals() {
+    const theme = this.state.theme || this.props.theme || 'light';
+    return { theme, toggleTheme: () => this.setState({ theme: theme === 'light' ? 'dark' : 'light' }) };
+  }
+  componentDidMount() {
+    const draw = () => { if (window.lucide && window.lucide.createIcons) { window.lucide.createIcons(); return true; } return false; };
+    if (!draw()) { const t = setInterval(() => { if (draw()) clearInterval(t); }, 60); setTimeout(() => clearInterval(t), 4000); }
+  }
+  componentDidUpdate() { if (window.lucide && window.lucide.createIcons) window.lucide.createIcons(); }
+}
+</script>
+</body>
+</html>

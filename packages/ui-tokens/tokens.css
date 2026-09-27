@@ -1,0 +1,41 @@
+/* GENERATED from packages/ui-tokens/src/index.ts — run `pnpm tokens`; do not edit. */
+@theme {
+  --color-*: initial;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+  --color-ink: #0E0E0E;
+  --color-black: #0B0B0B;
+  --color-paper: #F5F2EC;
+  --color-paper-reader: #FBFAF7;
+  --color-white: #FFFFFF;
+  --color-crimson: #A8141B;
+  --color-crimson-tint: #EFD3CF;
+  --color-crimson-on-dark: #F0B3B5;
+  --color-body: #1A1917;
+  --color-muted: #5A5750;
+  --color-subtle: #8C877E;
+  --color-disabled: #C4BEB3;
+  --color-strike: #B8B2A7;
+  --color-rule: #D9D4CA;
+  --color-rule-soft: #E4DFD5;
+  --color-on-dark-muted: #CFCAC0;
+  --color-on-dark-body: #E4E0D8;
+  --color-on-dark-body-bright: #ECE8E0;
+  --color-on-dark-caption: #DDD8CF;
+  --color-sheet: #161615;
+  --color-dark-panel: rgba(22,22,21,0.88);
+
+  --font-display: var(--font-bodoni), 'Bodoni 72', Didot, serif;
+  --font-text: var(--font-caslon), 'Iowan Old Style', Georgia, serif;
+  --font-label: var(--font-hanken), 'Helvetica Neue', Arial, sans-serif;
+
+  --breakpoint-*: initial;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1320px;
+
+  --radius-*: initial;
+  --radius-none: 0;
+  --radius-full: 9999px;
+}

@@ -1,0 +1,107 @@
+/* GENERATED from packages/ui-tokens/src/index.ts — run `pnpm tokens`; do not edit. */
+:root,
+[data-theme="light"] {
+  --bg: #FFFFFF;
+  --card: #FFFFFF;
+  --inset: #F6F3F2;
+  --line: #EFE9E7;
+  --ink: #1B1F3B;
+  --muted: #55586E;
+  --subtle: #8A8CA0;
+  --faint: #C6C7D2;
+  --solid: #1B1F3B;
+  --btn: #1B1F3B;
+  --btn-text: #FFFFFF;
+  --on-a: #1B1F3B;
+  --on-am: #3A3D55;
+  --logo-bg: #1B1F3B;
+  --logo-ic: #F2553A;
+  --mq-bg: #1B1F3B;
+  --mq-text: #F4F4F6;
+  --a1: #F2553A;
+  --a2: #FFC857;
+  --a3: #DCE1F5;
+  --a4: #FFE1D6;
+  --a5: #FFCFC2;
+  --a6: #FFE9E1;
+  --on-solid: #F4F4F6;
+  --on-solid-muted: #B4B4BA;
+  --on-solid-subtle: #8A8A92;
+  --on-photo: #EDEDF0;
+  --lime: #D7F75B;
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  --bg: #0C0C0F;
+  --card: #16161B;
+  --inset: #1F1F26;
+  --line: #2A2A32;
+  --ink: #FFFFFF;
+  --muted: #A0A0AA;
+  --subtle: #7C7C87;
+  --faint: #4A4A52;
+  --solid: #22222A;
+  --btn: #C6FF3D;
+  --btn-text: #0C0C0F;
+  --on-a: #0C0C0F;
+  --on-am: #2A2A30;
+  --logo-bg: #C6FF3D;
+  --logo-ic: #0C0C0F;
+  --mq-bg: #C6FF3D;
+  --mq-text: #0C0C0F;
+  --mq-star: #0C0C0F;
+  --a1: #FF8CC6;
+  --a2: #C6FF3D;
+  --a3: #F2F2F5;
+  --a4: #FF8CC6;
+  --a5: #FFB8DC;
+  --a6: #FFD6EA;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-*: initial;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+  --color-white: #FFFFFF;
+  --color-black: #000000;
+  --color-bg: var(--bg);
+  --color-card: var(--card);
+  --color-inset: var(--inset);
+  --color-line: var(--line);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-subtle: var(--subtle);
+  --color-faint: var(--faint);
+  --color-solid: var(--solid);
+  --color-btn: var(--btn);
+  --color-btn-text: var(--btn-text);
+  --color-on-a: var(--on-a);
+  --color-on-am: var(--on-am);
+  --color-logo-bg: var(--logo-bg);
+  --color-logo-ic: var(--logo-ic);
+  --color-mq-bg: var(--mq-bg);
+  --color-mq-text: var(--mq-text);
+  --color-a1: var(--a1);
+  --color-a2: var(--a2);
+  --color-a3: var(--a3);
+  --color-a4: var(--a4);
+  --color-a5: var(--a5);
+  --color-a6: var(--a6);
+  --color-on-solid: var(--on-solid);
+  --color-on-solid-muted: var(--on-solid-muted);
+  --color-on-solid-subtle: var(--on-solid-subtle);
+  --color-on-photo: var(--on-photo);
+  --color-lime: var(--lime);
+
+  --font-display: var(--font-outfit), sans-serif;
+  --font-body: var(--font-dm-sans), sans-serif;
+  --font-scripture: var(--font-newsreader), serif;
+
+  --breakpoint-*: initial;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1320px;
+}

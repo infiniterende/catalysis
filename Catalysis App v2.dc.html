@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..800;1,6..96,400..800&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+  body { margin:0; background:#E9E6E0; }
+  * { box-sizing:border-box; }
+  a { color:#A8141B; } a:hover { color:#0E0E0E; }
+  .dd { font-family:'Bodoni Moda',serif; }
+  .ct { font-family:'Libre Caslon Text',serif; }
+  .sn { font-family:'Hanken Grotesk',sans-serif; }
+  .lb { font-family:'Hanken Grotesk',sans-serif; text-transform:uppercase; letter-spacing:.22em; font-size:10px; font-weight:500; }
+  .ic { display:inline-flex; }
+  .ic svg { width:1em; height:1em; stroke-width:1.5; }
+  .frame-label { font-family:'Hanken Grotesk',sans-serif; cursor:grab; margin-bottom:13px; display:flex; align-items:baseline; gap:9px; }
+  .frame-label b { font-weight:700; font-size:14px; color:#0E0E0E; }
+  .frame-label span { font-size:12px; color:#5A5750; }
+  .phone { width:390px; height:844px; background:#F5F2EC; border-radius:40px; box-shadow:0 10px 40px rgba(0,0,0,.14), 0 0 0 1px rgba(0,0,0,.05); overflow:hidden; position:relative; }
+  .ph { background:radial-gradient(ellipse 70% 60% at 58% 38%, #74726e 0%, #2e2d2b 48%, #0c0c0c 100%); position:relative; overflow:hidden; }
+  .phl { font-family:ui-monospace,monospace; font-size:10px; letter-spacing:.08em; color:rgba(255,255,255,.42); }
+</style>
+</helmet>
+
+<!-- ===== 01 · HOME / LANDING (mobile) ===== -->
+<div style="position:absolute; left:80px; top:120px; width:390px;">
+  <div class="frame-label" data-drags-parent="1"><b>Home / Landing</b><span>mobile · pre-login</span></div>
+  <div class="phone" style="background:#0B0B0B;">
+    <div style="height:50px; display:flex; align-items:center; justify-content:space-between; padding:0 26px; color:#fff;"><span class="sn" style="font-size:14px; font-weight:600;">9:41</span><span class="ic" style="gap:6px; font-size:14px;"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+    <div class="dd" style="text-align:center; color:#fff; font-size:22px; letter-spacing:.34em; padding:6px 0 14px 8px; border-bottom:1px solid rgba(255,255,255,.2);">CATALYSIS</div>
+    <div class="lb" style="display:flex; justify-content:space-between; color:#fff; padding:11px 20px; font-size:9px; border-bottom:1px solid rgba(255,255,255,.12);"><span>Nº 09 — Sept 2026</span><span>A.M.D.G.</span></div>
+    <div class="ph" style="height:660px; background:#0B0B0B url('assets/angel.webp') 50% 0% / auto 100% no-repeat;">
+      <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,0) 25%, rgba(0,0,0,.82) 72%);"></div>
+      <div style="position:absolute; left:20px; right:20px; bottom:34px;">
+        <div style="display:flex; align-items:center; gap:12px;"><span class="lb" style="background:#A8141B; color:#fff; padding:6px 10px;">Est. 2026</span><span class="lb" style="color:#fff;">Faith</span></div>
+        <div class="dd" style="font-size:58px; line-height:.98; font-weight:500; color:#F5F2EC; margin-top:16px; letter-spacing:-.01em;">Grow in faith, every day.</div>
+        <div class="ct" style="font-style:italic; font-size:17px; line-height:1.45; color:#E4E0D8; margin-top:16px;">A daily companion for scripture, prayer, and a well-ordered life.</div>
+        <div class="lb" style="margin-top:28px; background:#F5F2EC; color:#0B0B0B; text-align:center; padding:17px; font-size:11px; font-weight:600;">Begin — it's free</div>
+        <div class="lb" style="margin-top:10px; border:1px solid rgba(255,255,255,.45); color:#fff; text-align:center; padding:16px; font-size:11px; font-weight:600;">Log in</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 02 · LOG IN (mobile) ===== -->
+<div style="position:absolute; left:550px; top:120px; width:390px;">
+  <div class="frame-label" data-drags-parent="1"><b>Log in / Sign up</b><span>mobile</span></div>
+  <div class="phone">
+    <div style="height:50px; display:flex; align-items:center; justify-content:space-between; padding:0 26px; color:#0E0E0E;"><span class="sn" style="font-size:14px; font-weight:600;">9:41</span><span class="ic" style="gap:6px; font-size:14px;"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+    <div class="dd" style="text-align:center; color:#0E0E0E; font-size:20px; letter-spacing:.34em; padding:6px 0 14px 8px; border-bottom:1px solid #0E0E0E;">CATALYSIS</div>
+    <div style="padding:34px 28px 0;">
+      <div class="lb" style="color:#A8141B;">Members</div>
+      <div class="dd" style="font-style:italic; font-size:54px; line-height:1; color:#0E0E0E; margin-top:12px;">Welcome back.</div>
+      <div class="ct" style="font-style:italic; font-size:16px; line-height:1.5; color:#5A5750; margin-top:12px;">Pick up where you left off. Today's readings are waiting.</div>
+      <div style="display:flex; gap:28px; margin-top:30px; border-bottom:1px solid #D9D4CA;">
+        <span class="lb" style="color:#0E0E0E; font-weight:600; padding-bottom:11px; border-bottom:1.5px solid #0E0E0E; margin-bottom:-1px;">Log in</span>
+        <span class="lb" style="color:#8C877E; padding-bottom:11px;">Sign up</span>
+      </div>
+      <div class="lb" style="color:#5A5750; margin-top:26px;">Email</div>
+      <div class="ct" style="font-size:17px; color:#0E0E0E; padding:10px 0; border-bottom:1px solid #0E0E0E;">maria.acosta@nyu.edu</div>
+      <div class="lb" style="color:#5A5750; margin-top:22px;">Password</div>
+      <div style="display:flex; align-items:center; padding:10px 0; border-bottom:1px solid #0E0E0E;"><span class="ct" style="flex:1; font-size:17px; letter-spacing:4px; color:#0E0E0E;">••••••••••</span><span class="lb" style="color:#5A5750; font-size:9px;">Show</span></div>
+      <div class="sn" style="text-align:right; font-size:12px; color:#0E0E0E; margin-top:12px; text-decoration:underline; text-underline-offset:3px;">Forgot password?</div>
+      <div class="lb" style="margin-top:22px; background:#0E0E0E; color:#F5F2EC; text-align:center; padding:18px; font-size:11px; font-weight:600;">Log in</div>
+      <div style="display:flex; align-items:center; gap:14px; margin:24px 0;"><div style="flex:1; height:1px; background:#D9D4CA;"></div><span class="ct" style="font-style:italic; font-size:14px; color:#8C877E;">or</span><div style="flex:1; height:1px; background:#D9D4CA;"></div></div>
+      <div style="display:flex; gap:10px;">
+        <div class="lb" style="flex:1; text-align:center; border:1px solid #0E0E0E; color:#0E0E0E; padding:14px 0; font-size:9.5px; font-weight:600;">Google</div>
+        <div class="lb" style="flex:1; text-align:center; border:1px solid #0E0E0E; color:#0E0E0E; padding:14px 0; font-size:9.5px; font-weight:600;">Apple</div>
+      </div>
+      <div class="ct" style="text-align:center; font-style:italic; font-size:15px; color:#5A5750; margin-top:26px;">New here? <span style="color:#A8141B; text-decoration:underline; text-underline-offset:3px; font-style:normal;">Create an account</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 03 · DASHBOARD (mobile) ===== -->
+<div style="position:absolute; left:1020px; top:120px; width:390px;">
+  <div class="frame-label" data-drags-parent="1"><b>Dashboard</b><span>mobile · today</span></div>
+  <div class="phone">
+    <div style="height:50px; display:flex; align-items:center; justify-content:space-between; padding:0 26px; color:#0E0E0E;"><span class="sn" style="font-size:14px; font-weight:600;">9:41</span><span class="ic" style="gap:6px; font-size:14px;"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:4px 20px 13px; border-bottom:1px solid #0E0E0E;">
+      <span class="ic" style="font-size:19px; color:#0E0E0E;"><i data-lucide="search"></i></span>
+      <span class="dd" style="font-size:19px; letter-spacing:.34em; color:#0E0E0E; padding-left:6px;">CATALYSIS</span>
+      <span class="ic" style="font-size:19px; color:#0E0E0E;"><i data-lucide="message-square"></i></span>
+    </div>
+    <div class="lb" style="text-align:center; padding:10px 0; font-size:9px; color:#0E0E0E; border-bottom:1px solid #D9D4CA;">Sat 26 Sept · Sts. Cosmas &amp; Damian</div>
+    <div style="padding:22px 22px 0;">
+      <div class="dd" style="font-style:italic; font-size:36px; line-height:1.05; color:#0E0E0E;">Good morning, Maria.</div>
+    </div>
+    <div style="margin:18px 22px 0; background:#0B0B0B; padding:22px 20px;">
+      <span class="lb" style="background:#A8141B; color:#fff; padding:5px 9px; font-size:9px;">Verse of the day</span>
+      <div class="dd" style="font-size:25px; line-height:1.22; color:#F5F2EC; margin-top:16px;">The light shines in the darkness, and the darkness has not overcome it.</div>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:16px;"><span class="lb" style="color:#CFCAC0; font-size:9px;">John 1:5 · RSV-CE</span><span class="lb" style="color:#fff; font-size:9px; border-bottom:1px solid #fff; padding-bottom:2px;">Reflect</span></div>
+    </div>
+    <div style="display:flex; justify-content:space-between; align-items:baseline; padding:24px 22px 10px;"><span class="lb" style="color:#0E0E0E; font-weight:600;">Today's rule</span><span class="dd" style="font-size:22px; color:#A8141B;">3<span style="color:#8C877E; font-size:16px;"> / 4</span></span></div>
+    <div style="margin:0 22px; border-top:1px solid #0E0E0E;">
+      <div style="display:flex; align-items:center; gap:14px; padding:11px 0; border-bottom:1px solid #D9D4CA;"><span class="dd" style="font-size:24px; color:#A8141B; width:30px;">01</span><span class="ct" style="flex:1; font-size:16px; color:#8C877E; text-decoration:line-through; text-decoration-color:#B8B2A7;">Morning Offering</span><span class="lb" style="font-size:9px; color:#5A5750;">7:14</span></div>
+      <div style="display:flex; align-items:center; gap:14px; padding:11px 0; border-bottom:1px solid #D9D4CA;"><span class="dd" style="font-size:24px; color:#A8141B; width:30px;">02</span><span class="ct" style="flex:1; font-size:16px; color:#8C877E; text-decoration:line-through; text-decoration-color:#B8B2A7;">The Angelus</span><span class="lb" style="font-size:9px; color:#5A5750;">12:02</span></div>
+      <div style="display:flex; align-items:center; gap:14px; padding:11px 0; border-bottom:1px solid #D9D4CA;"><span class="dd" style="font-size:24px; color:#A8141B; width:30px;">03</span><span class="ct" style="flex:1; font-size:16px; color:#8C877E; text-decoration:line-through; text-decoration-color:#B8B2A7;">Rosary · Glorious</span><span class="lb" style="font-size:9px; color:#5A5750;">17:30</span></div>
+      <div style="display:flex; align-items:center; gap:14px; padding:11px 0; border-bottom:1px solid #D9D4CA;"><span class="dd" style="font-size:24px; color:#A8141B; width:30px;">04</span><span class="ct" style="flex:1; font-size:16px; color:#0E0E0E; font-weight:700;">Evening Examen</span><span class="lb" style="font-size:9px; color:#fff; background:#0E0E0E; padding:6px 9px;">21:00</span></div>
+    </div>
+    <div style="position:absolute; bottom:0; left:0; right:0; height:76px; background:#F5F2EC; border-top:1px solid #0E0E0E; display:grid; grid-template-columns:repeat(5,1fr); padding-top:13px;">
+      <div style="text-align:center; color:#A8141B;"><div class="ic" style="font-size:20px; justify-content:center;"><i data-lucide="sun"></i></div><div class="lb" style="font-size:8px; letter-spacing:.16em; margin-top:6px; font-weight:700;">Today</div></div>
+      <div style="text-align:center; color:#0E0E0E;"><div class="ic" style="font-size:20px; justify-content:center;"><i data-lucide="book-open"></i></div><div class="lb" style="font-size:8px; letter-spacing:.16em; margin-top:6px;">Scripture</div></div>
+      <div style="text-align:center; color:#0E0E0E;"><div class="ic" style="font-size:20px; justify-content:center;"><i data-lucide="flame"></i></div><div class="lb" style="font-size:8px; letter-spacing:.16em; margin-top:6px;">Prayer</div></div>
+      <div style="text-align:center; color:#0E0E0E;"><div class="ic" style="font-size:20px; justify-content:center;"><i data-lucide="users"></i></div><div class="lb" style="font-size:8px; letter-spacing:.16em; margin-top:6px;">Community</div></div>
+      <div style="text-align:center; color:#0E0E0E;"><div class="ic" style="font-size:20px; justify-content:center;"><i data-lucide="clapperboard"></i></div><div class="lb" style="font-size:8px; letter-spacing:.16em; margin-top:6px;">Reels</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 04 · BIBLE READER (mobile) ===== -->
+<div style="position:absolute; left:1490px; top:120px; width:390px;">
+  <div class="frame-label" data-drags-parent="1"><b>Bible Reader</b><span>mobile · RSV-CE</span></div>
+  <div class="phone" style="background:#FBFAF7;">
+    <div style="height:50px; display:flex; align-items:center; justify-content:space-between; padding:0 26px; color:#0E0E0E;"><span class="sn" style="font-size:14px; font-weight:600;">9:41</span><span class="ic" style="gap:6px; font-size:14px;"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:4px 20px 12px; border-bottom:1px solid #0E0E0E;">
+      <span class="ic" style="font-size:20px; color:#0E0E0E;"><i data-lucide="chevron-left"></i></span>
+      <div style="text-align:center;"><div class="lb" style="color:#0E0E0E; font-weight:600;">John · I</div><div class="ct" style="font-style:italic; font-size:12px; color:#5A5750; margin-top:3px;">Revised Standard Version, Catholic Ed.</div></div>
+      <span class="ic" style="font-size:19px; color:#0E0E0E; gap:14px;"><i data-lucide="type"></i><i data-lucide="bookmark"></i></span>
+    </div>
+    <div style="padding:26px 26px 0;">
+      <div class="lb" style="color:#A8141B;">The Gospel according to</div>
+      <div class="dd" style="font-size:52px; font-weight:500; line-height:1; color:#0E0E0E; margin-top:8px;">John</div>
+      <div class="lb" style="color:#5A5750; font-size:9px; margin-top:14px; padding-top:12px; border-top:1px solid #0E0E0E;">Chapter One — The Word Became Flesh</div>
+      <p class="ct" style="font-size:17.5px; line-height:1.78; color:#1A1917; margin:18px 0 0;"><span class="dd" style="float:left; font-size:74px; line-height:.82; color:#A8141B; margin:6px 10px 0 0; font-weight:500;">I</span>n the beginning was the Word, and the Word was with God, and the Word was God. <sup class="sn" style="font-size:9px; color:#A8141B; font-weight:700;">2</sup> He was in the beginning with God; <sup class="sn" style="font-size:9px; color:#A8141B; font-weight:700;">3</sup> all things were made through him, and without him was not anything made that was made. <sup class="sn" style="font-size:9px; color:#A8141B; font-weight:700;">4</sup> In him was life, and <span style="background:linear-gradient(transparent 58%, #EFD3CF 58%);">the life was the light of men.</span> <sup class="sn" style="font-size:9px; color:#A8141B; font-weight:700;">5</sup> The light shines in the darkness, and the darkness has not overcome it.</p>
+      <div style="display:flex; justify-content:space-between; background:#0E0E0E; padding:14px 18px; margin-top:20px;">
+        <span class="lb" style="color:#fff; font-size:9px;">Highlight</span><span class="lb" style="color:#fff; font-size:9px;">Note</span><span class="lb" style="color:#fff; font-size:9px;">Explain</span><span class="lb" style="color:#fff; font-size:9px;">Share</span>
+      </div>
+    </div>
+    <div style="position:absolute; bottom:0; left:0; right:0; height:66px; background:#FBFAF7; border-top:1px solid #0E0E0E; display:flex; align-items:center; justify-content:space-between; padding:0 24px;">
+      <span class="lb" style="color:#5A5750; font-size:9px;">‹ Luke 24</span><span class="lb" style="color:#0E0E0E; font-size:9px; font-weight:600;">Contents</span><span class="lb" style="color:#0E0E0E; font-size:9px;">John 2 ›</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===== 05 · PRAYER (mobile) ===== -->
+<div style="position:absolute; left:1960px; top:120px; width:390px;">
+  <div class="frame-label" data-drags-parent="1"><b>Prayer Guide &amp; Tracker</b><span>mobile</span></div>
+  <div class="phone">
+    <div style="height:50px; display:flex; align-items:center; justify-content:space-between; padding:0 26px; color:#0E0E0E;"><span class="sn" style="font-size:14px; font-weight:600;">9:41</span><span class="ic" style="gap:6px; font-size:14px;"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+    <div style="padding:10px 22px 0;">
+      <div class="lb" style="color:#A8141B;">A rule of life</div>
+      <div class="dd" style="font-style:italic; font-size:54px; line-height:1; color:#0E0E0E; margin-top:8px;">Prayer</div>
+      <div class="ct" style="font-style:italic; font-size:15px; color:#5A5750; margin-top:8px;">Kept one day at a time.</div>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(7,1fr); gap:6px; padding:22px 22px 0;">
+      <div style="text-align:center;"><div style="height:38px; background:#0E0E0E;"></div><div class="lb" style="font-size:8px; margin-top:6px; color:#5A5750; letter-spacing:.1em;">M</div></div>
+      <div style="text-align:center;"><div style="height:38px; background:#0E0E0E;"></div><div class="lb" style="font-size:8px; margin-top:6px; color:#5A5750; letter-spacing:.1em;">T</div></div>
+      <div style="text-align:center;"><div style="height:38px; background:#0E0E0E;"></div><div class="lb" style="font-size:8px; margin-top:6px; color:#5A5750; letter-spacing:.1em;">W</div></div>
+      <div style="text-align:center;"><div style="height:38px; background:#0E0E0E;"></div><div class="lb" style="font-size:8px; margin-top:6px; color:#5A5750; letter-spacing:.1em;">T</div></div>
+      <div style="text-align:center;"><div style="height:38px; background:#0E0E0E;"></div><div class="lb" style="font-size:8px; margin-top:6px; color:#5A5750; letter-spacing:.1em;">F</div></div>
+      <div style="text-align:center;"><div style="height:38px; border:1.5px solid #A8141B; background:linear-gradient(0deg,#A8141B 75%,transparent 75%);"></div><div class="lb" style="font-size:8px; margin-top:6px; color:#A8141B; font-weight:700; letter-spacing:.1em;">S</div></div>
+      <div style="text-align:center;"><div style="height:38px; border:1px solid #D9D4CA;"></div><div class="lb" style="font-size:8px; margin-top:6px; color:#5A5750; letter-spacing:.1em;">S</div></div>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; margin:20px 22px 0; border-top:1px solid #0E0E0E; border-bottom:1px solid #0E0E0E;">
+      <div style="padding:12px 0; text-align:center;"><div class="dd" style="font-size:32px; color:#A8141B; line-height:1;">12</div><div class="lb" style="font-size:8px; color:#5A5750; margin-top:6px;">Day streak</div></div>
+      <div style="padding:12px 0; text-align:center; border-left:1px solid #D9D4CA; border-right:1px solid #D9D4CA;"><div class="dd" style="font-size:32px; color:#0E0E0E; line-height:1;">3/4</div><div class="lb" style="font-size:8px; color:#5A5750; margin-top:6px;">Today</div></div>
+      <div style="padding:12px 0; text-align:center;"><div class="dd" style="font-size:32px; color:#0E0E0E; line-height:1;">342</div><div class="lb" style="font-size:8px; color:#5A5750; margin-top:6px;">All time</div></div>
+    </div>
+    <div class="lb" style="padding:20px 22px 4px; color:#0E0E0E; font-weight:600;">Today</div>
+    <div style="margin:0 22px;">
+      <div style="display:flex; align-items:center; gap:13px; padding:11px 0; border-bottom:1px solid #D9D4CA;"><span style="width:20px; height:20px; background:#0E0E0E; color:#fff; display:flex; align-items:center; justify-content:center; font-size:13px;" class="ic"><i data-lucide="check"></i></span><span class="ct" style="flex:1; font-size:15.5px; color:#0E0E0E;">Morning Offering</span><span class="lb" style="font-size:8.5px; color:#8C877E;">7:14 AM</span></div>
+      <div style="display:flex; align-items:center; gap:13px; padding:11px 0; border-bottom:1px solid #D9D4CA;"><span style="width:20px; height:20px; background:#0E0E0E; color:#fff; display:flex; align-items:center; justify-content:center; font-size:13px;" class="ic"><i data-lucide="check"></i></span><span class="ct" style="flex:1; font-size:15.5px; color:#0E0E0E;">The Angelus</span><span class="lb" style="font-size:8.5px; color:#8C877E;">12:02 PM</span></div>
+      <div style="display:flex; align-items:center; gap:13px; padding:11px 0; border-bottom:1px solid #D9D4CA;"><span style="width:20px; height:20px; background:#0E0E0E; color:#fff; display:flex; align-items:center; justify-content:center; font-size:13px;" class="ic"><i data-lucide="check"></i></span><span class="ct" style="flex:1; font-size:15.5px; color:#0E0E0E;">Rosary · Glorious Mysteries</span><span class="lb" style="font-size:8.5px; color:#8C877E;">5:30 PM</span></div>
+      <div style="display:flex; align-items:center; gap:13px; padding:11px 0; border-bottom:1px solid #0E0E0E;"><span style="width:20px; height:20px; border:1.5px solid #0E0E0E;"></span><span class="ct" style="flex:1; font-size:15.5px; color:#0E0E0E; font-weight:700;">Evening Examen</span><span class="lb" style="font-size:8.5px; color:#A8141B; font-weight:700;">Begin →</span></div>
+    </div>
+    <div class="lb" style="padding:20px 22px 4px; color:#0E0E0E; font-weight:600;">Guided</div>
+    <div style="margin:0 22px; display:flex; gap:14px; align-items:baseline; padding:8px 0;"><span class="dd" style="font-size:20px; color:#A8141B;">I</span><span class="ct" style="flex:1; font-size:15px; color:#0E0E0E;">The Examen of St. Ignatius</span><span class="lb" style="font-size:8.5px; color:#8C877E;">10 min</span></div>
+    <div style="position:absolute; bottom:0; left:0; right:0; height:76px; background:#F5F2EC; border-top:1px solid #0E0E0E; display:grid; grid-template-columns:repeat(5,1fr); padding-top:13px;">
+      <div style="text-align:center; color:#0E0E0E;"><div class="ic" style="font-size:20px; justify-content:center;"><i data-lucide="sun"></i></div><div class="lb" style="font-size:8px; letter-spacing:.16em; margin-top:6px;">Today</div></div>
+      <div style="text-align:center; color:#0E0E0E;"><div class="ic" style="font-size:20px; justify-content:center;"><i data-lucide="book-open"></i></div><div class="lb" style="font-size:8px; letter-spacing:.16em; margin-top:6px;">Scripture</div></div>
+      <div style="text-align:center; color:#A8141B;"><div class="ic" style="font-size:20px; justify-content:center;"><i data-lucide="flame"></i></div><div class="lb" style="font-size:8px; letter-spacing:.16em; margin-top:6px; font-weight:700;">Prayer</div></div>
+      <div style="text-align:center; color:#0E0E0E;"><div class="ic" style="font-size:20px; justify-content:center;"><i data-lucide="users"></i></div><div class="lb" style="font-size:8px; letter-spacing:.16em; margin-top:6px;">Community</div></div>
+      <div style="text-align:center; color:#0E0E0E;"><div class="ic" style="font-size:20px; justify-content:center;"><i data-lucide="clapperboard"></i></div><div class="lb" style="font-size:8px; letter-spacing:.16em; margin-top:6px;">Reels</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 06 · COMMUNITY (mobile) ===== -->
+<div style="position:absolute; left:2430px; top:120px; width:390px;">
+  <div class="frame-label" data-drags-parent="1"><b>Community</b><span>mobile · feed</span></div>
+  <div class="phone">
+    <div style="height:50px; display:flex; align-items:center; justify-content:space-between; padding:0 26px; color:#0E0E0E;"><span class="sn" style="font-size:14px; font-weight:600;">9:41</span><span class="ic" style="gap:6px; font-size:14px;"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+    <div style="display:flex; align-items:flex-end; justify-content:space-between; padding:6px 22px 14px;">
+      <div class="dd" style="font-style:italic; font-size:42px; line-height:1; color:#0E0E0E;">Community</div>
+      <span class="ic" style="gap:16px; font-size:19px; color:#0E0E0E; padding-bottom:6px;"><i data-lucide="search"></i><i data-lucide="bell"></i></span>
+    </div>
+    <div style="display:flex; gap:22px; padding:0 22px; border-bottom:1px solid #0E0E0E;">
+      <span class="lb" style="color:#0E0E0E; font-weight:600; padding-bottom:11px; border-bottom:2px solid #A8141B; margin-bottom:-1px;">For you</span>
+      <span class="lb" style="color:#8C877E; padding-bottom:11px;">Newman Center</span>
+      <span class="lb" style="color:#8C877E; padding-bottom:11px;">Intentions</span>
+    </div>
+    <div class="ct" style="font-style:italic; font-size:15px; color:#8C877E; padding:16px 22px; border-bottom:1px solid #D9D4CA; display:flex; justify-content:space-between; align-items:center;">Share a reflection or an intention…<span class="ic" style="color:#0E0E0E; font-size:18px; font-style:normal;"><i data-lucide="pen-line"></i></span></div>
+    <div style="padding:18px 22px; border-bottom:1px solid #D9D4CA;">
+      <div style="display:flex; align-items:center; justify-content:space-between;"><span class="lb" style="color:#0E0E0E; font-weight:600;">Jacob Torres</span><span class="lb" style="font-size:8.5px; color:#fff; background:#A8141B; padding:5px 8px;">Prayer request</span></div>
+      <div class="lb" style="font-size:8.5px; color:#8C877E; margin-top:5px;">Newman Center · 2 hours ago</div>
+      <div class="ct" style="font-size:16.5px; line-height:1.55; color:#1A1917; margin-top:12px;">Starting finals week and feeling the weight of it. Could use prayers for peace and focus. Trusting that He's got me.</div>
+      <div style="display:flex; gap:22px; margin-top:14px;"><span class="lb" style="font-size:9px; color:#A8141B; font-weight:700;">I prayed · 24</span><span class="lb" style="font-size:9px; color:#5A5750;">Reply · 7</span><span class="lb" style="font-size:9px; color:#5A5750; margin-left:auto;">Share</span></div>
+    </div>
+    <div style="padding:18px 22px;">
+      <div class="lb" style="color:#0E0E0E; font-weight:600;">Ana Nguyen</div>
+      <div class="lb" style="font-size:8.5px; color:#8C877E; margin-top:5px;">Reflection · 5 hours ago</div>
+      <div class="dd" style="font-style:italic; font-size:24px; line-height:1.2; color:#0E0E0E; margin-top:12px;">“Do not let your hearts be troubled.”</div>
+      <div style="height:170px; margin-top:12px; background:url('assets/rosary.jpg') 30% 70% / cover no-repeat;"></div>
+      <div style="display:flex; gap:22px; margin-top:14px;"><span class="lb" style="font-size:9px; color:#5A5750;">I prayed · 41</span><span class="lb" style="font-size:9px; color:#5A5750;">Reply · 12</span></div>
+    </div>
+    <div style="position:absolute; bottom:0; left:0; right:0; height:76px; background:#F5F2EC; border-top:1px solid #0E0E0E; display:grid; grid-template-columns:repeat(5,1fr); padding-top:13px;">
+      <div style="text-align:center; color:#0E0E0E;"><div class="ic" style="font-size:20px; justify-content:center;"><i data-lucide="sun"></i></div><div class="lb" style="font-size:8px; letter-spacing:.16em; margin-top:6px;">Today</div></div>
+      <div style="text-align:center; color:#0E0E0E;"><div class="ic" style="font-size:20px; justify-content:center;"><i data-lucide="book-open"></i></div><div class="lb" style="font-size:8px; letter-spacing:.16em; margin-top:6px;">Scripture</div></div>
+      <div style="text-align:center; color:#0E0E0E;"><div class="ic" style="font-size:20px; justify-content:center;"><i data-lucide="flame"></i></div><div class="lb" style="font-size:8px; letter-spacing:.16em; margin-top:6px;">Prayer</div></div>
+      <div style="text-align:center; color:#A8141B;"><div class="ic" style="font-size:20px; justify-content:center;"><i data-lucide="users"></i></div><div class="lb" style="font-size:8px; letter-spacing:.16em; margin-top:6px; font-weight:700;">Community</div></div>
+      <div style="text-align:center; color:#0E0E0E;"><div class="ic" style="font-size:20px; justify-content:center;"><i data-lucide="clapperboard"></i></div><div class="lb" style="font-size:8px; letter-spacing:.16em; margin-top:6px;">Reels</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 07 · EVENTS & CALENDAR (mobile) ===== -->
+<div style="position:absolute; left:2900px; top:120px; width:390px;">
+  <div class="frame-label" data-drags-parent="1"><b>Events &amp; Calendar</b><span>mobile</span></div>
+  <div class="phone">
+    <div style="height:50px; display:flex; align-items:center; justify-content:space-between; padding:0 26px; color:#0E0E0E;"><span class="sn" style="font-size:14px; font-weight:600;">9:41</span><span class="ic" style="gap:6px; font-size:14px;"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+    <div style="padding:10px 22px 16px; border-bottom:1px solid #0E0E0E;">
+      <div class="lb" style="color:#A8141B;">Calendar</div>
+      <div style="display:flex; align-items:baseline; justify-content:space-between; margin-top:8px;"><div><span class="dd" style="font-size:44px; color:#0E0E0E; line-height:1;">September</span> <span class="dd" style="font-style:italic; font-size:22px; color:#8C877E;">2026</span></div><span class="ic" style="gap:14px; font-size:19px; color:#0E0E0E;"><i data-lucide="chevron-left"></i><i data-lucide="chevron-right"></i></span></div>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(7,1fr); padding:12px 18px 4px;">
+      <div class="lb" style="text-align:center; font-size:8.5px; color:#8C877E; letter-spacing:.1em;">S</div><div class="lb" style="text-align:center; font-size:8.5px; color:#8C877E; letter-spacing:.1em;">M</div><div class="lb" style="text-align:center; font-size:8.5px; color:#8C877E; letter-spacing:.1em;">T</div><div class="lb" style="text-align:center; font-size:8.5px; color:#8C877E; letter-spacing:.1em;">W</div><div class="lb" style="text-align:center; font-size:8.5px; color:#8C877E; letter-spacing:.1em;">T</div><div class="lb" style="text-align:center; font-size:8.5px; color:#8C877E; letter-spacing:.1em;">F</div><div class="lb" style="text-align:center; font-size:8.5px; color:#8C877E; letter-spacing:.1em;">S</div>
+    </div>
+    <div class="ct" style="display:grid; grid-template-columns:repeat(7,1fr); padding:0 18px; font-size:14px; color:#0E0E0E; text-align:center;">
+      <div style="padding:8px 0; color:#C4BEB3;">30</div><div style="padding:8px 0; color:#C4BEB3;">31</div><div style="padding:8px 0;">1</div><div style="padding:8px 0;">2</div><div style="padding:8px 0;">3</div><div style="padding:8px 0;">4</div><div style="padding:8px 0;">5</div>
+      <div style="padding:8px 0;">6</div><div style="padding:8px 0;">7</div><div style="padding:8px 0; color:#A8141B; font-weight:700;">8</div><div style="padding:8px 0;">9</div><div style="padding:8px 0;">10</div><div style="padding:8px 0;">11</div><div style="padding:8px 0;">12</div>
+      <div style="padding:8px 0;">13</div><div style="padding:8px 0; color:#A8141B; font-weight:700;">14</div><div style="padding:8px 0;">15</div><div style="padding:8px 0;">16</div><div style="padding:8px 0;">17</div><div style="padding:8px 0;">18</div><div style="padding:8px 0;">19</div>
+      <div style="padding:8px 0;">20</div><div style="padding:8px 0;">21</div><div style="padding:8px 0;">22</div><div style="padding:8px 0;">23</div><div style="padding:8px 0;">24</div><div style="padding:8px 0;">25</div><div style="padding:8px 0;"><span style="border-bottom:1.5px solid #0E0E0E; padding:0 3px 2px;">26</span></div>
+      <div style="padding:8px 0;">27</div><div style="padding:8px 0;">28</div><div style="padding:4px 0;"><span style="display:inline-flex; width:30px; height:30px; background:#0E0E0E; color:#fff; align-items:center; justify-content:center;">29</span></div><div style="padding:8px 0;">30</div><div style="padding:8px 0; color:#C4BEB3;">1</div><div style="padding:8px 0; color:#C4BEB3;">2</div><div style="padding:8px 0; color:#C4BEB3;">3</div>
+    </div>
+    <div style="margin:14px 22px 0; padding-top:14px; border-top:1px solid #0E0E0E;">
+      <div class="lb" style="color:#0E0E0E; font-weight:600;">Tuesday, 29 September</div>
+      <div class="ct" style="font-style:italic; font-size:14px; color:#A8141B; margin-top:4px;">Feast of Sts. Michael, Gabriel &amp; Raphael</div>
+    </div>
+    <div style="margin:12px 22px 0;">
+      <div style="display:flex; gap:16px; align-items:center; padding:13px 0; border-bottom:1px solid #D9D4CA;">
+        <div style="width:48px;"><div class="dd" style="font-size:26px; color:#A8141B; line-height:1;">7:00</div><div class="lb" style="font-size:8px; color:#8C877E; margin-top:3px;">PM</div></div>
+        <div style="flex:1;"><div class="ct" style="font-size:16px; font-weight:700; color:#0E0E0E;">Adoration &amp; Confession</div><div class="lb" style="font-size:8.5px; color:#5A5750; margin-top:5px;">Newman Center</div></div>
+        <span class="lb" style="font-size:8.5px; color:#fff; background:#0E0E0E; padding:8px 11px;">Going</span>
+      </div>
+      <div style="display:flex; gap:16px; align-items:center; padding:13px 0; border-bottom:1px solid #D9D4CA;">
+        <div style="width:48px;"><div class="dd" style="font-size:26px; color:#A8141B; line-height:1;">9:00</div><div class="lb" style="font-size:8px; color:#8C877E; margin-top:3px;">PM</div></div>
+        <div style="flex:1;"><div class="ct" style="font-size:16px; font-weight:700; color:#0E0E0E;">Theology on Tap</div><div class="lb" style="font-size:8.5px; color:#5A5750; margin-top:5px;">The Library Pub</div></div>
+        <span class="lb" style="font-size:8.5px; color:#0E0E0E; border:1px solid #0E0E0E; padding:7px 11px;">RSVP</span>
+      </div>
+    </div>
+    <div style="position:absolute; bottom:0; left:0; right:0; height:76px; background:#F5F2EC; border-top:1px solid #0E0E0E; display:grid; grid-template-columns:repeat(5,1fr); padding-top:13px;">
+      <div style="text-align:center; color:#A8141B;"><div class="ic" style="font-size:20px; justify-content:center;"><i data-lucide="sun"></i></div><div class="lb" style="font-size:8px; letter-spacing:.16em; margin-top:6px; font-weight:700;">Today</div></div>
+      <div style="text-align:center; color:#0E0E0E;"><div class="ic" style="font-size:20px; justify-content:center;"><i data-lucide="book-open"></i></div><div class="lb" style="font-size:8px; letter-spacing:.16em; margin-top:6px;">Scripture</div></div>
+      <div style="text-align:center; color:#0E0E0E;"><div class="ic" style="font-size:20px; justify-content:center;"><i data-lucide="flame"></i></div><div class="lb" style="font-size:8px; letter-spacing:.16em; margin-top:6px;">Prayer</div></div>
+      <div style="text-align:center; color:#0E0E0E;"><div class="ic" style="font-size:20px; justify-content:center;"><i data-lucide="users"></i></div><div class="lb" style="font-size:8px; letter-spacing:.16em; margin-top:6px;">Community</div></div>
+      <div style="text-align:center; color:#0E0E0E;"><div class="ic" style="font-size:20px; justify-content:center;"><i data-lucide="clapperboard"></i></div><div class="lb" style="font-size:8px; letter-spacing:.16em; margin-top:6px;">Reels</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 08 · AI CHAT (mobile) ===== -->
+<div style="position:absolute; left:3370px; top:120px; width:390px;">
+  <div class="frame-label" data-drags-parent="1"><b>AI Chat</b><span>mobile · scripture &amp; catechism</span></div>
+  <div class="phone">
+    <div style="height:50px; display:flex; align-items:center; justify-content:space-between; padding:0 26px; color:#0E0E0E;"><span class="sn" style="font-size:14px; font-weight:600;">9:41</span><span class="ic" style="gap:6px; font-size:14px;"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:4px 20px 12px; border-bottom:1px solid #0E0E0E;">
+      <span class="ic" style="font-size:20px; color:#0E0E0E;"><i data-lucide="chevron-left"></i></span>
+      <div style="text-align:center;"><div class="dd" style="font-size:22px; color:#0E0E0E; line-height:1;">Lumen</div><div class="lb" style="font-size:8px; color:#5A5750; margin-top:5px;">Scripture &amp; Catechism</div></div>
+      <span class="ic" style="font-size:19px; color:#0E0E0E;"><i data-lucide="more-horizontal"></i></span>
+    </div>
+    <div style="padding:18px 22px 0; display:flex; flex-direction:column; gap:18px;">
+      <div class="lb" style="text-align:center; font-size:8.5px; color:#8C877E;">Today</div>
+      <div class="ct" style="align-self:flex-end; max-width:80%; background:#0E0E0E; color:#F5F2EC; font-size:15px; line-height:1.5; padding:13px 16px;">What does the Church teach about forgiveness when it's really hard?</div>
+      <div>
+        <div class="lb" style="color:#A8141B; font-weight:600;">Lumen</div>
+        <div class="ct" style="font-size:15.5px; line-height:1.62; color:#1A1917; margin-top:8px;">Forgiveness sits at the heart of the Gospel. Jesus tells Peter to forgive “seventy times seven” (Mt 18:22), meaning without limit.</div>
+        <div style="border-left:2px solid #A8141B; padding:2px 0 2px 16px; margin:14px 0;">
+          <div class="dd" style="font-style:italic; font-size:20px; line-height:1.3; color:#0E0E0E;">“Forgive us our trespasses, as we forgive those who trespass against us.”</div>
+          <div class="lb" style="font-size:8.5px; color:#5A5750; margin-top:8px;">CCC 2838–2845</div>
+        </div>
+        <div class="ct" style="font-size:15.5px; line-height:1.62; color:#1A1917;">It doesn't mean the hurt wasn't real. It means choosing not to be ruled by it. Would you like a prayer for a forgiving heart?</div>
+        <div style="display:flex; gap:18px; margin-top:12px;"><span class="lb" style="font-size:8.5px; color:#8C877E;">Copy</span><span class="lb" style="font-size:8.5px; color:#8C877E;">Save</span><span class="lb" style="font-size:8.5px; color:#8C877E;">Sources</span></div>
+      </div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <span class="lb" style="font-size:8.5px; color:#0E0E0E; border:1px solid #0E0E0E; padding:9px 11px;">Yes, a prayer</span>
+        <span class="lb" style="font-size:8.5px; color:#0E0E0E; border:1px solid #0E0E0E; padding:9px 11px;">A related passage</span>
+      </div>
+    </div>
+    <div style="position:absolute; bottom:0; left:0; right:0; padding:14px 20px 26px; background:#F5F2EC; border-top:1px solid #0E0E0E; display:flex; align-items:center; gap:12px;">
+      <span class="ct" style="flex:1; font-style:italic; font-size:15px; color:#8C877E;">Ask about scripture, prayer, the saints…</span>
+      <span style="width:40px; height:40px; background:#0E0E0E; color:#fff; display:flex; align-items:center; justify-content:center; font-size:18px;" class="ic"><i data-lucide="arrow-up"></i></span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 09 · PROFILE (mobile) ===== -->
+<div style="position:absolute; left:3840px; top:120px; width:390px;">
+  <div class="frame-label" data-drags-parent="1"><b>User Profile</b><span>mobile</span></div>
+  <div class="phone">
+    <div style="height:50px; display:flex; align-items:center; justify-content:space-between; padding:0 26px; color:#0E0E0E;"><span class="sn" style="font-size:14px; font-weight:600;">9:41</span><span class="ic" style="gap:6px; font-size:14px;"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:4px 22px 12px; border-bottom:1px solid #0E0E0E;"><span class="lb" style="color:#0E0E0E; font-weight:600;">Profile</span><span class="ic" style="font-size:19px; color:#0E0E0E;"><i data-lucide="settings"></i></span></div>
+    <div style="display:flex; gap:18px; padding:22px 22px 0; align-items:flex-end;">
+      <div class="ph" style="width:104px; height:130px; flex-shrink:0; display:flex; align-items:center; justify-content:center;"><span class="phl" style="font-size:8px;">[ portrait ]</span></div>
+      <div style="padding-bottom:4px;">
+        <div class="dd" style="font-size:32px; line-height:1; color:#0E0E0E;">Maria<br>Acosta</div>
+        <div class="lb" style="font-size:8.5px; color:#5A5750; margin-top:10px; line-height:1.7;">@maria<br>Newman Center, NYU</div>
+      </div>
+    </div>
+    <div style="padding:20px 22px 0;">
+      <div class="dd" style="font-style:italic; font-size:19px; line-height:1.35; color:#0E0E0E;"><span style="color:#A8141B;">“</span>Pray as though everything depended on God. Work as though everything depended on you.<span style="color:#A8141B;">”</span></div>
+      <div class="lb" style="font-size:8.5px; color:#8C877E; margin-top:8px;">— Attributed to St. Ignatius</div>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; margin:20px 22px 0; border-top:1px solid #0E0E0E; border-bottom:1px solid #0E0E0E;">
+      <div style="padding:12px 0; text-align:center;"><div class="dd" style="font-size:30px; color:#A8141B; line-height:1;">128</div><div class="lb" style="font-size:8px; color:#5A5750; margin-top:6px;">Day streak</div></div>
+      <div style="padding:12px 0; text-align:center; border-left:1px solid #D9D4CA; border-right:1px solid #D9D4CA;"><div class="dd" style="font-size:30px; color:#0E0E0E; line-height:1;">342</div><div class="lb" style="font-size:8px; color:#5A5750; margin-top:6px;">Prayers</div></div>
+      <div style="padding:12px 0; text-align:center;"><div class="dd" style="font-size:30px; color:#0E0E0E; line-height:1;">17</div><div class="lb" style="font-size:8px; color:#5A5750; margin-top:6px;">Books read</div></div>
+    </div>
+    <div class="lb" style="padding:20px 22px 4px; color:#0E0E0E; font-weight:600;">Milestones</div>
+    <div style="margin:0 22px;">
+      <div style="display:flex; gap:14px; align-items:baseline; padding:10px 0; border-bottom:1px solid #D9D4CA;"><span class="dd" style="font-size:20px; color:#A8141B; width:26px;">01</span><span class="ct" style="flex:1; font-size:15px; color:#0E0E0E;">One hundred days of prayer</span><span class="lb" style="font-size:8px; color:#8C877E;">Aug 26</span></div>
+      <div style="display:flex; gap:14px; align-items:baseline; padding:10px 0; border-bottom:1px solid #D9D4CA;"><span class="dd" style="font-size:20px; color:#A8141B; width:26px;">02</span><span class="ct" style="flex:1; font-size:15px; color:#0E0E0E;">The Four Gospels, read</span><span class="lb" style="font-size:8px; color:#8C877E;">Jun 26</span></div>
+      <div style="display:flex; gap:14px; align-items:baseline; padding:10px 0; border-bottom:1px solid #D9D4CA;"><span class="dd" style="font-size:20px; color:#C4BEB3; width:26px;">03</span><span class="ct" style="flex:1; font-size:15px; color:#8C877E;">Thirty days of Lectio Divina</span><span class="lb" style="font-size:8px; color:#A8141B;">18 / 30</span></div>
+    </div>
+    <div style="margin:14px 22px 0; display:flex; justify-content:space-between; padding:12px 0; border-bottom:1px solid #0E0E0E;"><span class="lb" style="color:#0E0E0E;">Saved verses &amp; notes</span><span class="lb" style="color:#0E0E0E;">›</span></div>
+  </div>
+</div>
+
+<!-- ===== 10 · REELS (mobile) ===== -->
+<div style="position:absolute; left:4310px; top:120px; width:390px;">
+  <div class="frame-label" data-drags-parent="1"><b>Reels</b><span>mobile · short-form video</span></div>
+  <div class="phone" style="background:#0B0B0B;">
+    <div style="position:absolute; inset:0; background:url('assets/st-joseph.webp') 50% 20% / cover no-repeat;"></div>
+    <div style="position:absolute; left:0; right:0; bottom:0; height:340px; background:linear-gradient(transparent, rgba(0,0,0,.85));"></div>
+    <div style="position:relative; height:50px; display:flex; align-items:center; justify-content:space-between; padding:0 26px; color:#fff;"><span class="sn" style="font-size:14px; font-weight:600;">9:41</span><span class="ic" style="gap:6px; font-size:14px;"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+    <div style="position:relative; display:flex; justify-content:center; gap:26px; padding-top:6px;">
+      <span class="lb" style="color:rgba(255,255,255,.62);">Following</span>
+      <span class="lb" style="color:#fff; font-weight:700; padding-bottom:7px; border-bottom:2px solid #fff;">For you</span>
+    </div>
+    <div style="position:absolute; right:16px; bottom:120px; display:flex; flex-direction:column; align-items:center; gap:20px; color:#fff;">
+      <div style="width:44px; height:44px; border:1.5px solid #fff; display:flex; align-items:center; justify-content:center;" class="dd"><span style="font-size:17px;">X</span></div>
+      <div style="text-align:center;"><span class="ic" style="font-size:28px;"><i data-lucide="heart"></i></span><div class="lb" style="font-size:8px; letter-spacing:.1em; margin-top:4px;">2.4k</div></div>
+      <div style="text-align:center;"><span class="ic" style="font-size:27px;"><i data-lucide="message-circle"></i></span><div class="lb" style="font-size:8px; letter-spacing:.1em; margin-top:4px;">188</div></div>
+      <div style="text-align:center;"><span class="ic" style="font-size:27px;"><i data-lucide="bookmark"></i></span><div class="lb" style="font-size:8px; letter-spacing:.1em; margin-top:4px;">Save</div></div>
+      <div style="text-align:center;"><span class="ic" style="font-size:27px;"><i data-lucide="send"></i></span><div class="lb" style="font-size:8px; letter-spacing:.1em; margin-top:4px;">Share</div></div>
+    </div>
+    <div style="position:absolute; left:20px; right:84px; bottom:104px; color:#fff;">
+      <div style="display:flex; align-items:center; gap:12px;"><span class="lb" style="color:#fff; font-weight:700;">Fr. Xavier</span><span class="lb" style="font-size:8.5px; border:1px solid rgba(255,255,255,.7); padding:5px 9px;">Follow</span></div>
+      <div class="dd" style="font-size:26px; line-height:1.12; margin-top:12px;">Why I came back to the Church.</div>
+      <div class="ct" style="font-style:italic; font-size:14px; color:#DDD8CF; margin-top:8px;">A sixty-second testimony.</div>
+      <div style="display:flex; align-items:center; gap:10px; margin-top:12px;"><span class="lb" style="font-size:8.5px; background:#A8141B; padding:5px 8px;">Testimony</span><span class="lb" style="font-size:8.5px; color:#CFCAC0;">Original audio</span></div>
+    </div>
+    <div style="position:absolute; bottom:0; left:0; right:0; height:76px; background:#0B0B0B; border-top:1px solid rgba(255,255,255,.2); display:grid; grid-template-columns:repeat(5,1fr); padding-top:13px;">
+      <div style="text-align:center; color:#8C877E;"><div class="ic" style="font-size:20px; justify-content:center;"><i data-lucide="sun"></i></div><div class="lb" style="font-size:8px; letter-spacing:.16em; margin-top:6px;">Today</div></div>
+      <div style="text-align:center; color:#8C877E;"><div class="ic" style="font-size:20px; justify-content:center;"><i data-lucide="book-open"></i></div><div class="lb" style="font-size:8px; letter-spacing:.16em; margin-top:6px;">Scripture</div></div>
+      <div style="text-align:center; color:#8C877E;"><div class="ic" style="font-size:20px; justify-content:center;"><i data-lucide="flame"></i></div><div class="lb" style="font-size:8px; letter-spacing:.16em; margin-top:6px;">Prayer</div></div>
+      <div style="text-align:center; color:#8C877E;"><div class="ic" style="font-size:20px; justify-content:center;"><i data-lucide="users"></i></div><div class="lb" style="font-size:8px; letter-spacing:.16em; margin-top:6px;">Community</div></div>
+      <div style="text-align:center; color:#fff;"><div class="ic" style="font-size:20px; justify-content:center;"><i data-lucide="clapperboard"></i></div><div class="lb" style="font-size:8px; letter-spacing:.16em; margin-top:6px; font-weight:700;">Reels</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 11 · DISCOVER (mobile) ===== -->
+<div style="position:absolute; left:4780px; top:120px; width:390px;">
+  <div class="frame-label" data-drags-parent="1"><b>Discover</b><span>mobile · reels &amp; photos</span></div>
+  <div class="phone">
+    <div style="height:50px; display:flex; align-items:center; justify-content:space-between; padding:0 26px; color:#0E0E0E;"><span class="sn" style="font-size:14px; font-weight:600;">9:41</span><span class="ic" style="gap:6px; font-size:14px;"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+    <div style="display:flex; align-items:flex-end; justify-content:space-between; padding:6px 22px 14px;"><div class="dd" style="font-style:italic; font-size:42px; line-height:1; color:#0E0E0E;">Discover</div><span class="ic" style="font-size:19px; color:#0E0E0E; padding-bottom:6px;"><i data-lucide="search"></i></span></div>
+    <div style="display:flex; gap:24px; padding:0 22px; border-bottom:1px solid #0E0E0E;">
+      <span class="lb" style="color:#0E0E0E; font-weight:600; padding-bottom:11px; border-bottom:2px solid #A8141B; margin-bottom:-1px;">Reels</span>
+      <span class="lb" style="color:#8C877E; padding-bottom:11px;">Photos</span>
+      <span class="lb" style="color:#8C877E; padding-bottom:11px;">People</span>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:3px; padding:3px 0 0;">
+      <div style="display:flex; flex-direction:column; gap:3px;">
+        <div class="ph" style="height:250px;"><span class="ic" style="position:absolute; top:12px; left:12px; color:#fff; font-size:15px;"><i data-lucide="play"></i></span><div style="position:absolute; left:0; right:0; bottom:0; padding:12px; background:linear-gradient(transparent,rgba(0,0,0,.75));"><div class="dd" style="font-size:17px; line-height:1.15; color:#fff;">Why I came back</div><div class="lb" style="font-size:8px; color:#CFCAC0; margin-top:6px; letter-spacing:.14em;">Fr. Xavier · 2.4k</div></div></div>
+        <div class="ph" style="height:170px; background:url('assets/rosary.jpg') 20% 75% / cover no-repeat;"><span class="ic" style="position:absolute; top:12px; right:12px; color:#0E0E0E; font-size:14px;"><i data-lucide="image"></i></span></div>
+        <div class="ph" style="height:200px;"><span class="ic" style="position:absolute; top:12px; left:12px; color:#fff; font-size:15px;"><i data-lucide="play"></i></span><div style="position:absolute; left:0; right:0; bottom:0; padding:12px; background:linear-gradient(transparent,rgba(0,0,0,.75));"><div class="dd" style="font-size:17px; line-height:1.15; color:#fff;">Adoration, in time-lapse</div><div class="lb" style="font-size:8px; color:#CFCAC0; margin-top:6px; letter-spacing:.14em;">Newman NYU · 980</div></div></div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:3px;">
+        <div class="ph" style="height:170px; background:url('assets/st-joseph.webp') 50% 22% / cover no-repeat;"><span class="ic" style="position:absolute; top:12px; right:12px; color:#fff; font-size:14px;"><i data-lucide="image"></i></span></div>
+        <div class="ph" style="height:250px; background:#0B0B0B url('assets/angel.webp') 50% 40% / cover no-repeat;"><span class="ic" style="position:absolute; top:12px; left:12px; color:#fff; font-size:15px;"><i data-lucide="play"></i></span><div style="position:absolute; left:0; right:0; bottom:0; padding:12px; background:linear-gradient(transparent,rgba(0,0,0,.75));"><div class="dd" style="font-size:17px; line-height:1.15; color:#fff;">Three saints who doubted</div><div class="lb" style="font-size:8px; color:#CFCAC0; margin-top:6px; letter-spacing:.14em;">Ana Nguyen · 5.1k</div></div></div>
+        <div class="ph" style="height:200px;"><span class="ic" style="position:absolute; top:12px; left:12px; color:#fff; font-size:15px;"><i data-lucide="play"></i></span><div style="position:absolute; left:0; right:0; bottom:0; padding:12px; background:linear-gradient(transparent,rgba(0,0,0,.75));"><div class="dd" style="font-size:17px; line-height:1.15; color:#fff;">Lectio in sixty seconds</div><div class="lb" style="font-size:8px; color:#CFCAC0; margin-top:6px; letter-spacing:.14em;">Jacob Torres · 1.2k</div></div></div>
+      </div>
+    </div>
+    <div style="position:absolute; right:18px; bottom:92px; width:54px; height:54px; background:#A8141B; color:#fff; display:flex; align-items:center; justify-content:center; font-size:24px; box-shadow:0 8px 20px rgba(0,0,0,.25);" class="ic"><i data-lucide="plus"></i></div>
+    <div style="position:absolute; bottom:0; left:0; right:0; height:76px; background:#F5F2EC; border-top:1px solid #0E0E0E; display:grid; grid-template-columns:repeat(5,1fr); padding-top:13px;">
+      <div style="text-align:center; color:#0E0E0E;"><div class="ic" style="font-size:20px; justify-content:center;"><i data-lucide="sun"></i></div><div class="lb" style="font-size:8px; letter-spacing:.16em; margin-top:6px;">Today</div></div>
+      <div style="text-align:center; color:#0E0E0E;"><div class="ic" style="font-size:20px; justify-content:center;"><i data-lucide="book-open"></i></div><div class="lb" style="font-size:8px; letter-spacing:.16em; margin-top:6px;">Scripture</div></div>
+      <div style="text-align:center; color:#0E0E0E;"><div class="ic" style="font-size:20px; justify-content:center;"><i data-lucide="flame"></i></div><div class="lb" style="font-size:8px; letter-spacing:.16em; margin-top:6px;">Prayer</div></div>
+      <div style="text-align:center; color:#0E0E0E;"><div class="ic" style="font-size:20px; justify-content:center;"><i data-lucide="users"></i></div><div class="lb" style="font-size:8px; letter-spacing:.16em; margin-top:6px;">Community</div></div>
+      <div style="text-align:center; color:#A8141B;"><div class="ic" style="font-size:20px; justify-content:center;"><i data-lucide="clapperboard"></i></div><div class="lb" style="font-size:8px; letter-spacing:.16em; margin-top:6px; font-weight:700;">Reels</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 12 · CREATE POST (mobile) ===== -->
+<div style="position:absolute; left:5250px; top:120px; width:390px;">
+  <div class="frame-label" data-drags-parent="1"><b>Create Post</b><span>mobile · upload reel / photo</span></div>
+  <div class="phone" style="background:#0B0B0B;">
+    <div style="height:50px; display:flex; align-items:center; justify-content:space-between; padding:0 26px; color:#fff;"><span class="sn" style="font-size:14px; font-weight:600;">9:41</span><span class="ic" style="gap:6px; font-size:14px;"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span></div>
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:4px 20px 14px;">
+      <span class="lb" style="color:#CFCAC0;">Cancel</span>
+      <span class="dd" style="font-size:22px; color:#fff;">New post</span>
+      <span class="lb" style="color:#fff; background:#A8141B; padding:8px 12px; font-weight:600;">Next</span>
+    </div>
+    <div class="ph" style="height:440px;">
+      <div class="phl" style="position:absolute; top:44%; left:0; right:0; text-align:center;">[ camera preview ]</div>
+      <div style="position:absolute; right:16px; top:18px; display:flex; flex-direction:column; gap:20px; color:#fff; font-size:20px;"><span class="ic"><i data-lucide="zap"></i></span><span class="ic"><i data-lucide="switch-camera"></i></span><span class="ic"><i data-lucide="timer"></i></span><span class="ic"><i data-lucide="music"></i></span></div>
+      <div class="lb" style="position:absolute; top:18px; left:18px; color:#fff; font-size:9px;">0:00 / 1:00</div>
+      <div style="position:absolute; left:0; right:0; bottom:24px; display:flex; align-items:center; justify-content:center; gap:40px;">
+        <div class="ph" style="width:44px; height:44px; border:1.5px solid #fff; background:radial-gradient(#9a9893,#3a3937);"></div>
+        <div style="width:76px; height:76px; border-radius:50%; border:4px solid #fff; display:flex; align-items:center; justify-content:center;"><div style="width:56px; height:56px; border-radius:50%; background:#A8141B;"></div></div>
+        <div style="width:44px; height:44px; border:1.5px solid rgba(255,255,255,.6); color:#fff; display:flex; align-items:center; justify-content:center; font-size:19px;" class="ic"><i data-lucide="upload"></i></div>
+      </div>
+    </div>
+    <div style="display:flex; justify-content:center; gap:30px; padding:18px 0;">
+      <span class="lb" style="color:#8C877E;">Photo</span><span class="lb" style="color:#fff; font-weight:700; border-bottom:1.5px solid #A8141B; padding-bottom:6px;">Reel</span><span class="lb" style="color:#8C877E;">Text</span>
+    </div>
+    <div style="position:absolute; left:0; right:0; bottom:0; background:#161615; border-top:1px solid rgba(255,255,255,.14); padding:18px 20px 30px;">
+      <div style="display:flex; gap:8px;">
+        <span class="lb" style="font-size:8.5px; color:#fff; border:1px solid rgba(255,255,255,.4); padding:9px 11px;">+ Add a verse</span>
+        <span class="lb" style="font-size:8.5px; color:#fff; border:1px solid rgba(255,255,255,.4); padding:9px 11px;">Share to parish</span>
+      </div>
+      <div style="display:flex; justify-content:space-between; margin-top:18px; padding-top:14px; border-top:1px solid rgba(255,255,255,.12);"><span class="lb" style="color:#CFCAC0; font-size:9px;">Audience</span><span class="lb" style="color:#fff; font-size:9px;">Everyone ›</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 13 · LANDING (desktop) ===== -->
+<div style="position:absolute; left:80px; top:1110px; width:1320px;">
+  <div class="frame-label" data-drags-parent="1"><b>Home / Landing</b><span>desktop · 1320</span></div>
+  <div style="width:1320px; background:#fff; box-shadow:0 10px 40px rgba(0,0,0,.12); overflow:hidden;">
+    <div style="display:grid; grid-template-columns:1fr auto 1fr; align-items:center; padding:24px 36px;">
+      <div style="display:flex; gap:34px;"><span class="lb" style="color:#0E0E0E; font-size:11px;">Scripture</span><span class="lb" style="color:#0E0E0E; font-size:11px;">Prayer</span><span class="lb" style="color:#0E0E0E; font-size:11px;">Community</span><span class="lb" style="color:#0E0E0E; font-size:11px;">Reels</span></div>
+      <div class="dd" style="font-size:34px; letter-spacing:.36em; color:#0E0E0E; padding-left:12px;">CATALYSIS</div>
+      <div style="display:flex; gap:30px; justify-content:flex-end; align-items:center;"><span class="lb" style="color:#0E0E0E; font-size:11px;">Events</span><span class="lb" style="color:#0E0E0E; font-size:11px;">Log in</span><span class="lb" style="color:#fff; background:#0E0E0E; font-size:11px; padding:12px 18px; font-weight:600;">Begin</span></div>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr auto 1fr; background:#0B0B0B; padding:16px 22px;">
+      <span class="lb" style="color:#fff; font-size:10px;">Nº 09 — September 2026</span>
+      <span class="lb" style="color:#fff; font-size:10px;">Scripture · Prayer · Community · Companion</span>
+      <span class="lb" style="color:#fff; font-size:10px; text-align:right;">A.M.D.G.</span>
+    </div>
+    <div class="ph" style="height:720px; background:#0B0B0B url('assets/angel.webp') 42% 30% / cover no-repeat;">
+      <div style="position:absolute; inset:0; background:linear-gradient(90deg, rgba(0,0,0,.35), rgba(0,0,0,0) 60%), linear-gradient(0deg, rgba(0,0,0,.55), rgba(0,0,0,0) 45%);"></div>
+      <div style="position:absolute; left:28px; right:460px; top:120px;">
+        <div style="display:flex; gap:18px; align-items:center;"><span class="lb" style="background:#A8141B; color:#fff; padding:9px 14px; font-size:11px;">Cover story</span><span class="lb" style="color:#fff; font-size:11px;">Faith</span></div>
+        <div class="dd" style="font-size:112px; line-height:.95; font-weight:500; color:#F5F2EC; margin-top:30px; letter-spacing:-.015em;">Grow in faith, every single day.</div>
+        <div class="ct" style="font-style:italic; font-size:26px; line-height:1.45; color:#ECE8E0; margin-top:34px; max-width:640px;">A daily companion for scripture, prayer, and a well-ordered life.</div>
+        <div style="display:flex; gap:12px; margin-top:34px;"><span class="lb" style="background:#F5F2EC; color:#0B0B0B; padding:18px 28px; font-size:11px; font-weight:600;">Begin — it's free</span><span class="lb" style="border:1px solid rgba(255,255,255,.55); color:#fff; padding:17px 26px; font-size:11px; font-weight:600;">Take the tour</span></div>
+      </div>
+      <div style="position:absolute; right:28px; top:52px; width:400px; background:rgba(22,22,21,.88); padding:4px 30px 18px;">
+        <div style="padding:24px 0; border-top:1px solid rgba(255,255,255,.28); margin-top:18px;"><div class="lb" style="color:#CFCAC0;">Today's Gospel</div><div class="ct" style="font-weight:700; font-size:22px; line-height:1.35; color:#F5F2EC; margin-top:12px;">John 1:1–5: In the Beginning Was the Word</div></div>
+        <div style="padding:24px 0; border-top:1px solid rgba(255,255,255,.28);"><div class="lb" style="color:#CFCAC0;">Prayer</div><div class="ct" style="font-weight:700; font-size:22px; line-height:1.35; color:#F5F2EC; margin-top:12px;">The Examen of St. Ignatius, Guided in Ten Minutes</div></div>
+        <div style="padding:24px 0; border-top:1px solid rgba(255,255,255,.28);"><div class="lb" style="color:#CFCAC0;">Community</div><div class="ct" style="font-weight:700; font-size:22px; line-height:1.35; color:#F5F2EC; margin-top:12px;">Theology on Tap Returns for the Feast of the Archangels</div></div>
+      </div>
+    </div>
+    <div style="display:grid; grid-template-columns:420px 1fr; gap:40px; padding:70px 36px 80px;">
+      <div>
+        <div class="lb" style="color:#A8141B; font-size:11px;">In this app</div>
+        <div class="dd" style="font-style:italic; font-size:108px; line-height:1; color:#0E0E0E; margin-top:18px;">Contents</div>
+        <div class="ct" style="font-style:italic; font-size:22px; line-height:1.5; color:#5A5750; margin-top:30px; max-width:340px;">Scripture, prayer, and community, made for the modern believer.</div>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; column-gap:48px;">
+        <div style="display:flex; gap:26px; padding:30px 0; border-top:1px solid #0E0E0E;"><span class="dd" style="font-size:52px; line-height:.9; color:#A8141B;">01</span><div><div class="lb" style="color:#5A5750;">Scripture</div><div class="ct" style="font-weight:700; font-size:22px; line-height:1.3; color:#0E0E0E; margin-top:10px;">The Bible Reader: RSV-CE, with Notes and Highlights</div></div></div>
+        <div style="display:flex; gap:26px; padding:30px 0; border-top:1px solid #0E0E0E;"><span class="dd" style="font-size:52px; line-height:.9; color:#A8141B;">02</span><div><div class="lb" style="color:#5A5750;">Prayer</div><div class="ct" style="font-weight:700; font-size:22px; line-height:1.3; color:#0E0E0E; margin-top:10px;">A Rule of Life: Guided Prayer and a Gentle Tracker</div></div></div>
+        <div style="display:flex; gap:26px; padding:30px 0; border-top:1px solid #0E0E0E;"><span class="dd" style="font-size:52px; line-height:.9; color:#A8141B;">03</span><div><div class="lb" style="color:#5A5750;">Community</div><div class="ct" style="font-weight:700; font-size:22px; line-height:1.3; color:#0E0E0E; margin-top:10px;">Walk Together: Reflections and Prayer Intentions</div></div></div>
+        <div style="display:flex; gap:26px; padding:30px 0; border-top:1px solid #0E0E0E;"><span class="dd" style="font-size:52px; line-height:.9; color:#A8141B;">04</span><div><div class="lb" style="color:#5A5750;">Companion</div><div class="ct" style="font-weight:700; font-size:22px; line-height:1.3; color:#0E0E0E; margin-top:10px;">Ask Lumen: Scripture and the Catechism, Explained</div></div></div>
+        <div style="display:flex; gap:26px; padding:30px 0; border-top:1px solid #0E0E0E;"><span class="dd" style="font-size:52px; line-height:.9; color:#A8141B;">05</span><div><div class="lb" style="color:#5A5750;">Calendar</div><div class="ct" style="font-weight:700; font-size:22px; line-height:1.3; color:#0E0E0E; margin-top:10px;">Feasts, Parish Events, and Theology on Tap</div></div></div>
+        <div style="display:flex; gap:26px; padding:30px 0; border-top:1px solid #0E0E0E;"><span class="dd" style="font-size:52px; line-height:.9; color:#A8141B;">06</span><div><div class="lb" style="color:#5A5750;">Reels</div><div class="ct" style="font-weight:700; font-size:22px; line-height:1.3; color:#0E0E0E; margin-top:10px;">Short Films of Faith: Testimonies and Reflections</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 14 · DASHBOARD (desktop) ===== -->
+<div style="position:absolute; left:1480px; top:1110px; width:1320px;">
+  <div class="frame-label" data-drags-parent="1"><b>Dashboard</b><span>desktop · today</span></div>
+  <div style="width:1320px; height:880px; background:#F5F2EC; box-shadow:0 10px 40px rgba(0,0,0,.12); overflow:hidden;">
+    <div style="display:grid; grid-template-columns:1fr auto 1fr; align-items:center; padding:22px 36px; background:#fff; border-bottom:1px solid #0E0E0E;">
+      <div style="display:flex; gap:30px;"><span class="lb" style="color:#0E0E0E; font-size:11px; font-weight:700; padding-bottom:5px; border-bottom:2px solid #A8141B;">Today</span><span class="lb" style="color:#0E0E0E; font-size:11px;">Scripture</span><span class="lb" style="color:#0E0E0E; font-size:11px;">Prayer</span><span class="lb" style="color:#0E0E0E; font-size:11px;">Community</span><span class="lb" style="color:#0E0E0E; font-size:11px;">Reels</span></div>
+      <div class="dd" style="font-size:28px; letter-spacing:.36em; color:#0E0E0E; padding-left:10px;">CATALYSIS</div>
+      <div style="display:flex; gap:22px; justify-content:flex-end; align-items:center; color:#0E0E0E;"><span class="lb" style="font-size:11px;">Events</span><span class="lb" style="font-size:11px;">Ask Lumen</span><span class="ic" style="font-size:19px;"><i data-lucide="search"></i></span><span class="dd" style="width:36px; height:36px; background:#0E0E0E; color:#fff; display:flex; align-items:center; justify-content:center; font-size:16px;">M</span></div>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr auto 1fr; padding:13px 36px; border-bottom:1px solid #D9D4CA;"><span class="lb" style="color:#0E0E0E;">Saturday, 26 September 2026</span><span class="lb" style="color:#A8141B;">Memorial of Sts. Cosmas &amp; Damian</span><span class="lb" style="color:#0E0E0E; text-align:right;">Day 12 of your streak</span></div>
+    <div style="display:grid; grid-template-columns:1.45fr 1fr; gap:48px; padding:40px 36px;">
+      <div>
+        <div class="dd" style="font-style:italic; font-size:64px; line-height:1; color:#0E0E0E;">Good morning, Maria.</div>
+        <div style="background:#0B0B0B; padding:36px 36px 30px; margin-top:32px;">
+          <span class="lb" style="background:#A8141B; color:#fff; padding:7px 11px;">Verse of the day</span>
+          <div class="dd" style="font-size:40px; line-height:1.18; color:#F5F2EC; margin-top:22px;">The light shines in the darkness, and the darkness has not overcome it.</div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:26px;"><span class="lb" style="color:#CFCAC0;">John 1:5 · RSV-CE</span><span class="lb" style="color:#fff; border-bottom:1px solid #fff; padding-bottom:3px;">Read &amp; reflect</span></div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:32px; margin-top:28px;">
+          <div style="border-top:1px solid #0E0E0E; padding-top:16px;"><div class="lb" style="color:#5A5750;">Continue reading</div><div class="ct" style="font-weight:700; font-size:21px; line-height:1.3; color:#0E0E0E; margin-top:10px;">John 1: The Word Became Flesh</div></div>
+          <div style="border-top:1px solid #0E0E0E; padding-top:16px;"><div class="lb" style="color:#5A5750;">From the community</div><div class="ct" style="font-weight:700; font-size:21px; line-height:1.3; color:#0E0E0E; margin-top:10px;">24 people prayed for Jacob's finals week</div></div>
+        </div>
+      </div>
+      <div>
+        <div style="display:flex; justify-content:space-between; align-items:baseline;"><span class="lb" style="color:#0E0E0E; font-weight:600; font-size:11px;">Today's rule</span><span class="dd" style="font-size:30px; color:#A8141B;">3<span style="color:#8C877E; font-size:20px;"> / 4</span></span></div>
+        <div style="border-top:1px solid #0E0E0E; margin-top:12px;">
+          <div style="display:flex; gap:20px; align-items:center; padding:15px 0; border-bottom:1px solid #D9D4CA;"><span class="dd" style="font-size:34px; color:#A8141B; width:44px;">01</span><span class="ct" style="flex:1; font-size:18px; color:#8C877E; text-decoration:line-through; text-decoration-color:#B8B2A7;">Morning Offering</span><span class="lb" style="color:#5A5750;">7:14 AM</span></div>
+          <div style="display:flex; gap:20px; align-items:center; padding:15px 0; border-bottom:1px solid #D9D4CA;"><span class="dd" style="font-size:34px; color:#A8141B; width:44px;">02</span><span class="ct" style="flex:1; font-size:18px; color:#8C877E; text-decoration:line-through; text-decoration-color:#B8B2A7;">The Angelus</span><span class="lb" style="color:#5A5750;">12:02 PM</span></div>
+          <div style="display:flex; gap:20px; align-items:center; padding:15px 0; border-bottom:1px solid #D9D4CA;"><span class="dd" style="font-size:34px; color:#A8141B; width:44px;">03</span><span class="ct" style="flex:1; font-size:18px; color:#8C877E; text-decoration:line-through; text-decoration-color:#B8B2A7;">Rosary · Glorious Mysteries</span><span class="lb" style="color:#5A5750;">5:30 PM</span></div>
+          <div style="display:flex; gap:20px; align-items:center; padding:15px 0; border-bottom:1px solid #0E0E0E;"><span class="dd" style="font-size:34px; color:#A8141B; width:44px;">04</span><span class="ct" style="flex:1; font-size:18px; color:#0E0E0E; font-weight:700;">Evening Examen</span><span class="lb" style="color:#fff; background:#0E0E0E; padding:8px 12px;">Begin · 9 PM</span></div>
+        </div>
+        <div class="lb" style="color:#0E0E0E; font-weight:600; font-size:11px; margin-top:34px;">Next up</div>
+        <div style="display:flex; gap:20px; align-items:center; padding:16px 0; border-top:1px solid #0E0E0E; border-bottom:1px solid #D9D4CA; margin-top:12px;">
+          <div style="text-align:center; width:56px;"><div class="lb" style="color:#A8141B; font-size:9px;">Sept</div><div class="dd" style="font-size:38px; line-height:1; color:#0E0E0E;">29</div></div>
+          <div style="flex:1;"><div class="ct" style="font-weight:700; font-size:18px; color:#0E0E0E;">Adoration &amp; Confession</div><div class="lb" style="color:#5A5750; margin-top:6px;">7:00 PM · Newman Center</div></div>
+          <span class="lb" style="color:#0E0E0E; border:1px solid #0E0E0E; padding:8px 12px;">Going</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 15 · BIBLE READER (desktop) ===== -->
+<div style="position:absolute; left:2880px; top:1110px; width:1320px;">
+  <div class="frame-label" data-drags-parent="1"><b>Bible Reader</b><span>desktop · RSV-CE</span></div>
+  <div style="width:1320px; height:880px; background:#FBFAF7; box-shadow:0 10px 40px rgba(0,0,0,.12); overflow:hidden; display:grid; grid-template-columns:250px 1fr 330px;">
+    <div style="border-right:1px solid #0E0E0E; padding:28px 26px;">
+      <div class="dd" style="font-size:20px; letter-spacing:.34em; color:#0E0E0E;">CATALYSIS</div>
+      <div class="lb" style="color:#A8141B; margin-top:36px;">New Testament</div>
+      <div style="margin-top:12px; border-top:1px solid #0E0E0E;">
+        <div class="ct" style="font-size:16px; color:#5A5750; padding:11px 0; border-bottom:1px solid #E4DFD5;">Matthew</div>
+        <div class="ct" style="font-size:16px; color:#5A5750; padding:11px 0; border-bottom:1px solid #E4DFD5;">Mark</div>
+        <div class="ct" style="font-size:16px; color:#5A5750; padding:11px 0; border-bottom:1px solid #E4DFD5;">Luke</div>
+        <div style="display:flex; justify-content:space-between; align-items:baseline; padding:11px 0; border-bottom:1px solid #E4DFD5;"><span class="ct" style="font-size:16px; color:#0E0E0E; font-weight:700;">John</span><span class="dd" style="font-size:16px; color:#A8141B;">I</span></div>
+        <div class="ct" style="font-size:16px; color:#5A5750; padding:11px 0; border-bottom:1px solid #E4DFD5;">Acts</div>
+        <div class="ct" style="font-size:16px; color:#5A5750; padding:11px 0; border-bottom:1px solid #E4DFD5;">Romans</div>
+        <div class="ct" style="font-size:16px; color:#5A5750; padding:11px 0; border-bottom:1px solid #E4DFD5;">1 Corinthians</div>
+        <div class="ct" style="font-size:16px; color:#5A5750; padding:11px 0; border-bottom:1px solid #E4DFD5;">2 Corinthians</div>
+      </div>
+    </div>
+    <div style="padding:40px 70px; overflow:hidden;">
+      <div style="display:flex; justify-content:space-between; align-items:center;"><span class="lb" style="color:#5A5750;">Revised Standard Version · Catholic Edition</span><span class="ic" style="gap:18px; font-size:19px; color:#0E0E0E;"><i data-lucide="type"></i><i data-lucide="bookmark"></i><i data-lucide="share"></i></span></div>
+      <div class="lb" style="color:#A8141B; margin-top:44px;">The Gospel according to</div>
+      <div class="dd" style="font-size:88px; font-weight:500; line-height:1; color:#0E0E0E; margin-top:10px;">John</div>
+      <div class="lb" style="color:#5A5750; margin-top:22px; padding-top:16px; border-top:1px solid #0E0E0E; max-width:640px;">Chapter One — The Word Became Flesh</div>
+      <p class="ct" style="font-size:21px; line-height:1.8; color:#1A1917; margin:26px 0 0; max-width:640px;"><span class="dd" style="float:left; font-size:104px; line-height:.8; color:#A8141B; margin:8px 14px 0 0; font-weight:500;">I</span>n the beginning was the Word, and the Word was with God, and the Word was God. <sup class="sn" style="font-size:10px; color:#A8141B; font-weight:700;">2</sup> He was in the beginning with God; <sup class="sn" style="font-size:10px; color:#A8141B; font-weight:700;">3</sup> all things were made through him, and without him was not anything made that was made. <sup class="sn" style="font-size:10px; color:#A8141B; font-weight:700;">4</sup> In him was life, and <span style="background:linear-gradient(transparent 58%, #EFD3CF 58%);">the life was the light of men.</span> <sup class="sn" style="font-size:10px; color:#A8141B; font-weight:700;">5</sup> The light shines in the darkness, and the darkness has not overcome it.</p>
+    </div>
+    <div style="border-left:1px solid #0E0E0E; padding:40px 28px; background:#F5F2EC;">
+      <div class="lb" style="color:#0E0E0E; font-weight:600;">On verse 4</div>
+      <div style="margin-top:14px; padding-top:16px; border-top:1px solid #0E0E0E;">
+        <div class="lb" style="color:#A8141B;">Lumen explains</div>
+        <div class="ct" style="font-size:16px; line-height:1.62; color:#1A1917; margin-top:10px;">“Light” here is Christ himself, the Word entering a world in shadow. John deliberately echoes Genesis 1: a new creation begins.</div>
+      </div>
+      <div class="lb" style="color:#0E0E0E; font-weight:600; margin-top:34px;">Cross references</div>
+      <div style="margin-top:12px; border-top:1px solid #0E0E0E;">
+        <div style="display:flex; justify-content:space-between; padding:12px 0; border-bottom:1px solid #D9D4CA;"><span class="ct" style="font-size:15px; color:#0E0E0E; font-weight:700;">Genesis 1:3</span><span class="ct" style="font-style:italic; font-size:14px; color:#5A5750;">Let there be light</span></div>
+        <div style="display:flex; justify-content:space-between; padding:12px 0; border-bottom:1px solid #D9D4CA;"><span class="ct" style="font-size:15px; color:#0E0E0E; font-weight:700;">John 8:12</span><span class="ct" style="font-style:italic; font-size:14px; color:#5A5750;">I am the light</span></div>
+        <div style="display:flex; justify-content:space-between; padding:12px 0; border-bottom:1px solid #D9D4CA;"><span class="ct" style="font-size:15px; color:#0E0E0E; font-weight:700;">1 John 1:5</span><span class="ct" style="font-style:italic; font-size:14px; color:#5A5750;">God is light</span></div>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:28px;">
+        <span class="lb" style="text-align:center; background:#0E0E0E; color:#fff; padding:13px 0;">Highlight</span>
+        <span class="lb" style="text-align:center; border:1px solid #0E0E0E; color:#0E0E0E; padding:12px 0;">Add note</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 16 · PRAYER (desktop) ===== -->
+<div style="position:absolute; left:4280px; top:1110px; width:1320px;">
+  <div class="frame-label" data-drags-parent="1"><b>Prayer Guide &amp; Tracker</b><span>desktop</span></div>
+  <div style="width:1320px; height:880px; background:#F5F2EC; box-shadow:0 10px 40px rgba(0,0,0,.12); overflow:hidden;">
+    <div style="display:grid; grid-template-columns:1fr auto 1fr; align-items:center; padding:22px 36px; background:#fff; border-bottom:1px solid #0E0E0E;">
+      <div style="display:flex; gap:30px;"><span class="lb" style="color:#0E0E0E; font-size:11px;">Today</span><span class="lb" style="color:#0E0E0E; font-size:11px;">Scripture</span><span class="lb" style="color:#0E0E0E; font-size:11px; font-weight:700; padding-bottom:5px; border-bottom:2px solid #A8141B;">Prayer</span><span class="lb" style="color:#0E0E0E; font-size:11px;">Community</span><span class="lb" style="color:#0E0E0E; font-size:11px;">Reels</span></div>
+      <div class="dd" style="font-size:28px; letter-spacing:.36em; color:#0E0E0E; padding-left:10px;">CATALYSIS</div>
+      <div style="display:flex; gap:22px; justify-content:flex-end; align-items:center; color:#0E0E0E;"><span class="lb" style="font-size:11px;">Events</span><span class="lb" style="font-size:11px;">Ask Lumen</span><span class="ic" style="font-size:19px;"><i data-lucide="search"></i></span><span class="dd" style="width:36px; height:36px; background:#0E0E0E; color:#fff; display:flex; align-items:center; justify-content:center; font-size:16px;">M</span></div>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr 380px; gap:44px; padding:40px 36px;">
+      <div>
+        <div class="lb" style="color:#A8141B; font-size:11px;">A rule of life</div>
+        <div class="dd" style="font-style:italic; font-size:96px; line-height:.95; color:#0E0E0E; margin-top:12px;">Prayer</div>
+        <div class="ct" style="font-style:italic; font-size:19px; color:#5A5750; margin-top:14px;">Kept one day at a time.</div>
+        <div style="display:grid; grid-template-columns:repeat(7,1fr); gap:6px; margin-top:34px;">
+          <div style="text-align:center;"><div style="height:52px; background:#0E0E0E;"></div><div class="lb" style="font-size:9px; margin-top:7px; color:#5A5750;">Mon</div></div>
+          <div style="text-align:center;"><div style="height:52px; background:#0E0E0E;"></div><div class="lb" style="font-size:9px; margin-top:7px; color:#5A5750;">Tue</div></div>
+          <div style="text-align:center;"><div style="height:52px; background:#0E0E0E;"></div><div class="lb" style="font-size:9px; margin-top:7px; color:#5A5750;">Wed</div></div>
+          <div style="text-align:center;"><div style="height:52px; background:#0E0E0E;"></div><div class="lb" style="font-size:9px; margin-top:7px; color:#5A5750;">Thu</div></div>
+          <div style="text-align:center;"><div style="height:52px; background:#0E0E0E;"></div><div class="lb" style="font-size:9px; margin-top:7px; color:#5A5750;">Fri</div></div>
+          <div style="text-align:center;"><div style="height:52px; border:1.5px solid #A8141B; background:linear-gradient(0deg,#A8141B 75%,transparent 75%);"></div><div class="lb" style="font-size:9px; margin-top:7px; color:#A8141B; font-weight:700;">Sat</div></div>
+          <div style="text-align:center;"><div style="height:52px; border:1px solid #D9D4CA;"></div><div class="lb" style="font-size:9px; margin-top:7px; color:#5A5750;">Sun</div></div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; margin-top:28px; border-top:1px solid #0E0E0E; border-bottom:1px solid #0E0E0E;">
+          <div style="padding:18px 0; text-align:center;"><div class="dd" style="font-size:46px; color:#A8141B; line-height:1;">12</div><div class="lb" style="font-size:9px; color:#5A5750; margin-top:8px;">Day streak</div></div>
+          <div style="padding:18px 0; text-align:center; border-left:1px solid #D9D4CA; border-right:1px solid #D9D4CA;"><div class="dd" style="font-size:46px; color:#0E0E0E; line-height:1;">3/4</div><div class="lb" style="font-size:9px; color:#5A5750; margin-top:8px;">Today</div></div>
+          <div style="padding:18px 0; text-align:center;"><div class="dd" style="font-size:46px; color:#0E0E0E; line-height:1;">342</div><div class="lb" style="font-size:9px; color:#5A5750; margin-top:8px;">All time</div></div>
+        </div>
+      </div>
+      <div>
+        <div style="display:flex; justify-content:space-between; align-items:baseline;"><span class="lb" style="color:#0E0E0E; font-weight:600; font-size:11px;">Today's rule</span><span class="lb" style="color:#A8141B;">+ Add prayer</span></div>
+        <div style="border-top:1px solid #0E0E0E; margin-top:12px;">
+          <div style="display:flex; align-items:center; gap:16px; padding:16px 0; border-bottom:1px solid #D9D4CA;"><span style="width:22px; height:22px; background:#0E0E0E; color:#fff; display:flex; align-items:center; justify-content:center; font-size:14px;" class="ic"><i data-lucide="check"></i></span><span class="ct" style="flex:1; font-size:18px; color:#0E0E0E;">Morning Offering</span><span class="lb" style="color:#8C877E;">7:14 AM</span></div>
+          <div style="display:flex; align-items:center; gap:16px; padding:16px 0; border-bottom:1px solid #D9D4CA;"><span style="width:22px; height:22px; background:#0E0E0E; color:#fff; display:flex; align-items:center; justify-content:center; font-size:14px;" class="ic"><i data-lucide="check"></i></span><span class="ct" style="flex:1; font-size:18px; color:#0E0E0E;">The Angelus</span><span class="lb" style="color:#8C877E;">12:02 PM</span></div>
+          <div style="display:flex; align-items:center; gap:16px; padding:16px 0; border-bottom:1px solid #D9D4CA;"><span style="width:22px; height:22px; background:#0E0E0E; color:#fff; display:flex; align-items:center; justify-content:center; font-size:14px;" class="ic"><i data-lucide="check"></i></span><span class="ct" style="flex:1; font-size:18px; color:#0E0E0E;">Rosary · Glorious Mysteries</span><span class="lb" style="color:#8C877E;">5:30 PM</span></div>
+          <div style="display:flex; align-items:center; gap:16px; padding:16px 0; border-bottom:1px solid #0E0E0E;"><span style="width:22px; height:22px; border:1.5px solid #0E0E0E;"></span><span class="ct" style="flex:1; font-size:18px; color:#0E0E0E; font-weight:700;">Evening Examen</span><span class="lb" style="color:#A8141B; font-weight:700;">Begin · 9 PM</span></div>
+        </div>
+        <div class="lb" style="color:#0E0E0E; font-weight:600; font-size:11px; margin-top:34px;">Guided prayers</div>
+        <div style="border-top:1px solid #0E0E0E; margin-top:12px;">
+          <div style="display:flex; gap:18px; align-items:baseline; padding:14px 0; border-bottom:1px solid #D9D4CA;"><span class="dd" style="font-size:26px; color:#A8141B; width:34px;">I</span><span class="ct" style="flex:1; font-size:17px; color:#0E0E0E;">The Examen of St. Ignatius</span><span class="lb" style="color:#8C877E;">10 min</span></div>
+          <div style="display:flex; gap:18px; align-items:baseline; padding:14px 0; border-bottom:1px solid #D9D4CA;"><span class="dd" style="font-size:26px; color:#A8141B; width:34px;">II</span><span class="ct" style="flex:1; font-size:17px; color:#0E0E0E;">Lectio Divina on Sunday's Gospel</span><span class="lb" style="color:#8C877E;">15 min</span></div>
+          <div style="display:flex; gap:18px; align-items:baseline; padding:14px 0; border-bottom:1px solid #D9D4CA;"><span class="dd" style="font-size:26px; color:#A8141B; width:34px;">III</span><span class="ct" style="flex:1; font-size:17px; color:#0E0E0E;">The Divine Mercy Chaplet</span><span class="lb" style="color:#8C877E;">8 min</span></div>
+        </div>
+      </div>
+      <div style="position:relative; height:760px; background:url('assets/rosary.jpg') 25% 70% / cover no-repeat;">
+        <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,.82) 100%);"></div>
+        <div style="position:absolute; left:28px; right:28px; bottom:30px;">
+          <span class="lb" style="background:#A8141B; color:#fff; padding:7px 11px;">Tonight</span>
+          <div class="dd" style="font-size:44px; line-height:1.02; color:#F5F2EC; margin-top:18px;">The Glorious Mysteries</div>
+          <div class="ct" style="font-style:italic; font-size:17px; color:#E4E0D8; margin-top:12px;">Pray the Rosary with 214 others from your parish.</div>
+          <div class="lb" style="margin-top:22px; background:#F5F2EC; color:#0B0B0B; text-align:center; padding:16px; font-weight:600;">Begin · 20 min · Audio</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 17 · EVENTS (desktop) ===== -->
+<div style="position:absolute; left:5680px; top:1110px; width:1320px;">
+  <div class="frame-label" data-drags-parent="1"><b>Events &amp; Calendar</b><span>desktop</span></div>
+  <div style="width:1320px; height:880px; background:#F5F2EC; box-shadow:0 10px 40px rgba(0,0,0,.12); overflow:hidden;">
+    <div style="display:grid; grid-template-columns:1fr auto 1fr; align-items:center; padding:22px 36px; background:#fff; border-bottom:1px solid #0E0E0E;">
+      <div style="display:flex; gap:30px;"><span class="lb" style="color:#0E0E0E; font-size:11px;">Today</span><span class="lb" style="color:#0E0E0E; font-size:11px;">Scripture</span><span class="lb" style="color:#0E0E0E; font-size:11px;">Prayer</span><span class="lb" style="color:#0E0E0E; font-size:11px;">Community</span><span class="lb" style="color:#0E0E0E; font-size:11px;">Reels</span></div>
+      <div class="dd" style="font-size:28px; letter-spacing:.36em; color:#0E0E0E; padding-left:10px;">CATALYSIS</div>
+      <div style="display:flex; gap:22px; justify-content:flex-end; align-items:center; color:#0E0E0E;"><span class="lb" style="font-size:11px; font-weight:700; padding-bottom:5px; border-bottom:2px solid #A8141B;">Events</span><span class="lb" style="font-size:11px;">Ask Lumen</span><span class="ic" style="font-size:19px;"><i data-lucide="search"></i></span><span class="dd" style="width:36px; height:36px; background:#0E0E0E; color:#fff; display:flex; align-items:center; justify-content:center; font-size:16px;">M</span></div>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 400px; gap:40px; padding:34px 36px;">
+      <div>
+        <div style="display:flex; justify-content:space-between; align-items:flex-end;">
+          <div><div class="lb" style="color:#A8141B; font-size:11px;">Calendar</div><div style="margin-top:8px;"><span class="dd" style="font-size:66px; line-height:1; color:#0E0E0E;">September</span> <span class="dd" style="font-style:italic; font-size:32px; color:#8C877E;">2026</span></div></div>
+          <div style="display:flex; gap:10px; align-items:center;"><span class="lb" style="color:#fff; background:#0E0E0E; padding:9px 13px;">Month</span><span class="lb" style="color:#0E0E0E; border:1px solid #0E0E0E; padding:8px 13px;">List</span><span class="ic" style="font-size:20px; color:#0E0E0E; gap:12px; margin-left:10px;"><i data-lucide="chevron-left"></i><i data-lucide="chevron-right"></i></span></div>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(7,1fr); margin-top:24px; border-top:1px solid #0E0E0E;">
+          <div class="lb" style="padding:10px 8px; font-size:9px; color:#5A5750;">Sun</div><div class="lb" style="padding:10px 8px; font-size:9px; color:#5A5750;">Mon</div><div class="lb" style="padding:10px 8px; font-size:9px; color:#5A5750;">Tue</div><div class="lb" style="padding:10px 8px; font-size:9px; color:#5A5750;">Wed</div><div class="lb" style="padding:10px 8px; font-size:9px; color:#5A5750;">Thu</div><div class="lb" style="padding:10px 8px; font-size:9px; color:#5A5750;">Fri</div><div class="lb" style="padding:10px 8px; font-size:9px; color:#5A5750;">Sat</div>
+        </div>
+        <div class="ct" style="display:grid; grid-template-columns:repeat(7,1fr); grid-auto-rows:98px; border-left:1px solid #D9D4CA; border-top:1px solid #D9D4CA; font-size:15px; color:#0E0E0E;">
+          <div style="border-right:1px solid #D9D4CA; border-bottom:1px solid #D9D4CA; padding:8px; color:#C4BEB3;">30</div>
+          <div style="border-right:1px solid #D9D4CA; border-bottom:1px solid #D9D4CA; padding:8px; color:#C4BEB3;">31</div>
+          <div style="border-right:1px solid #D9D4CA; border-bottom:1px solid #D9D4CA; padding:8px;">1</div>
+          <div style="border-right:1px solid #D9D4CA; border-bottom:1px solid #D9D4CA; padding:8px;">2</div>
+          <div style="border-right:1px solid #D9D4CA; border-bottom:1px solid #D9D4CA; padding:8px;">3<div class="lb" style="font-size:8px; letter-spacing:.1em; color:#fff; background:#0E0E0E; padding:4px 6px; margin-top:6px;">Welcome Mass</div></div>
+          <div style="border-right:1px solid #D9D4CA; border-bottom:1px solid #D9D4CA; padding:8px;">4</div>
+          <div style="border-right:1px solid #D9D4CA; border-bottom:1px solid #D9D4CA; padding:8px;">5</div>
+          <div style="border-right:1px solid #D9D4CA; border-bottom:1px solid #D9D4CA; padding:8px;">6</div>
+          <div style="border-right:1px solid #D9D4CA; border-bottom:1px solid #D9D4CA; padding:8px;">7</div>
+          <div style="border-right:1px solid #D9D4CA; border-bottom:1px solid #D9D4CA; padding:8px;"><span style="color:#A8141B; font-weight:700;">8</span><div class="ct" style="font-style:italic; font-size:11px; color:#A8141B; margin-top:4px; line-height:1.3;">Nativity of Mary</div></div>
+          <div style="border-right:1px solid #D9D4CA; border-bottom:1px solid #D9D4CA; padding:8px;">9</div>
+          <div style="border-right:1px solid #D9D4CA; border-bottom:1px solid #D9D4CA; padding:8px;">10<div class="lb" style="font-size:8px; letter-spacing:.1em; color:#0E0E0E; border:1px solid #0E0E0E; padding:3px 6px; margin-top:6px;">Bible Study</div></div>
+          <div style="border-right:1px solid #D9D4CA; border-bottom:1px solid #D9D4CA; padding:8px;">11</div>
+          <div style="border-right:1px solid #D9D4CA; border-bottom:1px solid #D9D4CA; padding:8px;">12</div>
+          <div style="border-right:1px solid #D9D4CA; border-bottom:1px solid #D9D4CA; padding:8px;">13</div>
+          <div style="border-right:1px solid #D9D4CA; border-bottom:1px solid #D9D4CA; padding:8px;"><span style="color:#A8141B; font-weight:700;">14</span><div class="ct" style="font-style:italic; font-size:11px; color:#A8141B; margin-top:4px; line-height:1.3;">Exaltation of the Cross</div></div>
+          <div style="border-right:1px solid #D9D4CA; border-bottom:1px solid #D9D4CA; padding:8px;">15</div>
+          <div style="border-right:1px solid #D9D4CA; border-bottom:1px solid #D9D4CA; padding:8px;">16</div>
+          <div style="border-right:1px solid #D9D4CA; border-bottom:1px solid #D9D4CA; padding:8px;">17<div class="lb" style="font-size:8px; letter-spacing:.1em; color:#0E0E0E; border:1px solid #0E0E0E; padding:3px 6px; margin-top:6px;">Bible Study</div></div>
+          <div style="border-right:1px solid #D9D4CA; border-bottom:1px solid #D9D4CA; padding:8px;">18</div>
+          <div style="border-right:1px solid #D9D4CA; border-bottom:1px solid #D9D4CA; padding:8px;">19<div class="lb" style="font-size:8px; letter-spacing:.1em; color:#fff; background:#0E0E0E; padding:4px 6px; margin-top:6px;">Service Day</div></div>
+          <div style="border-right:1px solid #D9D4CA; border-bottom:1px solid #D9D4CA; padding:8px;">20</div>
+          <div style="border-right:1px solid #D9D4CA; border-bottom:1px solid #D9D4CA; padding:8px;">21</div>
+          <div style="border-right:1px solid #D9D4CA; border-bottom:1px solid #D9D4CA; padding:8px;">22</div>
+          <div style="border-right:1px solid #D9D4CA; border-bottom:1px solid #D9D4CA; padding:8px;">23</div>
+          <div style="border-right:1px solid #D9D4CA; border-bottom:1px solid #D9D4CA; padding:8px;">24<div class="lb" style="font-size:8px; letter-spacing:.1em; color:#0E0E0E; border:1px solid #0E0E0E; padding:3px 6px; margin-top:6px;">Bible Study</div></div>
+          <div style="border-right:1px solid #D9D4CA; border-bottom:1px solid #D9D4CA; padding:8px;">25</div>
+          <div style="border-right:1px solid #D9D4CA; border-bottom:1px solid #D9D4CA; padding:8px; background:#fff;"><span style="border-bottom:1.5px solid #0E0E0E;">26</span><div class="lb" style="font-size:8px; color:#5A5750; margin-top:6px; letter-spacing:.1em;">Today</div></div>
+          <div style="border-right:1px solid #D9D4CA; border-bottom:1px solid #D9D4CA; padding:8px;">27</div>
+          <div style="border-right:1px solid #D9D4CA; border-bottom:1px solid #D9D4CA; padding:8px;">28</div>
+          <div style="border-right:1px solid #D9D4CA; border-bottom:1px solid #D9D4CA; padding:8px; background:#0E0E0E; color:#fff;"><span style="font-weight:700;">29</span><div class="ct" style="font-style:italic; font-size:11px; color:#F0B3B5; margin-top:4px; line-height:1.3;">The Archangels</div><div class="lb" style="font-size:8px; letter-spacing:.1em; color:#fff; margin-top:5px;">2 events</div></div>
+          <div style="border-right:1px solid #D9D4CA; border-bottom:1px solid #D9D4CA; padding:8px;">30</div>
+          <div style="border-right:1px solid #D9D4CA; border-bottom:1px solid #D9D4CA; padding:8px; color:#C4BEB3;">1</div>
+          <div style="border-right:1px solid #D9D4CA; border-bottom:1px solid #D9D4CA; padding:8px; color:#C4BEB3;">2</div>
+          <div style="border-right:1px solid #D9D4CA; border-bottom:1px solid #D9D4CA; padding:8px; color:#C4BEB3;">3</div>
+        </div>
+      </div>
+      <div>
+        <div style="position:relative; height:250px; background:#0B0B0B url('assets/angel.webp') 50% 35% / cover no-repeat;">
+          <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,.8));"></div>
+          <div style="position:absolute; left:22px; right:22px; bottom:20px;"><div class="lb" style="color:#CFCAC0;">Tuesday, 29 September</div><div class="dd" style="font-size:30px; line-height:1.08; color:#F5F2EC; margin-top:8px;">Feast of Sts. Michael, Gabriel &amp; Raphael</div></div>
+        </div>
+        <div style="margin-top:6px;">
+          <div style="display:flex; gap:18px; align-items:center; padding:18px 0; border-bottom:1px solid #D9D4CA;">
+            <div style="width:60px;"><div class="dd" style="font-size:32px; color:#A8141B; line-height:1;">7:00</div><div class="lb" style="font-size:9px; color:#8C877E; margin-top:4px;">PM</div></div>
+            <div style="flex:1;"><div class="ct" style="font-size:18px; font-weight:700; color:#0E0E0E;">Adoration &amp; Confession</div><div class="lb" style="font-size:9px; color:#5A5750; margin-top:6px;">Newman Center · 48 going</div></div>
+            <span class="lb" style="color:#fff; background:#0E0E0E; padding:9px 12px;">Going</span>
+          </div>
+          <div style="display:flex; gap:18px; align-items:center; padding:18px 0; border-bottom:1px solid #D9D4CA;">
+            <div style="width:60px;"><div class="dd" style="font-size:32px; color:#A8141B; line-height:1;">9:00</div><div class="lb" style="font-size:9px; color:#8C877E; margin-top:4px;">PM</div></div>
+            <div style="flex:1;"><div class="ct" style="font-size:18px; font-weight:700; color:#0E0E0E;">Theology on Tap</div><div class="lb" style="font-size:9px; color:#5A5750; margin-top:6px;">The Library Pub · 31 going</div></div>
+            <span class="lb" style="color:#0E0E0E; border:1px solid #0E0E0E; padding:8px 12px;">RSVP</span>
+          </div>
+        </div>
+        <div class="lb" style="color:#0E0E0E; font-weight:600; font-size:11px; margin-top:26px;">Coming in October</div>
+        <div style="border-top:1px solid #0E0E0E; margin-top:12px;">
+          <div style="display:flex; gap:16px; align-items:baseline; padding:12px 0; border-bottom:1px solid #D9D4CA;"><span class="dd" style="font-size:24px; color:#A8141B; width:34px;">04</span><span class="ct" style="flex:1; font-size:16px; color:#0E0E0E;">Blessing of the Animals</span><span class="lb" style="font-size:9px; color:#8C877E;">St. Francis</span></div>
+          <div style="display:flex; gap:16px; align-items:baseline; padding:12px 0; border-bottom:1px solid #D9D4CA;"><span class="dd" style="font-size:24px; color:#A8141B; width:34px;">07</span><span class="ct" style="flex:1; font-size:16px; color:#0E0E0E;">Rosary Walk in the Park</span><span class="lb" style="font-size:9px; color:#8C877E;">Our Lady</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 18 · COMMUNITY (desktop) ===== -->
+<div style="position:absolute; left:7080px; top:1110px; width:1320px;">
+  <div class="frame-label" data-drags-parent="1"><b>Community</b><span>desktop · feed</span></div>
+  <div style="width:1320px; height:880px; background:#F5F2EC; box-shadow:0 10px 40px rgba(0,0,0,.12); overflow:hidden;">
+    <div style="display:grid; grid-template-columns:1fr auto 1fr; align-items:center; padding:22px 36px; background:#fff; border-bottom:1px solid #0E0E0E;">
+      <div style="display:flex; gap:30px;"><span class="lb" style="color:#0E0E0E; font-size:11px;">Today</span><span class="lb" style="color:#0E0E0E; font-size:11px;">Scripture</span><span class="lb" style="color:#0E0E0E; font-size:11px;">Prayer</span><span class="lb" style="color:#0E0E0E; font-size:11px; font-weight:700; padding-bottom:5px; border-bottom:2px solid #A8141B;">Community</span><span class="lb" style="color:#0E0E0E; font-size:11px;">Reels</span></div>
+      <div class="dd" style="font-size:28px; letter-spacing:.36em; color:#0E0E0E; padding-left:10px;">CATALYSIS</div>
+      <div style="display:flex; gap:22px; justify-content:flex-end; align-items:center; color:#0E0E0E;"><span class="lb" style="font-size:11px;">Events</span><span class="lb" style="font-size:11px;">Ask Lumen</span><span class="ic" style="font-size:19px;"><i data-lucide="search"></i></span><span class="dd" style="width:36px; height:36px; background:#0E0E0E; color:#fff; display:flex; align-items:center; justify-content:center; font-size:16px;">M</span></div>
+    </div>
+    <div style="display:grid; grid-template-columns:240px 1fr 320px; gap:44px; padding:34px 36px;">
+      <div>
+        <div class="dd" style="font-style:italic; font-size:52px; line-height:1; color:#0E0E0E;">Community</div>
+        <div class="lb" style="color:#0E0E0E; font-weight:600; margin-top:32px;">Feeds</div>
+        <div style="border-top:1px solid #0E0E0E; margin-top:10px;">
+          <div style="display:flex; justify-content:space-between; padding:12px 0; border-bottom:1px solid #D9D4CA;"><span class="ct" style="font-size:16px; color:#A8141B; font-weight:700;">For you</span></div>
+          <div style="display:flex; justify-content:space-between; padding:12px 0; border-bottom:1px solid #D9D4CA;"><span class="ct" style="font-size:16px; color:#0E0E0E;">Following</span></div>
+          <div style="display:flex; justify-content:space-between; padding:12px 0; border-bottom:1px solid #D9D4CA;"><span class="ct" style="font-size:16px; color:#0E0E0E;">Prayer intentions</span><span class="lb" style="color:#8C877E;">12</span></div>
+        </div>
+        <div class="lb" style="color:#0E0E0E; font-weight:600; margin-top:28px;">Your groups</div>
+        <div style="border-top:1px solid #0E0E0E; margin-top:10px;">
+          <div style="display:flex; justify-content:space-between; padding:12px 0; border-bottom:1px solid #D9D4CA;"><span class="ct" style="font-size:16px; color:#0E0E0E;">Newman Center, NYU</span></div>
+          <div style="display:flex; justify-content:space-between; padding:12px 0; border-bottom:1px solid #D9D4CA;"><span class="ct" style="font-size:16px; color:#0E0E0E;">Women's Bible Study</span></div>
+          <div style="display:flex; justify-content:space-between; padding:12px 0; border-bottom:1px solid #D9D4CA;"><span class="ct" style="font-size:16px; color:#0E0E0E;">Young Adults, St. Joseph's</span></div>
+        </div>
+      </div>
+      <div>
+        <div style="display:flex; align-items:center; gap:14px; background:#fff; border:1px solid #0E0E0E; padding:16px 18px;"><span class="dd" style="width:34px; height:34px; background:#0E0E0E; color:#fff; display:flex; align-items:center; justify-content:center; font-size:15px;">M</span><span class="ct" style="flex:1; font-style:italic; font-size:16px; color:#8C877E;">Share a reflection or an intention…</span><span class="lb" style="color:#5A5750;">Photo</span><span class="lb" style="color:#fff; background:#0E0E0E; padding:9px 13px;">Post</span></div>
+        <div style="padding:24px 0; border-bottom:1px solid #D9D4CA;">
+          <div style="display:flex; align-items:center; justify-content:space-between;"><div><span class="lb" style="color:#0E0E0E; font-weight:600;">Jacob Torres</span><span class="lb" style="color:#8C877E; margin-left:12px;">Newman Center · 2h</span></div><span class="lb" style="font-size:9px; color:#fff; background:#A8141B; padding:6px 9px;">Prayer request</span></div>
+          <div class="ct" style="font-size:18px; line-height:1.6; color:#1A1917; margin-top:12px;">Starting finals week and feeling the weight of it. Could use prayers for peace and focus. Trusting that He's got me.</div>
+          <div style="display:flex; gap:26px; margin-top:14px;"><span class="lb" style="color:#A8141B; font-weight:700;">I prayed · 24</span><span class="lb" style="color:#5A5750;">Reply · 7</span><span class="lb" style="color:#5A5750;">Share</span></div>
+        </div>
+        <div style="padding:24px 0;">
+          <div><span class="lb" style="color:#0E0E0E; font-weight:600;">Ana Nguyen</span><span class="lb" style="color:#8C877E; margin-left:12px;">Reflection · 5h</span></div>
+          <div style="display:grid; grid-template-columns:1fr 220px; gap:24px; margin-top:12px;">
+            <div>
+              <div class="dd" style="font-style:italic; font-size:32px; line-height:1.15; color:#0E0E0E;">“Go to Joseph.”</div>
+              <div class="ct" style="font-size:17px; line-height:1.6; color:#1A1917; margin-top:12px;">Found this window after Mass at St. Joseph's. Asking his intercession for everyone waiting on a door to open this week.</div>
+              <div style="display:flex; gap:26px; margin-top:14px;"><span class="lb" style="color:#5A5750;">I prayed · 41</span><span class="lb" style="color:#5A5750;">Reply · 12</span></div>
+            </div>
+            <div style="height:260px; background:url('assets/st-joseph.webp') 50% 25% / cover no-repeat;"></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="lb" style="color:#0E0E0E; font-weight:600;">Intentions this week</div>
+        <div style="border-top:1px solid #0E0E0E; margin-top:10px;">
+          <div style="display:flex; gap:16px; padding:14px 0; border-bottom:1px solid #D9D4CA;"><span class="dd" style="font-size:26px; color:#A8141B; line-height:1; width:34px;">01</span><div><div class="ct" style="font-size:15.5px; line-height:1.4; color:#0E0E0E;">For a grandmother entering hospice</div><div class="lb" style="font-size:9px; color:#8C877E; margin-top:6px;">112 praying</div></div></div>
+          <div style="display:flex; gap:16px; padding:14px 0; border-bottom:1px solid #D9D4CA;"><span class="dd" style="font-size:26px; color:#A8141B; line-height:1; width:34px;">02</span><div><div class="ct" style="font-size:15.5px; line-height:1.4; color:#0E0E0E;">Discernment for three RCIA candidates</div><div class="lb" style="font-size:9px; color:#8C877E; margin-top:6px;">87 praying</div></div></div>
+          <div style="display:flex; gap:16px; padding:14px 0; border-bottom:1px solid #D9D4CA;"><span class="dd" style="font-size:26px; color:#A8141B; line-height:1; width:34px;">03</span><div><div class="ct" style="font-size:15.5px; line-height:1.4; color:#0E0E0E;">Peace for students during midterms</div><div class="lb" style="font-size:9px; color:#8C877E; margin-top:6px;">64 praying</div></div></div>
+        </div>
+        <div style="background:#0B0B0B; padding:24px; margin-top:28px;">
+          <div class="lb" style="color:#CFCAC0;">Group spotlight</div>
+          <div class="dd" style="font-size:28px; line-height:1.1; color:#F5F2EC; margin-top:10px;">Young Adults, St. Joseph's</div>
+          <div class="ct" style="font-style:italic; font-size:15px; color:#CFCAC0; margin-top:8px;">Weekly Holy Hour and dinner, Thursdays at 7.</div>
+          <div class="lb" style="margin-top:18px; background:#F5F2EC; color:#0B0B0B; text-align:center; padding:13px; font-weight:600;">Join group</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 19 · LUMEN AI (desktop) ===== -->
+<div style="position:absolute; left:8480px; top:1110px; width:1320px;">
+  <div class="frame-label" data-drags-parent="1"><b>Lumen AI</b><span>desktop · scripture &amp; catechism</span></div>
+  <div style="width:1320px; height:880px; background:#F5F2EC; box-shadow:0 10px 40px rgba(0,0,0,.12); overflow:hidden; display:flex; flex-direction:column;">
+    <div style="display:grid; grid-template-columns:1fr auto 1fr; align-items:center; padding:22px 36px; background:#fff; border-bottom:1px solid #0E0E0E;">
+      <div style="display:flex; gap:30px;"><span class="lb" style="color:#0E0E0E; font-size:11px;">Today</span><span class="lb" style="color:#0E0E0E; font-size:11px;">Scripture</span><span class="lb" style="color:#0E0E0E; font-size:11px;">Prayer</span><span class="lb" style="color:#0E0E0E; font-size:11px;">Community</span><span class="lb" style="color:#0E0E0E; font-size:11px;">Reels</span></div>
+      <div class="dd" style="font-size:28px; letter-spacing:.36em; color:#0E0E0E; padding-left:10px;">CATALYSIS</div>
+      <div style="display:flex; gap:22px; justify-content:flex-end; align-items:center; color:#0E0E0E;"><span class="lb" style="font-size:11px;">Events</span><span class="lb" style="font-size:11px; font-weight:700; padding-bottom:5px; border-bottom:2px solid #A8141B;">Ask Lumen</span><span class="ic" style="font-size:19px;"><i data-lucide="search"></i></span><span class="dd" style="width:36px; height:36px; background:#0E0E0E; color:#fff; display:flex; align-items:center; justify-content:center; font-size:16px;">M</span></div>
+    </div>
+    <div style="flex:1; display:grid; grid-template-columns:270px 1fr 300px; min-height:0;">
+      <div style="border-right:1px solid #0E0E0E; padding:28px 24px;">
+        <div class="lb" style="text-align:center; background:#0E0E0E; color:#fff; padding:14px; font-weight:600;">+ New conversation</div>
+        <div class="lb" style="color:#5A5750; margin-top:28px;">This week</div>
+        <div style="border-top:1px solid #0E0E0E; margin-top:10px;">
+          <div class="ct" style="font-size:15px; line-height:1.4; color:#A8141B; font-weight:700; padding:12px 0; border-bottom:1px solid #D9D4CA;">Forgiveness when it's hard</div>
+          <div class="ct" style="font-size:15px; line-height:1.4; color:#0E0E0E; padding:12px 0; border-bottom:1px solid #D9D4CA;">Who were the three archangels?</div>
+          <div class="ct" style="font-size:15px; line-height:1.4; color:#0E0E0E; padding:12px 0; border-bottom:1px solid #D9D4CA;">How to pray the Examen</div>
+          <div class="ct" style="font-size:15px; line-height:1.4; color:#0E0E0E; padding:12px 0; border-bottom:1px solid #D9D4CA;">Purgatory in the Catechism</div>
+        </div>
+      </div>
+      <div style="display:flex; flex-direction:column; min-height:0;">
+        <div style="flex:1; padding:34px 60px 0; overflow:hidden;">
+          <div style="max-width:660px; margin:0 auto; display:flex; flex-direction:column; gap:26px;">
+            <div style="text-align:center;"><div class="dd" style="font-size:40px; color:#0E0E0E;">Lumen</div><div class="ct" style="font-style:italic; font-size:15px; color:#5A5750; margin-top:4px;">Answers drawn from Scripture and the Catechism, with sources.</div></div>
+            <div class="ct" style="align-self:flex-end; max-width:78%; background:#0E0E0E; color:#F5F2EC; font-size:17px; line-height:1.5; padding:16px 20px;">What does the Church teach about forgiveness when it's really hard?</div>
+            <div>
+              <div class="lb" style="color:#A8141B; font-weight:600;">Lumen</div>
+              <div class="ct" style="font-size:18px; line-height:1.65; color:#1A1917; margin-top:10px;">Forgiveness sits at the heart of the Gospel. Jesus tells Peter to forgive “seventy times seven” (Mt 18:22), meaning without limit.</div>
+              <div style="border-left:2px solid #A8141B; padding:2px 0 2px 20px; margin:18px 0;">
+                <div class="dd" style="font-style:italic; font-size:26px; line-height:1.3; color:#0E0E0E;">“Forgive us our trespasses, as we forgive those who trespass against us.”</div>
+                <div class="lb" style="color:#5A5750; margin-top:10px;">CCC 2838–2845</div>
+              </div>
+              <div class="ct" style="font-size:18px; line-height:1.65; color:#1A1917;">It doesn't mean the hurt wasn't real. It means choosing not to be ruled by it. Would you like a prayer for a forgiving heart?</div>
+              <div style="display:flex; gap:10px; margin-top:18px;"><span class="lb" style="color:#0E0E0E; border:1px solid #0E0E0E; padding:10px 13px;">Yes, a prayer</span><span class="lb" style="color:#0E0E0E; border:1px solid #0E0E0E; padding:10px 13px;">A related passage</span><span class="lb" style="color:#0E0E0E; border:1px solid #0E0E0E; padding:10px 13px;">Saints who forgave</span></div>
+            </div>
+          </div>
+        </div>
+        <div style="border-top:1px solid #0E0E0E; padding:18px 60px 24px; background:#F5F2EC;">
+          <div style="max-width:660px; margin:0 auto; display:flex; align-items:center; gap:14px; background:#fff; border:1px solid #0E0E0E; padding:10px 10px 10px 20px;"><span class="ct" style="flex:1; font-style:italic; font-size:16px; color:#8C877E;">Ask about scripture, prayer, the saints…</span><span style="width:42px; height:42px; background:#0E0E0E; color:#fff; display:flex; align-items:center; justify-content:center; font-size:18px;" class="ic"><i data-lucide="arrow-up"></i></span></div>
+        </div>
+      </div>
+      <div style="border-left:1px solid #0E0E0E; padding:28px 24px; background:#fff;">
+        <div class="lb" style="color:#0E0E0E; font-weight:600;">Sources in this answer</div>
+        <div style="border-top:1px solid #0E0E0E; margin-top:10px;">
+          <div style="padding:14px 0; border-bottom:1px solid #D9D4CA;"><div class="lb" style="color:#A8141B; font-size:9px;">Scripture</div><div class="ct" style="font-size:16px; font-weight:700; color:#0E0E0E; margin-top:6px;">Matthew 18:21–22</div><div class="ct" style="font-style:italic; font-size:14px; color:#5A5750; margin-top:4px;">Seventy times seven</div></div>
+          <div style="padding:14px 0; border-bottom:1px solid #D9D4CA;"><div class="lb" style="color:#A8141B; font-size:9px;">Catechism</div><div class="ct" style="font-size:16px; font-weight:700; color:#0E0E0E; margin-top:6px;">CCC 2838–2845</div><div class="ct" style="font-style:italic; font-size:14px; color:#5A5750; margin-top:4px;">On the fifth petition of the Our Father</div></div>
+          <div style="padding:14px 0; border-bottom:1px solid #D9D4CA;"><div class="lb" style="color:#A8141B; font-size:9px;">Scripture</div><div class="ct" style="font-size:16px; font-weight:700; color:#0E0E0E; margin-top:6px;">Luke 23:34</div><div class="ct" style="font-style:italic; font-size:14px; color:#5A5750; margin-top:4px;">Father, forgive them</div></div>
+        </div>
+        <div class="ct" style="font-style:italic; font-size:13px; line-height:1.5; color:#8C877E; margin-top:24px;">Lumen is a study aid, not a substitute for a priest or spiritual director.</div>
+      </div>
+    </div>
+  </div>
+</div></x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  componentDidMount() {
+    const draw = () => { if (window.lucide && window.lucide.createIcons) { window.lucide.createIcons(); return true; } return false; };
+    if (!draw()) {
+      const t = setInterval(() => { if (draw()) clearInterval(t); }, 60);
+      setTimeout(() => clearInterval(t), 4000);
+    }
+  }
+  componentDidUpdate() { if (window.lucide && window.lucide.createIcons) window.lucide.createIcons(); }
+}
+</script>
+</body>
+</html>

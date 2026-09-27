@@ -1,0 +1,20 @@
+{
+  "name": "catalysis",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Catalysis — Catholic companion app (web + mobile)",
+  "packageManager": "pnpm@12.4.2",
+  "scripts": {
+    "dev:web": "pnpm --filter @catalysis/web dev",
+    "dev:mobile": "pnpm --filter @catalysis/mobile start",
+    "build:web": "pnpm --filter @catalysis/web build",
+    "tokens": "pnpm --filter @catalysis/ui-tokens build:css",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
+    "db:generate": "pnpm --filter @catalysis/db generate",
+    "db:migrate": "pnpm --filter @catalysis/db migrate",
+    "db:studio": "pnpm --filter @catalysis/db studio",
+    "db:seed": "pnpm --filter @catalysis/db seed",
+    "db:moderator": "pnpm --filter @catalysis/db moderator"
+  }
+}
