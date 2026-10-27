@@ -1,0 +1,13 @@
+{
+  "name": "@catalysis/catechism",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Catechism of the Catholic Church (English) — imported by scripts/import-catechism.mjs. Copyrighted; see README.",
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": { "types": "./index.d.ts", "default": "./index.js" }
+  },
+  "sideEffects": false
+}

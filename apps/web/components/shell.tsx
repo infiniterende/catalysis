@@ -23,7 +23,7 @@ interface NavItem {
 
 const NAV: NavItem[] = [
   { href: '/today', label: 'Home', icon: Home, also: ['/profile', '/saved', '/search'] },
-  { href: '/scripture', label: 'Bible', icon: BookOpen },
+  { href: '/scripture', label: 'Bible', icon: BookOpen, also: ['/catechism'] },
   { href: '/prayer', label: 'Prayer', icon: HandHeart },
   { href: '/community', label: 'Community', icon: Users, also: ['/reels', '/discover'] },
   { href: '/events', label: 'Events', icon: CalendarDays },

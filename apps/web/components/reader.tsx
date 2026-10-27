@@ -7,7 +7,7 @@ import {
   type Verse,
 } from '@catalysis/api';
 import { loadNabreBook, type NabreBook } from '@catalysis/bible-nabre';
-import { Bookmark, ChevronLeft, ChevronRight, Eraser, Headphones, LibraryBig, Search, Sparkles, Square, X } from 'lucide-react';
+import { Bookmark, ChevronLeft, ChevronRight, Eraser, Headphones, Landmark, LibraryBig, Search, Sparkles, Square, X } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
@@ -917,6 +917,9 @@ export function Reader({ chapterRef, edition, verse: target }: { chapterRef: Cha
                 <Pill variant="inset" aria-label="Type settings" onClick={() => setSheet('type')} className="px-3 py-[6px] text-[14px]">Aa</Pill>
                 <Pill variant="inset" icon={LibraryBig} iconSize={15} onClick={() => setSheet('books')} className="px-3 py-[6px] text-[14px] lg:hidden">
                   Books
+                </Pill>
+                <Pill href="/catechism" variant="inset" icon={Landmark} iconSize={15} className="px-3 py-[6px] text-[14px]">
+                  Catechism
                 </Pill>
               </div>
               <div className="flex items-center gap-2">

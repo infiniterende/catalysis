@@ -446,3 +446,17 @@ model Allowance {
   count   Int      @default(0)
   resetAt DateTime
 }
+
+/// The Liturgy of the Hours for one hour of one day, as fetched from the outside
+/// source, so each is fetched once. `sections` is the parsed text (HourSection[]).
+model HourText {
+  date      String
+  hour      String
+  lang      String   @default("en")
+  /// The day as the source names it.
+  day       String
+  sections  Json
+  fetchedAt DateTime @default(now())
+
+  @@id([date, hour, lang])
+}

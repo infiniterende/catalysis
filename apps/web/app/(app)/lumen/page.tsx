@@ -1,7 +1,7 @@
 'use client';
 
 import {
-  activeConversation, chapterLabel, conversationTitle, lumenPlainText, newId, parseLumenBlocks, streamLumen,
+  activeConversation, catechismHref, chapterLabel, parseCccReference, conversationTitle, lumenPlainText, newId, parseLumenBlocks, streamLumen,
   type Citation, type Conversation, type Message, type Tone,
 } from '@catalysis/api';
 import {
@@ -216,10 +216,17 @@ function withCitations(text: string): ReactNode[] {
   for (const match of text.matchAll(CITATION)) {
     const at = match.index ?? 0;
     if (at > last) parts.push(text.slice(last, at));
+    const ccc = parseCccReference(match[1] ?? '');
     parts.push(
-      <span key={at} className="rounded-full bg-a3 px-2 py-[3px] text-[12px] font-semibold whitespace-nowrap text-on-a">
-        {match[1]}
-      </span>,
+      ccc ? (
+        <Link key={at} href={catechismHref(ccc.start)} className="hover-dim rounded-full bg-a4 px-2 py-[3px] text-[12px] font-semibold whitespace-nowrap text-on-a">
+          {match[1]}
+        </Link>
+      ) : (
+        <span key={at} className="rounded-full bg-a3 px-2 py-[3px] text-[12px] font-semibold whitespace-nowrap text-on-a">
+          {match[1]}
+        </span>
+      ),
     );
     last = at + match[0].length;
   }
@@ -284,7 +291,13 @@ function Answer({ message, live }: { message: Message; live: boolean }) {
                 <p className="bq text-[22px] leading-[1.2] font-normal md:text-[26px]">{block.text}</p>
                 {block.citation ? (
                   <cite className="mt-[10px] block not-italic">
-                    <Chip tone="white">{block.citation}</Chip>
+                    {parseCccReference(block.citation) ? (
+                      <Link href={catechismHref(parseCccReference(block.citation)!.start)} className="hover-dim inline-block">
+                        <Chip tone="white">{block.citation}</Chip>
+                      </Link>
+                    ) : (
+                      <Chip tone="white">{block.citation}</Chip>
+                    )}
                   </cite>
                 ) : null}
               </blockquote>
@@ -427,7 +440,13 @@ function Sources({ citations }: { citations: Citation[] }) {
           {citations.map((c) => (
             <li key={`${c.type}-${c.reference}`} className="rounded-[22px] border border-line bg-card px-[18px] py-4">
               <span className={cx('gs inline-block rounded-full px-[9px] py-1 text-[11px] font-bold text-on-a', TONE_BG[sourceTone(c.type)])}>{c.type}</span>
-              <div className="gs mt-[10px] text-[16px] font-semibold text-ink">{c.reference}</div>
+              {c.type === 'Catechism' && parseCccReference(c.reference) ? (
+                <Link href={catechismHref(parseCccReference(c.reference)!.start)} className="gs hover-dim mt-[10px] block text-[16px] font-semibold text-ink underline decoration-line underline-offset-4">
+                  {c.reference}
+                </Link>
+              ) : (
+                <div className="gs mt-[10px] text-[16px] font-semibold text-ink">{c.reference}</div>
+              )}
               {c.description ? <div className="gs mt-[2px] text-[13px] text-muted">{c.description}</div> : null}
             </li>
           ))}

@@ -7,7 +7,7 @@ import {
   allTimePrayers, roman, segmentVerse, splitReply, toISODate, DEFAULT_PRAYERS, defaultEditionShort, fetchChapter,
   setBibleSource, verseRuns, weeklyPizzaAndPews, parseISODate, buildMonth, longestStreak, bestStreak, verseRanges, versesLabel,
   chapterOf, compactChanges, feedReels, findPrayer, GUIDED_PRAYERS, journalFor, rosaryFor,
-  searchPrayerBook, TONIGHT, type Change, followerCount, followersOf, groupFor, groupsToJoin, memberCount, milestonesFor, myGroups, personFor, postsBy,
+  searchPrayerBook, TONIGHT, type Change, cccForDay, cccLabel, cccPageFor, cccSpan, currentHour, isHourId, parseCccNumber, parseCccReference, sourceMissesCelebration, followerCount, followersOf, groupFor, groupsToJoin, memberCount, milestonesFor, myGroups, personFor, postsBy,
 } from './index.ts';
 
 const memoryStorage = () => {
@@ -399,4 +399,59 @@ test('people are stable between reads', () => {
   store.setState({ people: [], followerIds: [author] });
   assert.equal(personFor(store.getState(), author), personFor(store.getState(), author));
   assert.equal(followersOf(store.getState())[0], followersOf(store.getState())[0]);
+});
+
+test('catechism references', () => {
+  assert.deepEqual(parseCccReference('CCC 2838–2845'), { start: 2838, end: 2845 });
+  assert.deepEqual(parseCccReference('CCC 2838-45'), { start: 2838, end: 2845 });
+  assert.deepEqual(parseCccReference('CCC 1324, 1327'), { start: 1324, end: 1324 });
+  assert.deepEqual(parseCccReference('Catechism 27'), { start: 27, end: 27 });
+  assert.equal(parseCccReference('CCC 3000'), undefined);
+  assert.equal(parseCccReference('John 3:16'), undefined);
+  assert.equal(parseCccNumber('§2267'), 2267);
+  assert.equal(parseCccNumber('ccc 1'), 1);
+  assert.equal(parseCccNumber('2867'), undefined);
+  assert.equal(cccLabel({ start: 5, end: 5 }), 'CCC 5');
+
+  const toc = [
+    { depth: 1, page: 'p1', first: 1, last: 25 },
+    { depth: 2, page: 'p2', first: 1, last: 3 },
+    { depth: 2, page: 'p3', first: 4, last: 10 },
+    { depth: 3, first: 26, last: 30 },
+  ];
+  assert.equal(cccPageFor(toc, 2)?.page, 'p2', 'the deepest page holding it');
+  assert.equal(cccPageFor(toc, 20)?.page, 'p1');
+  assert.equal(cccPageFor(toc, 27), undefined, 'a heading without a page is not a page');
+
+  // A year's portions cover every paragraph once, in order.
+  for (const year of [2026, 2028]) {
+    const days = year === 2028 ? 366 : 365;
+    let next = 1;
+    for (let i = 0; i < days; i++) {
+      const { start, end } = cccForDay(toISODate(new Date(year, 0, 1 + i)));
+      assert.equal(start, next, `${year} day ${i + 1} starts where the day before ended`);
+      assert.ok(end - start <= 8);
+      next = end + 1;
+    }
+    assert.equal(next, 2866, `${year} ends at §2865`);
+  }
+  assert.deepEqual(cccSpan({ first: 1066, last: 1075, end: 1690 }), { start: 1066, end: 1690 });
+});
+
+test('liturgy of the hours', () => {
+  assert.equal(currentHour(new Date(2026, 9, 27, 3, 0)), 'compline');
+  assert.equal(currentHour(new Date(2026, 9, 27, 6, 30)), 'lauds');
+  assert.equal(currentHour(new Date(2026, 9, 27, 12, 0)), 'daytime');
+  assert.equal(currentHour(new Date(2026, 9, 27, 18, 0)), 'vespers');
+  assert.equal(currentHour(new Date(2026, 9, 27, 22, 0)), 'compline');
+  assert.ok(isHourId('lauds') && !isHourId('matins'));
+
+  // The app's calendar knows All Saints; a source that gives the Sunday instead is flagged.
+  const allSaints = getLiturgicalDay('2026-11-01');
+  assert.equal(sourceMissesCelebration(allSaints, 'Thirty-First Sunday in Ordinary Time'), true);
+  assert.equal(sourceMissesCelebration(allSaints, 'All Saints'), false);
+  assert.equal(sourceMissesCelebration(getLiturgicalDay('2026-12-25'), 'The Nativity of the Lord'), false);
+  assert.equal(sourceMissesCelebration(getLiturgicalDay('2026-12-08'), 'Tuesday of the Second Week of Advent'), true);
+  // An ordinary weekday is never flagged.
+  assert.equal(sourceMissesCelebration(getLiturgicalDay('2026-10-27'), 'anything at all'), false);
 });

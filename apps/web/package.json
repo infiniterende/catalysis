@@ -13,6 +13,7 @@
     "@anthropic-ai/sdk": "^0.128.0",
     "@catalysis/api": "workspace:*",
     "@catalysis/bible-nabre": "workspace:*",
+    "@catalysis/catechism": "workspace:*",
     "@catalysis/db": "workspace:*",
     "@catalysis/ui-tokens": "workspace:*",
     "lucide-react": "^1.48.0",

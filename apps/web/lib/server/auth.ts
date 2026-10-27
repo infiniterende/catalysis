@@ -130,7 +130,8 @@ export function clientKey(request: Request): string {
 
 export const json = (body: unknown, init?: ResponseInit & { cookie?: string }) => {
   const headers = new Headers(init?.headers);
-  headers.set('Cache-Control', 'no-store');
+  // Nothing is cached unless the route says it may be.
+  if (!headers.has('Cache-Control')) headers.set('Cache-Control', 'no-store');
   if (init?.cookie) headers.append('Set-Cookie', init.cookie);
   return Response.json(body, { ...init, headers });
 };

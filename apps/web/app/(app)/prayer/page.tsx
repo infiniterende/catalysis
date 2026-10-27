@@ -2,15 +2,16 @@
 
 import {
   bestStreak, buildMonth, buildRule, computeStreak, DEFAULT_PRAYERS, FEATURED_GUIDED_IDS, formatHour, formatTime12,
-  formatDayShort, GUIDED_PRAYERS, MONTHS, MONTHS_SHORT, pad2, parseISODate, rosaryFor, TONIGHT,
+  currentHour, formatDayShort, getLiturgicalDay, GUIDED_PRAYERS, hourInfo, HOURS, MONTHS, MONTHS_SHORT, pad2, parseISODate, rosaryFor, TONIGHT,
   type ISODate, type MonthDay, type RuleRow, type Tone,
 } from '@catalysis/api';
-import { ArrowRight, Bell, BookOpen, BookText, Check, Heart, Moon, NotebookPen, Play, Plus, type LucideIcon } from 'lucide-react';
+import { ArrowRight, Bell, BookOpen, BookText, Check, Clock, Heart, Moon, NotebookPen, Play, Plus, type LucideIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useState, type FormEvent } from 'react';
 import { guidedHref, prayerHref } from '@/components/prayer-book';
 import { Page } from '@/components/shell';
 import { Card, CardTitle, cx, EmptyState, Field, Ico, PageTitle, Photo, Pill, Sheet, TextAction, TONE_BG } from '@/components/ui';
+import { hoursHref } from '@/lib/hours';
 import { useToday } from '@/lib/hooks';
 import { useApp } from '@/lib/store';
 
@@ -276,12 +277,40 @@ function GuidedRow() {
   );
 }
 
-/* ---------- prayer book and journal ---------- */
+/* ---------- liturgy of the hours, prayer book and journal ---------- */
+
+function HoursCard() {
+  const { now, today } = useToday();
+  const day = getLiturgicalDay(today);
+  const hour = hourInfo(currentHour(now));
+  return (
+    <Card as="section" surface="solid" aria-label="Liturgy of the Hours" className="flex flex-col justify-between gap-6 p-[26px] md:col-span-2 lg:col-span-4">
+      <div>
+        <div className="flex items-center justify-between gap-3">
+          <span className="mn text-a2">Liturgy of the Hours</span>
+          <Ico icon={Clock} size={20} className="text-white" />
+        </div>
+        <h2 className="bq mt-4 text-[32px] leading-none font-bold tracking-[-.03em] text-white">{hour.title}</h2>
+        <p className="gs mt-2 text-[14px] text-on-solid-muted">{day.celebration}</p>
+      </div>
+      <div>
+        <Pill href={hoursHref(hour.id)} variant="highlight" iconAfter={ArrowRight} className="w-full p-[14px] text-[15px]">Pray {hour.title}</Pill>
+        <ul className="gs mt-3 flex flex-wrap gap-x-4 gap-y-2 text-[13px]">
+          {HOURS.filter((h) => h.id !== hour.id).map((h) => (
+            <li key={h.id}>
+              <Link href={hoursHref(h.id)} className="hover-dim text-on-solid underline underline-offset-2">{h.short}</Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </Card>
+  );
+}
 
 function BookCard({ today }: { today: ISODate }) {
   const rosary = rosaryFor(today);
   return (
-    <Card as="section" aria-label="Prayer book" className="flex flex-col justify-between gap-6 p-[26px] md:col-span-1 lg:col-span-6">
+    <Card as="section" aria-label="Prayer book" className="flex flex-col justify-between gap-6 p-[26px] md:col-span-1 lg:col-span-4">
       <div>
         <div className="flex items-center justify-between gap-3">
           <CardTitle>Prayer book</CardTitle>
@@ -310,7 +339,7 @@ function JournalCard() {
   const latest = useApp((s) => s.journal[0]);
   const count = useApp((s) => s.journal.length);
   return (
-    <Card as="section" surface="a4" aria-label="Journal" className="flex flex-col justify-between gap-6 p-[26px] md:col-span-1 lg:col-span-6">
+    <Card as="section" surface="a4" aria-label="Journal" className="flex flex-col justify-between gap-6 p-[26px] md:col-span-1 lg:col-span-4">
       <div>
         <div className="flex items-center justify-between gap-3">
           <CardTitle>Journal</CardTitle>
@@ -380,6 +409,7 @@ export default function PrayerPage() {
         <TodayCard today={today} />
         <TonightCard today={today} />
         <GuidedRow />
+        <HoursCard />
         <BookCard today={today} />
         <JournalCard />
       </div>

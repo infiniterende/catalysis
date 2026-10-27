@@ -1,7 +1,7 @@
 'use client';
 
 import {
-  allEvents, BIBLE_BOOKS, formatDayLong, GUIDED_PRAYERS, parseISODate, visiblePosts,
+  allEvents, BIBLE_BOOKS, catechismHref, formatDayLong, GUIDED_PRAYERS, parseCccNumber, parseISODate, visiblePosts,
 } from '@catalysis/api';
 import { ArrowRight, Search } from 'lucide-react';
 import Link from 'next/link';
@@ -33,6 +33,15 @@ export default function SearchPage() {
       hits: BIBLE_BOOKS.filter((b) => has(b.name, q)).map((b) => ({
         key: b.id, href: `/scripture/${b.id}/1`, title: b.name, meta: `${b.chapters} ${b.chapters === 1 ? 'chapter' : 'chapters'}`,
       })),
+    },
+    {
+      title: 'Catechism',
+      hits: [
+        ...(parseCccNumber(query) ? [{ key: 'ccc-n', href: catechismHref(parseCccNumber(query)!), title: `Paragraph ${parseCccNumber(query)}`, meta: 'Catechism of the Catholic Church' }] : []),
+        ...(q.length >= 3 && !parseCccNumber(query)
+          ? [{ key: 'ccc-q', href: `/catechism?q=${encodeURIComponent(query.trim())}`, title: `Search the Catechism for “${query.trim()}”`, meta: '2,865 paragraphs' }]
+          : []),
+      ],
     },
     {
       title: 'Prayers',
