@@ -10,9 +10,12 @@
  * The source is a scrape of one verse at a time, so section headings arrive fused
  * to the verse that follows them ("Chapter 5 - The Sermon on the Mount. When he
  * saw the crowds…"). This script lifts them out into `h`, so the reader can set
- * them as headings: `h` before a verse, `m` inside one. Nothing is discarded
- * except the bare "Chapter N" / "Psalm N" markers, and when in doubt words stay
- * in the verse.
+ * them as headings: `h` before a verse, `m` inside one. Many headings have no
+ * separator at all ("Triumph of the Elect. After this…", "…before you. The
+ * Similes of Salt and Light."); liftFusedHeadings handles those. Nothing is
+ * discarded except the bare "Chapter N" / "Psalm N" markers, when in doubt words
+ * stay in the verse, and every verse is checked against the source letter by
+ * letter.
  *
  * The NABRE is under copyright (Confraternity of Christian Doctrine). The source
  * repository's MIT licence covers its script, not the translation. Obtain
@@ -46,6 +49,7 @@ const BOOKS = {
 const SEPARATOR = ' - ';
 /** Chapter markers, including Esther's lettered Greek additions and "(Chapter 3)". */
 const MARKER = /\(?\b(?:Chapter|Psalm) (?:\d+|[A-F])\b\)?/;
+const MARKERS = new RegExp(MARKER.source, 'g');
 /** Stanza markers in the Psalms and Lamentations: I, II, A, B, Aleph, Beth… */
 const STANZA = /^(?:[IVX]+|[A-Z]|Aleph|Beth|Gimel|Daleth|He|Waw|Zayin|Heth|Teth|Yodh|Kaph|Lamedh|Mem|Nun|Samekh|Ayin|Pe|Sadhe|Qoph|Resh|Shin|Sin|Taw)$/;
 const SMALL = new Set([
@@ -54,7 +58,14 @@ const SMALL = new Set([
   'between', 'under', 'within', 'without', 'who', 'that',
 ]);
 /** One-word sentences that are scripture, however much they look like a title. */
-const NOT_HEADINGS = new Set(['Amen', 'Selah', 'Hallelujah']);
+const NOT_HEADINGS = new Set(['Amen', 'Selah', 'Hallelujah', 'Alleluia']);
+/** Title-case phrases in the text that are names, not headings. */
+const NOT_FUSED_HEADINGS = new Set(['Shupham and Hupham']);
+/** Headings with commas; any other comma phrase is a list of names ("Jetur, Naphish, and Kedemah."). */
+const COMMA_HEADINGS = new Set([
+  'Jesus, Compassionate High Priest', 'Sennacherib, Hezekiah, and Isaiah', 'One Body, Many Parts',
+  'Directives, Greetings, and Blessing', 'The Future: Jerusalem, Judah, and the Nations',
+]);
 
 const tidy = (s) => s.replace(/\s+/g, ' ').trim();
 const hasWord = (s) => /[\p{L}\p{N}]/u.test(s);
@@ -172,6 +183,57 @@ export function parseVerse(raw) {
   return { text, before, breaks, after };
 }
 
+/** A heading fused into the verse text: short, title case, and not a list of names or a liturgical word. */
+function isFusedHeading(phrase) {
+  if (phrase.split(' ').length > 12) return false;
+  // Two-part headings: "Second Plague: The Frogs", "The Narrow Door; Salvation and Rejection".
+  if (!phrase.split(/[:;] /).every((part) => isTitle(part))) return false;
+  if (NOT_HEADINGS.has(phrase) || NOT_FUSED_HEADINGS.has(phrase)) return false;
+  return !phrase.includes(',') || COMMA_HEADINGS.has(phrase);
+}
+
+/** A heading that opens the text, ahead of a capitalised word or an opening quote: "Triumph of the Elect. After this…" */
+const FUSED_START = /^([^.!?“”"‘]{1,120}?)\.\s+(?=[“‘"\p{Lu}])/u;
+/** A heading that closes the text, after the end of a sentence: "…before you. The Similes of Salt and Light." */
+const FUSED_END = /(?<=[.!?”’])\s+([^.!?“”"‘]{1,120}?)\.$/u;
+
+/**
+ * Some verses carry their heading with no separator at all, so parseVerse leaves
+ * it in the text. Lifts those out: a heading at the start joins `before`, and one
+ * at the end joins `after` (it introduces the next verse).
+ */
+export function liftFusedHeadings(parsed, { superscription = false } = {}) {
+  if (superscription) return parsed;
+  let { text } = parsed;
+  const before = [...parsed.before];
+  let breaks = parsed.breaks.map((b) => ({ at: b.at, h: [...b.h] }));
+  const trailing = [];
+
+  for (let start = FUSED_START.exec(text); start && isFusedHeading(start[1]); start = FUSED_START.exec(text)) {
+    before.push(start[1]);
+    text = text.slice(start[0].length);
+    breaks = breaks.map((b) => ({ ...b, at: b.at - start[0].length }));
+  }
+  for (let end = FUSED_END.exec(text); end && isFusedHeading(end[1]); end = FUSED_END.exec(text)) {
+    trailing.unshift(end[1]);
+    text = text.slice(0, end.index);
+  }
+  // A break that no longer has text after it now trails the verse.
+  const moved = breaks.filter((b) => b.at > text.length).flatMap((b) => b.h);
+  breaks = breaks.filter((b) => b.at <= text.length);
+  return { text, before, breaks, after: [...moved, ...trailing, ...parsed.after] };
+}
+
+/** The letters and digits of a passage, in order, for checking that nothing was lost. */
+const letters = (s) => (s.match(/[\p{L}\p{N}]+/gu) ?? []).join('');
+
+/** The verse as the source had it: headings before, text with headings inside, headings after. */
+function reassemble({ text, before, breaks, after }) {
+  let body = text;
+  for (const b of [...breaks].sort((x, y) => y.at - x.at)) body = `${body.slice(0, b.at)}${b.h.join(' ')} ${body.slice(b.at)}`;
+  return [...before, body, ...after].join(' ');
+}
+
 async function load(name, from) {
   if (from) return JSON.parse(await readFile(join(from, 'generated_data/books', `${name}.json`), 'utf8'));
   const response = await fetch(`${RAW}/${name}.json`);
@@ -188,19 +250,25 @@ async function main() {
   const index = {};
   let verses = 0;
   let lifted = 0;
+  let checked = 0;
 
   for (const [id, name] of Object.entries(BOOKS)) {
     const source = await load(name, from);
+    // A heading that trails one verse introduces the next, across chapter breaks too.
+    let carried = [];
     const chapters = [...source.chapters]
       .sort((a, b) => a.chapter - b.chapter)
       .map((chapter, i) => {
         if (chapter.chapter !== i + 1) throw new Error(`${name}: chapter ${i + 1} is missing`);
-        let carried = [];
-        return chapter.verses.map((verse) => {
-          const parsed = parseVerse(verse.text);
+        const out = chapter.verses.map((verse) => {
+          // Psalm superscriptions ("Of David.") are verse text in the NABRE.
+          const superscription = id === 'PSA' || (id === 'HAB' && chapter.chapter === 3 && verse.verse === 1);
+          const parsed = liftFusedHeadings(parseVerse(verse.text), { superscription });
           if (!parsed.text) throw new Error(`${name} ${chapter.chapter}:${verse.verse} came out empty`);
           verses += 1;
-          // A heading that trails one verse introduces the next.
+          if (letters(verse.text.replace(MARKERS, ' ')) !== letters(reassemble(parsed))) {
+            throw new Error(`${name} ${chapter.chapter}:${verse.verse}: words were lost, added or moved`);
+          }
           const headings = [...carried.filter((h) => !parsed.before.includes(h)), ...parsed.before];
           carried = parsed.after;
           const out = { n: verse.verse, t: parsed.text };
@@ -215,7 +283,10 @@ async function main() {
           }
           return out;
         });
+        checked += 1;
+        return out;
       });
+    if (carried.length > 0) console.error(`${id}: dropped a heading after the last verse: ${carried.join(' | ')}`);
     index[id] = chapters.length;
     await writeFile(join(OUT, `${id}.json`), `${JSON.stringify({ id, chapters })}\n`);
   }
@@ -231,7 +302,7 @@ async function main() {
       `export async function loadNabreBook(id) {\n  const load = LOADERS[id];\n  if (!load) return undefined;\n` +
       `  const book = await load();\n  return book.default ?? book;\n}\n`,
   );
-  console.error(`Imported ${Object.keys(index).length} books, ${verses} verses; headings lifted from ${lifted}.`);
+  console.error(`Imported ${Object.keys(index).length} books, ${verses} verses; headings lifted from ${lifted}; no words lost in ${checked} chapters.`);
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
