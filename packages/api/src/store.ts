@@ -12,11 +12,9 @@ import type { ChapterRef } from './bible/books.ts';
 import { toISODate } from './format.ts';
 import { longestStreak } from './prayer.ts';
 import type { Change } from './sync.ts';
-import {
-  buildSeed, DEFAULT_PRAYERS, DEMO_USER, EVENTS, GROUPS, MY_GROUP_IDS, PEOPLE, REELS, SEED_FOLLOWERS, SEED_FOLLOWING, SEED_RSVPS,
-} from './seed.ts';
+import { buildSeed, DEFAULT_PRAYERS, DEMO_USER } from './seed.ts';
 import type {
-  Audience, CalendarEvent, Comment, Conversation, Group, Highlight, ISODate, JournalEntry, JournalKind, Media, Message,
+  Audience, CalendarEvent, Comment, Conversation, DiscoverTile, Group, Highlight, ISODate, JournalEntry, JournalKind, Media, Message,
   Milestone, Note, Person, Post, PostType, Prayer, PrayerLog, Reel, TikTokVideo, User, VerseRef,
 } from './types.ts';
 
@@ -174,8 +172,8 @@ const EMPTY: AppData = {
   savedReelIds: [],
   followingIds: [],
   followerIds: [],
-  people: PEOPLE,
-  groups: GROUPS,
+  people: [],
+  groups: [],
   joinedGroupIds: [],
   prayingIntentionIds: [],
   reminderIds: [],
@@ -238,9 +236,7 @@ export function createAppStore(storage: StateStorage, name = 'catalysis', option
 
         startSession(user, now = new Date()) {
           if (user.id !== DEMO_USER.id) {
-            // The community is shared, so a new member still sees the feed.
-            const seed = buildSeed(now);
-            set({ ...EMPTY, user, posts: seed.posts, comments: seed.comments });
+            set({ ...EMPTY, user });
             return;
           }
           const seed = buildSeed(now);
@@ -248,13 +244,6 @@ export function createAppStore(storage: StateStorage, name = 'catalysis', option
             ...EMPTY,
             user: { ...user, prayerCountOffset: seed.prayerCountOffset },
             prayerLogs: seed.prayerLogs,
-            posts: seed.posts,
-            comments: seed.comments,
-            prayedPostIds: seed.prayedPostIds,
-            rsvpEventIds: SEED_RSVPS,
-            followingIds: SEED_FOLLOWING,
-            followerIds: SEED_FOLLOWERS,
-            joinedGroupIds: MY_GROUP_IDS,
             highlights: seed.highlights,
             journal: seed.journal,
             conversations: seed.conversations,
@@ -670,7 +659,7 @@ export function tiktokReel(video: TikTokVideo): Reel {
   };
 }
 
-/** Reels for a feed: approved TikTok videos, seeded reels and the user's own, minus anything reported or blocked. */
+/** Reels for a feed: approved TikTok videos and members' own, minus anything reported or blocked. */
 export function feedReels(s: AppData, feed: 'forYou' | 'following'): Reel[] {
   const own: Reel[] = s.posts
     .filter((p) => p.type === 'reel')
@@ -688,7 +677,7 @@ export function feedReels(s: AppData, feed: 'forYou' | 'following'): Reel[] {
       commentCount: p.replyCount,
       feed: 'forYou',
     })));
-  return [...own, ...(s.tiktok ?? []).map((video) => once(video, tiktokReel)), ...REELS]
+  return [...own, ...(s.tiktok ?? []).map((video) => once(video, tiktokReel))]
     .filter((r) => !s.hiddenReelIds.includes(r.id) && !s.hiddenPostIds.includes(r.id) && !s.blockedUserIds.includes(r.authorId))
     .filter((r) => feed === 'forYou' || s.followingIds.includes(r.authorId) || r.authorId === s.user?.id);
 }
@@ -736,7 +725,7 @@ export function journalFor(s: Pick<AppData, 'journal'>, filter: { kind?: Journal
 /* ---------- people, followers and groups ---------- */
 
 export function groupFor(s: Pick<AppData, 'groups'>, id: string | undefined): Group | undefined {
-  return id ? (s.groups ?? GROUPS).find((g) => g.id === id) : undefined;
+  return id ? (s.groups ?? []).find((g) => g.id === id) : undefined;
 }
 
 export function memberCount(s: Pick<AppData, 'joinedGroupIds'>, group: Group): number {
@@ -839,7 +828,31 @@ export function activeConversation(s: AppData): Conversation | undefined {
   return s.conversations.find((c) => c.id === s.activeConversationId);
 }
 
-/** Events are static for now; this is where a backend query would go. */
+/** The calendar. No events are listed yet; this is where a backend query would go. */
 export function allEvents(): CalendarEvent[] {
-  return EVENTS;
+  return NO_EVENTS;
+}
+
+const NO_EVENTS: CalendarEvent[] = [];
+
+/** Tile heights down each Discover column, repeating. */
+const TILE_HEIGHTS = [250, 170, 200];
+
+/**
+ * The Discover masonry: reels and members' photos, newest first, dealt
+ * alternately into two columns.
+ */
+export function discoverColumns(reels: Reel[], posts: Post[]): [DiscoverTile[], DiscoverTile[]] {
+  const tiles: Omit<DiscoverTile, 'height'>[] = [
+    ...reels.map((r) => ({ id: `d-${r.id}`, kind: 'reel' as const, reelId: r.id, title: r.title, meta: r.authorName, media: r.media })),
+    ...posts
+      .filter((p) => p.type === 'photo' && p.media)
+      .map((p) => ({ id: `d-${p.id}`, kind: 'photo' as const, media: p.media })),
+  ];
+  const columns: [DiscoverTile[], DiscoverTile[]] = [[], []];
+  tiles.forEach((tile, i) => {
+    const column = columns[i % 2] as DiscoverTile[];
+    column.push({ ...tile, height: TILE_HEIGHTS[column.length % TILE_HEIGHTS.length] ?? 200 });
+  });
+  return columns;
 }

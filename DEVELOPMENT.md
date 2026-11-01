@@ -37,11 +37,12 @@ pnpm build:web
 pnpm db:migrate       # apply pending migrations to the database (uses DIRECT_URL)
 pnpm db:generate      # regenerate the Prisma client after editing the schema
 pnpm db:studio        # browse the data
-pnpm db:seed          # groups, events, trusted TikTok creators and the sample community
+pnpm db:seed          # the starting list of trusted TikTok creators (there is no sample content)
 pnpm db:moderator you@example.com   # make a member a moderator (add --remove to undo)
 
 node scripts/import-nabre.mjs            # re-import the Bible text (pinned commit)
 node scripts/import-catechism.mjs        # re-import the Catechism (pinned release, checked by SHA-256)
+node --experimental-strip-types scripts/import-lectionary.mjs   # re-import the Mass reading citations (pinned commit)
 ```
 
 With `DATABASE_URL` set, accounts are real: sign up in the app, and sign in on any device. Without
@@ -127,6 +128,27 @@ the server is Lumen, which is limited for visitors:
 | `DEMO_LUMEN_DAILY_TOTAL` | `300` | Answers all visitors together may have in a day. |
 
 The counts are kept in the `Allowance` table against a salted hash of the visitor's address.
+
+## Readings at Mass
+
+`/readings` shows the day's readings at Mass, with a card for the Gospel on Home.
+
+- **Which readings:** citations from the Lectionary for Mass for the United States, in
+  `packages/lectionary` (one file per year), imported from
+  [acupofjose/catholic-readings-api](https://github.com/acupofjose/catholic-readings-api) (MIT) by
+  `scripts/import-lectionary.mjs`, which checks that every citation can be read. Coverage ends where
+  the source does (`LECTIONARY_RANGE`, currently 30 September 2027); re-run the import with a newer
+  commit to extend it.
+- **The text:** each reading is shown from the app's own NABRE (the translation the US Lectionary
+  uses), so nothing is fetched from another site. `parsePassage` and `passageVerses` in
+  `packages/api/src/readings.ts` read citations such as "Jonah 1:1–2:1-2, 11", and `cleanVerseText`
+  takes out section titles left in the Bible text, psalm titles and "Selah".
+- **What the app leaves to the USCCB:** the Lectionary's own wording (it differs slightly from the
+  Bible's), the psalm refrain, the Gospel acclamation, partial verses ("26b" is shown whole), days with
+  more than one Mass (Christmas, the Easter Vigil), and Esther's lettered chapters. Each day links to
+  its page on bible.usccb.org.
+- **Not used:** Universalis's free feed. Its terms limit it to free, public parish web pages and it
+  serves only today's readings.
 
 ## Liturgy of the Hours
 

@@ -1,7 +1,7 @@
 'use client';
 
 import {
-  feedPosts, feedReels, groupFor, groupsToJoin, INTENTIONS, memberCount, myGroups, SPOTLIGHT_GROUP_ID,
+  feedPosts, feedReels, groupFor, groupsToJoin, memberCount, myGroups, prayedCount,
   type FeedId, type Group, type Reel, type Tone,
 } from '@catalysis/api';
 import { Clapperboard, HandHeart, Plus, Search, Sparkles, Users, type LucideIcon } from 'lucide-react';
@@ -11,7 +11,7 @@ import { Suspense, useState, type ReactNode } from 'react';
 import { ComposeBar, PostCard } from '@/components/community';
 import { GroupHeader, GroupsSheet, groupTone, JoinButton } from '@/components/groups';
 import { Page } from '@/components/shell';
-import { Avatar, Card, CardTitle, cx, EmptyState, Ico, initials, Photo, Pill, Skeleton } from '@/components/ui';
+import { Avatar, Card, CardTitle, cx, EmptyState, Ico, initials, Photo, Skeleton } from '@/components/ui';
 import { useNow } from '@/lib/hooks';
 import { useApp } from '@/lib/store';
 
@@ -207,44 +207,35 @@ function Feed({ feed }: { feed: FeedId }) {
 
 /* ---------- right column ---------- */
 
-function Intentions() {
-  const praying = useApp((s) => s.prayingIntentionIds);
-  const toggleIntention = useApp((s) => s.toggleIntention);
+/** The latest prayer requests from members; the Intentions feed has the rest. */
+function Intentions({ onMore }: { onMore: () => void }) {
+  const requests = useApp((s) => feedPosts(s, 'intentions').slice(0, 3));
+  const counts = useApp((s) => requests.map((post) => prayedCount(s, post)));
   return (
-    <Card as="section" aria-label="Intentions this week" className="p-[22px]">
-      <CardTitle className="text-[22px]">Intentions this week</CardTitle>
-      <ul className="gs mt-[14px] flex flex-col gap-[10px]">
-        {INTENTIONS.map((intention) => {
-          const on = praying.includes(intention.id);
-          return (
-            <li key={intention.id} className="rounded-[16px] bg-inset p-[14px]">
-              <div className="text-[15px] leading-[1.4] text-ink">{intention.title}</div>
-              <div className="mt-[10px] flex items-center justify-between gap-3">
-                <span className="text-[13px] text-muted">{intention.prayingCount + (on ? 1 : 0)} praying{on ? ' · with you' : ''}</span>
-                <Pill
-                  variant={on ? 'highlight' : 'ghost'}
-                  aria-pressed={on}
-                  aria-label={`${on ? 'Prayed' : 'Pray'}: ${intention.title}`}
-                  onClick={() => toggleIntention(intention.id)}
-                  className="relative px-3 py-[6px] text-[13px] after:absolute after:-inset-[6px]"
-                >
-                  {on ? 'Prayed' : 'Pray'}
-                </Pill>
-              </div>
-            </li>
-          );
-        })}
-      </ul>
+    <Card as="section" aria-label="Prayer requests" className="p-[22px]">
+      <CardTitle className="text-[22px]">Prayer requests</CardTitle>
+      {requests.length === 0 ? (
+        <p className="gs mt-[10px] text-[14px] leading-[1.45] text-muted">No requests yet. Ask the community to pray with you from the box above.</p>
+      ) : (
+        <>
+          <ul className="gs mt-[14px] flex flex-col gap-[10px]">
+            {requests.map((post, i) => (
+              <li key={post.id} className="rounded-[16px] bg-inset p-[14px]">
+                <div className="line-clamp-3 text-[15px] leading-[1.4] text-ink">{post.body}</div>
+                <div className="mt-[8px] text-[13px] text-muted">{post.authorName}{counts[i] ? ` · ${counts[i]} praying` : ''}</div>
+              </li>
+            ))}
+          </ul>
+          <button type="button" onClick={onMore} className="gs hover-accent mt-[12px] text-[14px] font-semibold text-ink">See all requests</button>
+        </>
+      )}
     </Card>
   );
 }
 
 function Spotlight({ onOpen }: { onOpen: (group: Group) => void }) {
-  // The design's group while it is there to join; otherwise the largest group not yet joined.
-  const group = useApp((s) => {
-    const open = groupsToJoin(s);
-    return open.find((g) => g.id === SPOTLIGHT_GROUP_ID) ?? open[0] ?? groupFor(s, SPOTLIGHT_GROUP_ID) ?? myGroups(s)[0];
-  });
+  // The largest group not yet joined; otherwise one of the member's own.
+  const group = useApp((s) => groupsToJoin(s)[0] ?? myGroups(s)[0]);
   const count = useApp((s) => (group ? memberCount(s, group) : 0));
   if (!group) return null;
   return (
@@ -292,7 +283,7 @@ function Community() {
           aria-label="Intentions and groups"
           className="no-scrollbar flex min-w-0 flex-col gap-4 lg:sticky lg:top-[84px] lg:h-[calc(100dvh-112px)] lg:min-h-[480px] lg:self-start lg:overflow-y-auto"
         >
-          <Intentions />
+          <Intentions onMore={() => pick('intentions')} />
           <Spotlight onOpen={openGroup} />
         </aside>
       </div>

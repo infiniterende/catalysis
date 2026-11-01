@@ -3,11 +3,11 @@ import { test } from 'node:test';
 import {
   adjacentChapter, BIBLE_BOOKS, buildMonthGrid, buildRule, buildSeed, buildWeek, chapterTitle, compactCount,
   computeStreak, createAppStore, createProseFilter, DEMO_USER, easterSunday, formatDayShort, formatHour,
-  formatTime12, getLiturgicalDay, localAuth, META_MARKER, nextEvent, EVENTS, parseLumenBlocks, prayedCount,
+  formatTime12, getLiturgicalDay, localAuth, META_MARKER, nextEvent, allEvents, discoverColumns, parseLumenBlocks, prayedCount,
   allTimePrayers, roman, segmentVerse, splitReply, toISODate, DEFAULT_PRAYERS, defaultEditionShort, fetchChapter,
-  setBibleSource, verseRuns, weeklyPizzaAndPews, parseISODate, buildMonth, longestStreak, bestStreak, verseRanges, versesLabel,
+  setBibleSource, verseRuns, parseISODate, buildMonth, longestStreak, bestStreak, verseRanges, versesLabel,
   chapterOf, compactChanges, feedReels, findPrayer, GUIDED_PRAYERS, journalFor, rosaryFor,
-  searchPrayerBook, TONIGHT, type Change, cccForDay, cccLabel, cccPageFor, cccSpan, currentHour, isHourId, parseCccNumber, parseCccReference, sourceMissesCelebration, followerCount, followersOf, groupFor, groupsToJoin, memberCount, milestonesFor, myGroups, personFor, postsBy,
+  searchPrayerBook, TONIGHT, type Change, cccForDay, cccLabel, cccPageFor, cccSpan, currentHour, isHourId, parseCccNumber, parseCccReference, sourceMissesCelebration, readingRef, parsePassage, passageChapters, passageVerses, usccbReadingsUrl, EDITIONS, cleanVerseText, followerCount, followersOf, groupFor, groupsToJoin, memberCount, milestonesFor, myGroups, personFor, postsBy,
 } from './index.ts';
 
 const memoryStorage = () => {
@@ -100,15 +100,15 @@ test('calendar grid', () => {
   assert.equal(sept.length, 5);
   assert.deepEqual(sept[0]?.map((c) => c.day), [30, 31, 1, 2, 3, 4, 5]);
   assert.deepEqual(sept[4]?.map((c) => c.day), [27, 28, 29, 30, 1, 2, 3]);
-  assert.equal(nextEvent(EVENTS, '2026-09-26')?.id, 'e-pizza-2026-09-27');
-  assert.equal(nextEvent(EVENTS, '2026-09-28')?.id, 'e-adoration');
 
-  // Pizza and Pews is every Sunday at eight, and only on Sundays.
-  const pizza = EVENTS.filter((e) => e.title === 'Pizza and Pews');
-  assert.ok(pizza.length > 30);
-  assert.ok(pizza.every((e) => parseISODate(e.date).getDay() === 0 && e.time === '20:00'));
-  assert.deepEqual(weeklyPizzaAndPews('2026-09-01', '2026-09-30').map((e) => e.date), ['2026-09-06', '2026-09-13', '2026-09-20', '2026-09-27']);
-  assert.equal(EVENTS.some((e) => /Theology/.test(e.title)), false);
+  // No sample events: the calendar lists only real ones.
+  assert.deepEqual(allEvents(), []);
+  const events = [
+    { id: 'e-b', title: 'B', date: '2026-09-29', time: '19:00', location: '', goingCount: 0 },
+    { id: 'e-a', title: 'A', date: '2026-09-27', time: '20:00', location: '', goingCount: 0 },
+  ];
+  assert.equal(nextEvent(events, '2026-09-26')?.id, 'e-a');
+  assert.equal(nextEvent(events, '2026-09-28')?.id, 'e-b');
 });
 
 test('liturgical calendar', () => {
@@ -180,11 +180,11 @@ test('store', async () => {
   assert.equal(allTimePrayers(s()), 342);
   assert.equal(bestStreak(s()), 31);
 
-  const jacob = s().posts.find((p) => p.id === 'post-jacob');
-  assert.ok(jacob);
-  assert.equal(prayedCount(s(), jacob), 24);
-  s().togglePrayed('post-jacob');
-  assert.equal(prayedCount(s(), jacob), 23);
+  // The demo keeps its own history but brings no sample community with it.
+  assert.deepEqual(
+    [s().posts.length, s().comments.length, s().followerIds.length, s().followingIds.length, s().joinedGroupIds.length, s().groups.length, s().people.length],
+    [0, 0, 0, 0, 0, 0, 0],
+  );
 
   s().togglePrayer('p-examen', now);
   assert.equal(buildRule(s().prayers, s().prayerLogs, '2026-09-26').filter((r) => r.done).length, 4);
@@ -192,14 +192,17 @@ test('store', async () => {
   s().togglePrayer('p-examen', now);
   assert.equal(allTimePrayers(s()), 342);
 
-  s().toggleRsvp('e-pizza-2026-09-27');
-  assert.ok(s().rsvpEventIds.includes('e-pizza-2026-09-27'));
+  s().toggleRsvp('e-somewhere');
+  assert.ok(s().rsvpEventIds.includes('e-somewhere'));
 
   const post = s().addPost({ type: 'reflection', body: '  Peace be with you.  ', audience: 'everyone' }, now);
   assert.equal(post?.body, 'Peace be with you.');
   assert.equal(s().posts[0]?.id, post?.id);
-  s().reportPost('post-ana');
-  assert.ok(!s().hiddenPostIds.includes('post-jacob') && s().hiddenPostIds.includes('post-ana'));
+  assert.equal(prayedCount(s(), post!), 0);
+  s().togglePrayed(post!.id);
+  assert.equal(prayedCount(s(), post!), 1);
+  s().reportPost('post-other');
+  assert.ok(s().hiddenPostIds.includes('post-other') && !s().hiddenPostIds.includes(post!.id));
 
   s().signOut();
   assert.equal(s().user, null);
@@ -347,14 +350,27 @@ test('feed reels are stable between reads', () => {
   first.forEach((reel, i) => assert.equal(reel, second[i], `${reel.id} is the same object`));
 });
 
+test('discover columns', () => {
+  assert.deepEqual(discoverColumns([], []), [[], []]);
+  const reel = (id: string) => ({ id, authorId: 'u-a', authorName: 'A', initial: 'A', title: id, subtitle: '', category: '', audio: '', likeCount: 0, commentCount: 0, feed: 'forYou' as const });
+  const photo = { id: 'p-1', type: 'photo' as const, authorId: 'u-a', authorName: 'A', media: { kind: 'image' as const, asset: 'rosary' as const }, audience: 'everyone' as const, createdAt: '', prayedCount: 0, replyCount: 0 };
+  const text = { ...photo, id: 'p-2', type: 'reflection' as const, media: undefined };
+  const [left, right] = discoverColumns([reel('r-1'), reel('r-2'), reel('r-3')], [photo, text]);
+  assert.deepEqual(left.map((t) => t.id), ['d-r-1', 'd-r-3']);
+  assert.deepEqual(right.map((t) => [t.id, t.kind]), [['d-r-2', 'reel'], ['d-p-1', 'photo']]);
+  assert.deepEqual(left.map((t) => t.height), [250, 170]);
+});
+
 test('groups and followers', () => {
   const changes: Change[] = [];
   const store = createAppStore(memoryStorage(), 'groups-test', { onChange: (c) => changes.push(c) });
   const s = () => store.getState();
   s().startSession({ ...DEMO_USER, id: 'u-me', name: 'Me', handle: '@me' });
+  // Someone else's group.
+  store.setState({ groups: [{ id: 'g-other', name: 'Young Adults, St. Anne’s', shortName: 'Young Adults', ownerId: 'u-other' }] });
 
   assert.ok(!s().createGroup({ name: 'ab' }).ok, 'too short');
-  assert.ok(!s().createGroup({ name: 'Newman Center, NYU' }).ok, 'name already taken');
+  assert.ok(!s().createGroup({ name: 'Young Adults, St. Anne’s' }).ok, 'name already taken');
   const made = s().createGroup({ name: '  Rosary   Walkers, Thursdays ', description: ' We walk and pray. ' });
   assert.ok(made.ok);
   assert.equal(made.group.name, 'Rosary Walkers, Thursdays');
@@ -366,8 +382,8 @@ test('groups and followers', () => {
   assert.ok(groupsToJoin(s()).every((g) => g.id !== made.group.id));
 
   // Only the founder can close a group; its posts stay.
-  s().deleteGroup('g-newman');
-  assert.ok(groupFor(s(), 'g-newman'));
+  s().deleteGroup('g-other');
+  assert.ok(groupFor(s(), 'g-other'));
   const post = s().addPost({ type: 'reflection', body: 'Hello', groupId: made.group.id, audience: 'parish' });
   s().deleteGroup(made.group.id);
   assert.equal(groupFor(s(), made.group.id), undefined);
@@ -454,4 +470,52 @@ test('liturgy of the hours', () => {
   assert.equal(sourceMissesCelebration(getLiturgicalDay('2026-12-08'), 'Tuesday of the Second Week of Advent'), true);
   // An ordinary weekday is never flagged.
   assert.equal(sourceMissesCelebration(getLiturgicalDay('2026-10-27'), 'anything at all'), false);
+});
+
+test('mass reading citations', () => {
+  const spans = (c: string) => parsePassage(c)?.spans.map(({ from, to }) => `${from.c}:${from.v}-${to.c}:${to.v}`).join(' ');
+  assert.equal(parsePassage('Matthew 5:1-12a')?.bookId, 'MAT');
+  assert.equal(spans('Matthew 5:1-12a'), '5:1-5:12');
+  assert.equal(spans('Psalm 22:26b-27, 28-30ab, 30e, 31-32'), '22:26-22:27 22:28-22:30 22:30-22:30 22:31-22:32');
+  assert.equal(spans('Habakkuk 1:2-3; 2:2-4'), '1:2-1:3 2:2-2:4');
+  assert.equal(spans('Jonah 1:1–2:1-2, 11'), '1:1-2:2 2:11-2:11', 'a run into the next chapter, then a verse there');
+  assert.equal(spans('Wisdom 2:23—3:9'), '2:23-3:9');
+  assert.equal(spans('Psalm 149:1b-2, 3-4, 5-6a and 9b'), '149:1-149:2 149:3-149:4 149:5-149:6 149:9-149:9');
+  assert.equal(spans('Matthew 4:12-23 or 4:12-17'), '4:12-4:23', 'the longer form');
+  assert.equal(spans('John 20:1a and 2-8'), '20:1-20:1 20:2-20:8');
+  assert.equal(parsePassage('Phiippians 2:5-11')?.bookId, 'PHP', 'a misspelling in the data');
+  assert.equal(spans('Philemon 9-10, 12-17'), '1:9-1:10 1:12-1:17', 'a book of one chapter, cited by verse');
+  assert.equal(parsePassage('Romans 9-10'), undefined, 'a book of many chapters needs a chapter');
+  // Typing slips in the data.
+  assert.equal(spans('Psalm 23: 1-3a, 3b4, 5, 6'), '23:1-23:3 23:3-23:4 23:5-23:5 23:6-23:6');
+  assert.equal(spans('Psalm 85:9-10-11-12, 13-14'), '85:9-85:12 85:13-85:14');
+  assert.equal(spans('Psalm 78:3 & 4bc, 6c-7, 8'), '78:3-78:3 78:4-78:4 78:6-78:7 78:8-78:8');
+  assert.equal(spans('Sirach 51:12 cd-20'), '51:12-51:20');
+  assert.equal(spans('Psalm 136:1 and 23-24, 10-12'), '136:1-136:1 136:23-136:24 136:10-136:12', '"and" after a verse is still a separator');
+  assert.equal(spans('Psalm 72:1-2, 7-8, 10-11, 12-13.'), '72:1-72:2 72:7-72:8 72:10-72:11 72:12-72:13');
+  assert.equal(spans('Revelation 11:19A; 12:1-6A, 10AB'), '11:19-11:19 12:1-12:6 12:10-12:10');
+  assert.equal(spans('Malachi 4:1-2a'), '3:19-3:20', 'Malachi 4 is Malachi 3:19-24 in the NAB');
+  assert.equal(parsePassage('Esther C:12, 14-16, 23-25'), undefined, 'lettered chapters are not in the Bible');
+  assert.equal(parsePassage('John 99:1'), undefined);
+  assert.equal(parsePassage('Hezekiah 3:1'), undefined);
+  assert.deepEqual(readingRef('1 John 3:1-3'), { bookId: '1JN', chapter: 3, verse: 1 });
+  assert.equal(usccbReadingsUrl('2026-11-03'), 'https://bible.usccb.org/bible/readings/110326.cfm');
+
+  // The text as read at Mass: no psalm titles or "Selah"; other verses come back unchanged.
+  assert.equal(cleanVerseText('REV', 9, 'After this I had a vision of a great multitude.'), 'After this I had a vision of a great multitude.');
+  assert.equal(cleanVerseText('MAT', 12, 'Thus they persecuted the prophets who were before you.'), 'Thus they persecuted the prophets who were before you.');
+  assert.equal(cleanVerseText('PSA', 1, 'A psalm of David. The earth is the LORD’s and all it holds.'), 'The earth is the LORD’s and all it holds.');
+  assert.equal(cleanVerseText('PSA', 6, 'that seeks the face of the God of Jacob.” Selah'), 'that seeks the face of the God of Jacob.”');
+  assert.equal(cleanVerseText('PSA', 1, 'For the leader; according to the gittith. Of David.'), '', 'a verse that is only a title');
+  assert.equal(cleanVerseText('GAL', 18, 'The grace of our Lord Jesus Christ be with your spirit, brothers. Amen.'), 'The grace of our Lord Jesus Christ be with your spirit, brothers. Amen.', '"Amen" is scripture');
+  assert.equal(cleanVerseText('1CH', 31, 'Beth-marcaboth, Hazar-susim, Bethbiri, and Shaaraim. These were their cities.'), 'Beth-marcaboth, Hazar-susim, Bethbiri, and Shaaraim. These were their cities.', 'a list of names is not a title');
+  assert.equal(cleanVerseText('JHN', 1, 'In the beginning was the Word, and the Word was with God.'), 'In the beginning was the Word, and the Word was with God.');
+
+  // Verses come once each, in order, across chapters.
+  const passage = parsePassage('Jonah 1:16–2:2, 1');
+  assert.ok(passage);
+  assert.deepEqual(passageChapters(passage), [1, 2]);
+  const chapter = (c: number, n: number) => ({ ref: { bookId: 'JON', chapter: c }, edition: EDITIONS.nabre, verses: Array.from({ length: n }, (_, i) => ({ number: i + 1, text: `${c}.${i + 1}` })) });
+  const verses = passageVerses(passage, new Map([[1, chapter(1, 16)], [2, chapter(2, 11)]]));
+  assert.deepEqual(verses.map((v) => v.text), ['1.16', '2.1', '2.2']);
 });

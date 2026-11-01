@@ -1,8 +1,8 @@
-import { DISCOVER_COLUMNS, PEOPLE, type DiscoverTile, type Media } from '@catalysis/api';
+import { discoverColumns, feedReels, visiblePosts, type DiscoverTile, type Media } from '@catalysis/api';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { Icon } from '@/components/Icon';
@@ -14,7 +14,7 @@ import { Tabs } from '@/components/Tabs';
 import { IconButton, Touchable } from '@/components/Touchable';
 import { PersonRow } from '@/features/people/PersonRow';
 import { focusToPosition, mediaSource } from '@/lib/assets';
-import { useApp } from '@/lib/store';
+import { useApp, useAppShallow } from '@/lib/store';
 import { colors, display, spacing, tracking } from '@/theme';
 
 type Section = 'reels' | 'photos' | 'people';
@@ -34,9 +34,11 @@ export default function Discover() {
   const [section, setSection] = useState<Section>('reels');
   const [viewing, setViewing] = useState<Media | null>(null);
 
-  const columns = DISCOVER_COLUMNS.map((column) =>
-    section === 'photos' ? column.filter((tile) => tile.kind === 'photo') : column);
-  const people = PEOPLE.filter((person) => !blockedUserIds.includes(person.id));
+  const reels = useAppShallow((s) => feedReels(s, 'forYou'));
+  const posts = useAppShallow(visiblePosts);
+  const everyone = useAppShallow((s) => s.people);
+  const columns = useMemo(() => discoverColumns(section === 'photos' ? [] : reels, posts), [section, reels, posts]);
+  const people = everyone.filter((person) => !blockedUserIds.includes(person.id));
 
   const open = (tile: DiscoverTile) => {
     if (tile.kind === 'reel' && tile.reelId) router.navigate({ pathname: '/reels', params: { reel: tile.reelId } });

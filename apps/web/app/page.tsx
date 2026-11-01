@@ -1,15 +1,12 @@
 'use client';
 
-import {
-  allEvents, defaultEditionShort, formatHour, formatTime12, MONTHS_SHORT, nextEvent, parseISODate, PIZZA_AND_PEWS,
-} from '@catalysis/api';
-import { ArrowRight, Flame, HandHeart, Play, Sparkles } from 'lucide-react';
+import { defaultEditionShort } from '@catalysis/api';
+import { ArrowRight, BookOpen, Flame, HandHeart, Play, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { Logo, ThemeToggle } from '@/components/shell';
 import { Card, cx, Ico, Pill } from '@/components/ui';
-import { useToday } from '@/lib/hooks';
 import { ASSETS } from '@/lib/media';
 import { useApp } from '@/lib/store';
 
@@ -27,7 +24,7 @@ const NAV = [
 const MARQUEE: { word: string; star: string }[] = [
   { word: 'scripture', star: 'var(--a1)' }, { word: 'prayer', star: 'var(--a2)' },
   { word: 'community', star: 'var(--a4)' }, { word: 'reels', star: 'var(--a3)' },
-  { word: 'events', star: 'var(--a1)' }, { word: 'lumen ai', star: 'var(--a2)' },
+  { word: 'readings', star: 'var(--a1)' }, { word: 'lumen ai', star: 'var(--a2)' },
   { word: 'rosary', star: 'var(--a4)' }, { word: 'adoration', star: 'var(--a3)' },
   { word: 'saints', star: 'var(--a1)' }, { word: 'testimony', star: 'var(--a2)' },
 ];
@@ -45,7 +42,7 @@ function Collage() {
         <div className="absolute top-10 right-[10px] h-[330px] w-[250px] rotate-[4deg] rounded-[26px] shadow-[0_20px_40px_rgba(0,0,0,.18)]" style={photo(ASSETS.stJoseph, '50% 25%')}>
           <div className="gs absolute bottom-[14px] left-[14px] flex items-center gap-[7px] rounded-full bg-[rgba(18,18,18,.78)] px-[13px] py-2 text-white">
             <Ico icon={Play} size={13} />
-            <span className="text-[13px] font-semibold">2.4k views</span>
+            <span className="text-[13px] font-semibold">60s reels</span>
           </div>
         </div>
         <div className="absolute bottom-[10px] left-[250px] h-[190px] w-[260px] rotate-[-1.5deg] rounded-[24px] border-[5px] border-bg shadow-[0_20px_40px_rgba(0,0,0,.16)]" style={photo(ASSETS.monstrance, '50% 42%')} />
@@ -85,33 +82,24 @@ function Marquee() {
   );
 }
 
-/** The next Pizza and Pews, so the card always shows a Sunday that is still to come. */
-function PizzaAndPews() {
-  const { today } = useToday();
-  const next = nextEvent(allEvents().filter((e) => e.title === PIZZA_AND_PEWS.title), today);
-  const date = next ? parseISODate(next.date) : undefined;
+/** The day's readings at Mass and the Liturgy of the Hours. */
+function DailyReadings() {
   return (
     <Card surface="a4" className="flex min-h-[270px] flex-col justify-between gap-6 p-7 md:col-span-2">
       <div>
-        <h3 className="bq text-[32px] leading-none font-bold tracking-[-.035em]">Never miss<br />{PIZZA_AND_PEWS.title}</h3>
-        <p className="gs mt-3 text-[15px] leading-[1.45] text-on-am">Pizza, then prayer. Every Sunday at {formatHour(PIZZA_AND_PEWS.time)}.</p>
+        <h3 className="bq text-[32px] leading-none font-bold tracking-[-.035em]">Pray with<br />the whole Church</h3>
+        <p className="gs mt-3 text-[15px] leading-[1.45] text-on-am">Each day&rsquo;s readings at Mass, the Liturgy of the Hours and the Catechism.</p>
       </div>
       <div className="flex items-center gap-4 rounded-[18px] bg-white px-4 py-[14px]">
-        <div className="flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-[14px] bg-on-a text-white" suppressHydrationWarning>
-          <span className="mn text-[9px] text-lime" suppressHydrationWarning>{date ? MONTHS_SHORT[date.getMonth()] : 'Sun'}</span>
-          <span className="bq text-[24px] leading-none font-bold" suppressHydrationWarning>{date ? date.getDate() : '8'}</span>
+        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-[14px] bg-on-a text-lime">
+          <Ico icon={BookOpen} size={22} />
         </div>
         <div className="min-w-0 flex-1">
-          <div className="gs text-[16px] font-semibold text-on-a">{PIZZA_AND_PEWS.title}</div>
-          <div className="gs mt-[2px] text-[13px] text-on-am">
-            Sundays · {formatTime12(PIZZA_AND_PEWS.time)} · {PIZZA_AND_PEWS.location} · {PIZZA_AND_PEWS.goingCount} going
-          </div>
+          <div className="gs text-[16px] font-semibold text-on-a">Today&rsquo;s readings</div>
+          <div className="gs mt-[2px] text-[13px] text-on-am">First reading · Psalm · Gospel</div>
         </div>
-        <Link
-          href={gate(next ? `/events?date=${next.date}` : '/events')}
-          className="gs hover-dim rounded-full bg-on-a px-[18px] py-[10px] text-[14px] font-semibold text-white"
-        >
-          RSVP
+        <Link href={gate('/readings')} className="gs hover-dim rounded-full bg-on-a px-[18px] py-[10px] text-[14px] font-semibold text-white">
+          Read
         </Link>
       </div>
     </Card>
@@ -176,7 +164,7 @@ function Features() {
         <p className="gs absolute right-7 bottom-[26px] left-7 text-[15px] leading-[1.4] text-white">Testimonies, saints and 60-second reflections.</p>
       </div>
 
-      <PizzaAndPews />
+      <DailyReadings />
     </div>
   );
 }
@@ -228,14 +216,6 @@ export default function Landing() {
                 <Pill href={SIGN_UP} iconAfter={ArrowRight} className="gap-[10px] px-7 py-[17px] text-[16px]">Start free</Pill>
                 <Pill href="/demo" variant="ghost" icon={Play} className="gap-[10px] px-[26px] py-4 text-[16px]">Try the demo</Pill>
               </div>
-              <div className="mt-[30px] flex items-center gap-3">
-                <div className="flex" aria-hidden>
-                  {(['bg-a2', 'bg-a3', 'bg-a4', 'bg-a5'] as const).map((tone, i) => (
-                    <div key={tone} className={cx('h-[34px] w-[34px] rounded-full border-[2.5px] border-bg', tone, i > 0 && '-ml-[10px]')} />
-                  ))}
-                </div>
-                <span className="gs text-[14px] text-muted"><b className="text-ink">12k+ students</b> praying daily</span>
-              </div>
             </div>
             <Collage />
           </section>
@@ -250,7 +230,6 @@ export default function Landing() {
             <h2 id="features-title" className="bq max-w-[760px] text-[40px] leading-[.95] font-bold tracking-[-.03em] text-ink md:text-[64px]">
               Everything your faith life needs, <span className="tracking-[-.01em]">in one app.</span>
             </h2>
-            <p className="gs max-w-[300px] text-[16px] leading-[1.5] text-muted">Built with students at Newman Centers across the country.</p>
           </div>
           <Features />
         </section>

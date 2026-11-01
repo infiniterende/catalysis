@@ -1,5 +1,5 @@
 import {
-  allEvents, BIBLE_BOOKS, formatDayShort, GUIDED_PRAYERS, parseISODate, PEOPLE, sortEvents, visiblePosts,
+  allEvents, BIBLE_BOOKS, formatDayShort, GUIDED_PRAYERS, parseISODate, sortEvents, visiblePosts,
 } from '@catalysis/api';
 import { useRouter } from 'expo-router';
 import { useState, type ReactNode } from 'react';
@@ -24,6 +24,7 @@ export default function Search() {
   const router = useRouter();
   const [query, setQuery] = useState('');
   const posts = useAppShallow(visiblePosts);
+  const everyone = useAppShallow((s) => s.people);
 
   const needle = query.trim().toLowerCase();
   const matches = (...fields: (string | undefined)[]) =>
@@ -36,7 +37,7 @@ export default function Search() {
     ? sortEvents(allEvents()).filter((event) => matches(event.title, event.location, event.note)).slice(0, MAX_PER_GROUP)
     : [];
   const people = searching
-    ? PEOPLE.filter((person) => matches(person.name, person.handle, person.parish)).slice(0, MAX_PER_GROUP)
+    ? everyone.filter((person) => matches(person.name, person.handle, person.parish)).slice(0, MAX_PER_GROUP)
     : [];
   const found = searching
     ? posts

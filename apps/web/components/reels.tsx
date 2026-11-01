@@ -1,14 +1,14 @@
 'use client';
 
 import {
-  compactCount, DISCOVER_COLUMNS, feedReels, followingOf, peopleToFollow, type DiscoverTile, type Reel,
+  compactCount, discoverColumns, feedReels, followingOf, peopleToFollow, visiblePosts, type DiscoverTile, type Reel,
 } from '@catalysis/api';
 import {
   Ban, Bookmark, ExternalLink, Flag, Heart, Image as ImageIcon, MessageCircle, MoreHorizontal, Music2, Play, Send, Trash2, Volume2, VolumeX,
   type LucideIcon,
 } from 'lucide-react';
 import Link from 'next/link';
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useDismiss } from '@/lib/hooks';
 import { useMediaUrl } from '@/lib/media';
 import { useApp } from '@/lib/store';
@@ -523,9 +523,13 @@ function People() {
 
 export function DiscoverGrid({ tab, scale = 1 }: { tab: DiscoverTab; scale?: number }) {
   const [photo, setPhoto] = useState<DiscoverTile | null>(null);
+  const reels = useApp((s) => feedReels(s, 'forYou'));
+  const posts = useApp(visiblePosts);
+  const columns = useMemo(() => discoverColumns(tab === 'photos' ? [] : reels, posts), [tab, reels, posts]);
   if (tab === 'people') return <People />;
-
-  const columns = DISCOVER_COLUMNS.map((column) => column.filter((t) => tab === 'reels' || t.kind === 'photo'));
+  if (columns[0].length === 0) {
+    return <EmptyState>{tab === 'photos' ? 'No photos yet. Share one from Create.' : 'Nothing here yet. Reels and photos from members will show up here.'}</EmptyState>;
+  }
   return (
     <>
       <div className="grid grid-cols-2 gap-[10px]">

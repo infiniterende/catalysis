@@ -13,6 +13,7 @@ import { useEffect, useState, type FormEvent } from 'react';
 import { Page } from '@/components/shell';
 import { Card, CardTitle, cx, Ico, Photo, Pill, Progress } from '@/components/ui';
 import { useToday } from '@/lib/hooks';
+import { readingsHref, useDayReadings } from '@/lib/readings';
 import { useApp } from '@/lib/store';
 
 const verseHref = `/scripture/${VERSE_OF_THE_DAY.bookId}/${VERSE_OF_THE_DAY.chapter}`;
@@ -256,6 +257,32 @@ function ReelsCard() {
   );
 }
 
+/** Today's Gospel, opening the day's readings at Mass. */
+function MassReadingsCard({ today }: { today: string }) {
+  const { result } = useDayReadings(today);
+  if (result && result.status !== 'ready') return null;
+  const readings = result?.day.readings ?? [];
+  const gospel = readings.find((r) => r.kind === 'gospel');
+  const opening = gospel?.verses?.slice(0, 3).map((v) => v.text).join(' ') ?? '';
+  return (
+    <Card as="section" aria-label="Today’s readings at Mass" className="flex flex-col gap-5 p-[26px] md:col-span-2 lg:col-span-12 lg:flex-row lg:items-center lg:gap-8">
+      <div className="lg:w-[260px] lg:shrink-0">
+        <div className="mn text-a1">Readings at Mass</div>
+        <CardTitle className="mt-2">{gospel ? `Gospel · ${gospel.citation}` : 'Today’s Gospel'}</CardTitle>
+        <ul className="gs mt-3 flex flex-wrap gap-2 text-[12px] text-muted">
+          {readings.filter((r) => r.kind !== 'gospel').map((r) => (
+            <li key={r.kind} className="rounded-full bg-inset px-[10px] py-[5px]">{r.citation}</li>
+          ))}
+        </ul>
+      </div>
+      <p className="nr line-clamp-3 min-w-0 flex-1 text-[18px] leading-[1.55] text-ink">
+        {result ? opening : <span className="block h-[84px] animate-pulse rounded-[12px] bg-inset" />}
+      </p>
+      <Pill href={readingsHref()} iconAfter={ArrowRight} className="self-start px-[20px] py-[12px] text-[14px] lg:self-center">Read today’s readings</Pill>
+    </Card>
+  );
+}
+
 export default function HomePage() {
   const { now, today } = useToday();
   const name = useApp((s) => s.user?.name ?? '');
@@ -280,6 +307,7 @@ export default function HomePage() {
         <VerseCard />
         <StreakCard />
         {next ? <NextUpCard event={next} today={today} /> : null}
+        <MassReadingsCard today={today} />
         <PrayersCard />
         <ReadingCard />
         <ReelsCard />

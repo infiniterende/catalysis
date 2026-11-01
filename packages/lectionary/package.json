@@ -1,0 +1,13 @@
+{
+  "name": "@catalysis/lectionary",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Daily Mass reading citations (Lectionary for Mass, USA) — imported by scripts/import-lectionary.mjs. Citations only.",
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": { "types": "./index.d.ts", "default": "./index.js" }
+  },
+  "sideEffects": false
+}

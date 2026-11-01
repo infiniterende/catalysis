@@ -8,6 +8,7 @@ export * from './auth.ts';
 export * from './prayerbook.ts';
 export * from './catechism.ts';
 export * from './hours.ts';
+export * from './readings.ts';
 export * from './seed.ts';
 export * from './store.ts';
 export * from './sync.ts';

@@ -164,6 +164,9 @@ importers:
       '@catalysis/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@catalysis/lectionary':
+        specifier: workspace:*
+        version: link:../../packages/lectionary
       '@catalysis/ui-tokens':
         specifier: workspace:*
         version: link:../../packages/ui-tokens
@@ -261,6 +264,8 @@ importers:
       typescript:
         specifier: ^7.0.2
         version: 7.0.2
+
+  packages/lectionary: {}
 
   packages/ui-tokens:
     devDependencies:

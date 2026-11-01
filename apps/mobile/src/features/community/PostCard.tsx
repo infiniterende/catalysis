@@ -1,4 +1,4 @@
-import { GROUPS, relativeTime, type Post } from '@catalysis/api';
+import { groupFor, relativeTime, type Group, type Post } from '@catalysis/api';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { Label, Tag } from '@/components/Label';
@@ -20,14 +20,14 @@ interface PostCardProps {
   divider?: boolean;
 }
 
-function kindLabel(post: Post): string {
-  const group = post.groupId ? GROUPS.find((g) => g.id === post.groupId) : undefined;
+function kindLabel(post: Post, group: Group | undefined): string {
   if (group) return group.shortName;
   return post.type === 'request' ? 'Prayer request' : 'Reflection';
 }
 
 export function PostCard({ post, now, onOpenThread, onMore, divider = true }: PostCardProps) {
   const prayed = useApp((s) => s.prayedPostIds.includes(post.id));
+  const group = useApp((s) => groupFor(s, post.groupId));
   const prayedTotal = post.prayedCount + (prayed ? 1 : 0);
 
   const share = () => {
@@ -49,7 +49,7 @@ export function PostCard({ post, now, onOpenThread, onMore, divider = true }: Po
         />
       </View>
       <Label size={8.5} color={colors.subtle} style={styles.meta}>
-        {kindLabel(post)} · {relativeTime(post.createdAt, now)}
+        {kindLabel(post, group)} · {relativeTime(post.createdAt, now)}
       </Label>
 
       {post.pullQuote ? <Text style={styles.pullQuote}>{post.pullQuote}</Text> : null}
