@@ -5,6 +5,11 @@
   "buildCommand": "pnpm run build",
   "redirects": [
     {
+      "source": "/",
+      "destination": "https://catalysis-web-223722750367.us-east4.run.app/",
+      "permanent": false
+    },
+    {
       "source": "/:path*",
       "destination": "https://catalysis-web-223722750367.us-east4.run.app/:path*",
       "permanent": false
