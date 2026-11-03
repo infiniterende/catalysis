@@ -10,6 +10,9 @@ import { createJSONStorage, persist, type StateStorage } from 'zustand/middlewar
 import { createStore } from 'zustand/vanilla';
 import type { ChapterRef } from './bible/books.ts';
 import { toISODate } from './format.ts';
+import {
+  MAX_MEMORY_SPAN, MAX_MEMORY_TEXT, MAX_MEMORY_VERSES, newMemoryVerse, reviewMemory, knownMemory, type MemoryGrade, type MemoryVerse,
+} from './memory.ts';
 import { longestStreak } from './prayer.ts';
 import type { Change } from './sync.ts';
 import { buildSeed, DEFAULT_PRAYERS, DEMO_USER } from './seed.ts';
@@ -53,6 +56,8 @@ export interface AppData {
   notes: Note[];
   /** The prayer journal, newest first. */
   journal: JournalEntry[];
+  /** Passages the member is learning by heart, in the order they were added. */
+  memory: MemoryVerse[];
   /** TikTok videos approved for Reels. Empty on a device that keeps its own data. */
   tiktok: TikTokVideo[];
   bookmarks: ChapterRef[];
@@ -143,6 +148,17 @@ export interface AppActions {
   /** Replaces the approved TikTok videos, after the server sends a fresh list. */
   setTikTok(videos: TikTokVideo[]): void;
 
+  /**
+   * Saves a passage to learn by heart and returns it; a passage already saved
+   * is returned as it is. Nothing is saved past the limit or for an over-long passage.
+   */
+  addMemoryVerse(input: Pick<MemoryVerse, 'bookId' | 'chapter' | 'verseStart' | 'verseEnd' | 'text'>, now?: Date): MemoryVerse | undefined;
+  /** Records a review, or the end of learning a new passage, and schedules the next. */
+  reviewMemoryVerse(id: string, grade: MemoryGrade, now?: Date): void;
+  /** Starts learning a passage again from the first step. */
+  restartMemoryVerse(id: string, now?: Date): void;
+  removeMemoryVerse(id: string): void;
+
   /** Returns the new conversation's id. */
   startConversation(title?: string, now?: Date): string;
   setActiveConversation(id: string | null): void;
@@ -180,6 +196,7 @@ const EMPTY: AppData = {
   highlights: [],
   notes: [],
   journal: [],
+  memory: [],
   tiktok: [],
   bookmarks: [],
   reading: { bookId: 'JHN', chapter: 1 },
@@ -518,6 +535,43 @@ export function createAppStore(storage: StateStorage, name = 'catalysis', option
           return entry;
         },
 
+        addMemoryVerse(input, now = new Date()) {
+          const memory = get().memory ?? [];
+          const same = memory.find(
+            (v) => v.bookId === input.bookId && v.chapter === input.chapter && v.verseStart === input.verseStart && v.verseEnd === input.verseEnd,
+          );
+          if (same) return same;
+          const text = input.text.replace(/\s+/g, ' ').trim();
+          const span = input.verseEnd - input.verseStart + 1;
+          if (!text || text.length > MAX_MEMORY_TEXT || span < 1 || span > MAX_MEMORY_SPAN || memory.length >= MAX_MEMORY_VERSES) return undefined;
+          const verse = newMemoryVerse({ id: newId('mv'), ...input, text }, now);
+          set({ memory: [...memory, verse] });
+          emit({ type: 'memory.save', verse });
+          return verse;
+        },
+
+        reviewMemoryVerse(id, grade, now = new Date()) {
+          const found = (get().memory ?? []).find((v) => v.id === id);
+          if (!found) return;
+          const verse = reviewMemory(found, grade, now);
+          set({ memory: get().memory.map((v) => (v.id === id ? verse : v)) });
+          emit({ type: 'memory.save', verse });
+        },
+
+        restartMemoryVerse(id, now = new Date()) {
+          const found = (get().memory ?? []).find((v) => v.id === id);
+          if (!found) return;
+          const verse: MemoryVerse = { ...found, box: 0, dueOn: toISODate(now), updatedAt: now.toISOString() };
+          set({ memory: get().memory.map((v) => (v.id === id ? verse : v)) });
+          emit({ type: 'memory.save', verse });
+        },
+
+        removeMemoryVerse(id) {
+          if (!(get().memory ?? []).some((v) => v.id === id)) return;
+          set({ memory: get().memory.filter((v) => v.id !== id) });
+          emit({ type: 'memory.delete', verseId: id });
+        },
+
         deleteJournalEntry(entryId) {
           if (!get().journal.some((e) => e.id === entryId)) return;
           set({ journal: get().journal.filter((e) => e.id !== entryId) });
@@ -813,6 +867,7 @@ export function milestonesFor(s: AppData): Milestone[] {
     step('m-100', 'One hundred prayers', Math.min(allTimePrayers(s), 100), 100),
     step('m-journal', 'Ten journal entries', Math.min((s.journal ?? []).length, 10), 10),
     step('m-pray', 'Prayed for ten intentions', Math.min(s.prayedPostIds.length + s.prayingIntentionIds.length, 10), 10),
+    step('m-memory', 'Five passages known by heart', Math.min(knownMemory(s.memory ?? []).length, 5), 5),
   ];
 }
 

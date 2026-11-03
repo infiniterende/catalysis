@@ -1,0 +1,17 @@
+# What `gcloud run deploy --source .` uploads to Cloud Build: the same as .dockerignore.
+**/.env
+**/.env.*
+**/node_modules
+**/.next
+.git
+.claude
+.snapshots
+apps/mobile/*
+!apps/mobile/package.json
+design
+**/*.tsbuildinfo
+.DS_Store
+
+# gcloud also reads these two.
+.gcloudignore
+.dockerignore

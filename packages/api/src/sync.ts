@@ -4,6 +4,7 @@
  * the server writes each to the database. Every change is safe to apply twice.
  */
 import type { ChapterRef } from './bible/books.ts';
+import type { MemoryVerse } from './memory.ts';
 import type {
   Comment, Conversation, Highlight, JournalEntry, Message, Note, Post, Prayer, User,
 } from './types.ts';
@@ -38,6 +39,8 @@ export type Change =
   | { type: 'note.delete'; bookId: string; chapter: number; verseStart: number }
   | { type: 'journal.save'; entry: JournalEntry }
   | { type: 'journal.delete'; entryId: string }
+  | { type: 'memory.save'; verse: MemoryVerse }
+  | { type: 'memory.delete'; verseId: string }
   | { type: 'conversation.create'; conversation: Pick<Conversation, 'id' | 'title' | 'updatedAt'> }
   | { type: 'conversation.rename'; conversationId: string; title: string }
   | { type: 'conversation.delete'; conversationId: string }
@@ -54,6 +57,7 @@ export function compactChanges(changes: Change[]): Change[] {
     switch (c.type) {
       case 'message.save': return `m:${c.message.id}`;
       case 'journal.save': return `j:${c.entry.id}`;
+      case 'memory.save': return `mv:${c.verse.id}`;
       case 'highlights.replace': return `h:${c.ref.bookId}/${c.ref.chapter}`;
       case 'reading.set': return 'reading';
       case 'reader.set': return 'reader';

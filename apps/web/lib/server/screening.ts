@@ -5,7 +5,8 @@
  * but a trusted creator, a moderator still decides.
  */
 import Anthropic from '@anthropic-ai/sdk';
-import OpenAI from 'openai';
+import { ThinkingLevel } from '@google/genai';
+import { vertex, vertexConfigured } from './vertex';
 
 export const TOPICS = ['Prayer', 'Scripture', 'Saints', 'Sacraments', 'Teaching', 'Testimony', 'Music', 'Parish life', 'Faith'] as const;
 export type Topic = (typeof TOPICS)[number];
@@ -52,7 +53,22 @@ function parse(text: string): Omit<Screening, 'by'> | null {
 
 async function askModel(subject: Subject): Promise<Omit<Screening, 'by'> | null> {
   const signal = AbortSignal.timeout(20_000);
-  if (process.env.ANTHROPIC_API_KEY && process.env.LUMEN_PROVIDER?.toLowerCase() !== 'openai') {
+  const provider = process.env.LUMEN_PROVIDER?.toLowerCase();
+  if (vertexConfigured() && provider !== 'anthropic') {
+    const reply = await vertex().models.generateContent({
+      model: process.env.SCREENING_GEMINI_MODEL || 'gemini-3.5-flash-lite',
+      contents: [{ role: 'user', parts: [{ text: describe(subject) }] }],
+      config: {
+        systemInstruction: INSTRUCTIONS,
+        responseMimeType: 'application/json',
+        maxOutputTokens: 600,
+        thinkingConfig: { thinkingLevel: ThinkingLevel.MINIMAL },
+        abortSignal: signal,
+      },
+    });
+    return parse(reply.text ?? '');
+  }
+  if (process.env.ANTHROPIC_API_KEY) {
     const message = await new Anthropic().messages.create(
       {
         model: process.env.SCREENING_MODEL || process.env.LUMEN_MODEL || 'claude-opus-5',
@@ -63,19 +79,6 @@ async function askModel(subject: Subject): Promise<Omit<Screening, 'by'> | null>
       { signal },
     );
     return parse(message.content.flatMap((block) => (block.type === 'text' ? [block.text] : [])).join(''));
-  }
-  if (process.env.OPENAI_API_KEY) {
-    const reply = await new OpenAI().chat.completions.create(
-      {
-        model: process.env.SCREENING_OPENAI_MODEL || process.env.LUMEN_OPENAI_MODEL || 'gpt-5.5',
-        max_completion_tokens: 1200,
-        reasoning_effort: 'low',
-        response_format: { type: 'json_object' },
-        messages: [{ role: 'developer', content: INSTRUCTIONS }, { role: 'user', content: describe(subject) }],
-      },
-      { signal },
-    );
-    return parse(reply.choices[0]?.message.content ?? '');
   }
   return null;
 }

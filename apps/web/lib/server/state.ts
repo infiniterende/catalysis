@@ -1,6 +1,6 @@
 /** Assembles everything the app shows a member, from the database. */
 import type {
-  AppData, Comment, Conversation, Group, Highlight, JournalEntry, Message, Note, Person, Post, Prayer, PrayerLog, Tone, User,
+  AppData, Comment, Conversation, Group, Highlight, JournalEntry, MemoryVerse, Message, Note, Person, Post, Prayer, PrayerLog, Tone, User,
 } from '@catalysis/api';
 import { db, type Prisma } from '@catalysis/db';
 import { approvedVideos } from './tiktok';
@@ -50,7 +50,7 @@ export async function loadState(userId: string): Promise<(Partial<AppData> & { u
   const [
     prayers, prayerLogs, highlights, notes, bookmarks, memberships, postPrayers, reports, blocks, follows,
     intentionPrayers, rsvps, reelLikes, reelSaves, reminders, conversations,
-    otherRsvps, otherIntentions, otherLikes, journal, tiktok, followers, groups,
+    otherRsvps, otherIntentions, otherLikes, journal, tiktok, followers, groups, memory,
   ] = await Promise.all([
     client.prayer.findMany({ where: { userId }, orderBy: [{ scheduledTime: 'asc' }, { position: 'asc' }] }),
     client.prayerLog.findMany({ where: { userId }, orderBy: { completedAt: 'asc' } }),
@@ -84,6 +84,7 @@ export async function loadState(userId: string): Promise<(Partial<AppData> & { u
       take: GROUP_LIMIT,
       include: { _count: { select: { members: { where: { userId: { not: userId } } } } } },
     }),
+    client.memoryVerse.findMany({ where: { userId }, orderBy: { createdAt: 'asc' } }),
   ]);
 
   const blocked = blocks.map((b) => b.blockedId);
@@ -201,6 +202,13 @@ export async function loadState(userId: string): Promise<(Partial<AppData> & { u
       answeredOn: j.answeredOn ?? undefined,
       createdAt: j.createdAt.toISOString(),
       updatedAt: j.updatedAt.toISOString(),
+    })),
+    memory: memory.map((m): MemoryVerse => ({
+      // The member's own id: the stored one carries their account id in front.
+      id: m.id.startsWith(`${userId}:`) ? m.id.slice(userId.length + 1) : m.id,
+      bookId: m.bookId, chapter: m.chapter, verseStart: m.verseStart, verseEnd: m.verseEnd, text: m.text,
+      box: m.box, dueOn: m.dueOn, reviews: m.reviews, lapses: m.lapses, lastReviewedOn: m.lastReviewedOn ?? undefined,
+      createdAt: m.createdAt.toISOString(), updatedAt: m.updatedAt.toISOString(),
     })),
     tiktok,
     bookmarks: bookmarks.map((b) => ({ bookId: b.bookId, chapter: b.chapter })),

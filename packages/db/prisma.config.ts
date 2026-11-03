@@ -1,6 +1,7 @@
 // Prisma CLI configuration (migrations, introspection).
-// Migrations need a session-mode connection, so the CLI uses DIRECT_URL; the
-// app itself connects through the transaction-mode pooler in DATABASE_URL.
+// The CLI uses DIRECT_URL when it is set (a connection that bypasses any pooler),
+// otherwise DATABASE_URL. With Cloud SQL there is no pooler: run the Cloud SQL
+// Auth Proxy and point DATABASE_URL at it (see DEVELOPMENT.md).
 import { config } from 'dotenv';
 import { defineConfig } from 'prisma/config';
 

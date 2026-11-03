@@ -124,8 +124,14 @@ export function allowAttempt(key: string, limit = 8, windowMs = 10 * 60_000): bo
   return entry.count <= limit;
 }
 
+/**
+ * The visitor's address, for attempt limits. Cloud Run's front end appends the
+ * address it saw to whatever `x-forwarded-for` the visitor sent, so there the
+ * last entry is the one to trust; elsewhere (Vercel, local) the first.
+ */
 export function clientKey(request: Request): string {
-  return (request.headers.get('x-forwarded-for') ?? '').split(',')[0]?.trim() || 'local';
+  const hops = (request.headers.get('x-forwarded-for') ?? '').split(',').map((h) => h.trim()).filter(Boolean);
+  return (process.env.K_SERVICE ? hops.at(-1) : hops[0]) || 'local';
 }
 
 export const json = (body: unknown, init?: ResponseInit & { cookie?: string }) => {

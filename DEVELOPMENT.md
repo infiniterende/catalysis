@@ -16,7 +16,7 @@ apps/web            Next.js 16 (App Router) — desktop layouts, and the mobile 
 apps/mobile         Expo SDK 57 + Expo Router — iOS and Android
 packages/api        Shared types, demo content, business logic and the app store (zustand)
 packages/ui-tokens  Design tokens for both designs; `tokens.css` (editorial) and `genz.css` are generated from `src/index.ts`
-packages/db          Prisma schema, migrations and the database client (Supabase Postgres)
+packages/db          Prisma schema, migrations and the database client (Cloud SQL for PostgreSQL)
 packages/bible-nabre  The reader's text (NABRE), one JSON file per book, loaded on demand
 scripts/            import-nabre.mjs (Bible text)
 ```
@@ -34,7 +34,8 @@ pnpm test             # unit tests for packages/api
 pnpm tokens           # regenerate packages/ui-tokens/tokens.css after editing tokens
 pnpm build:web
 
-pnpm db:migrate       # apply pending migrations to the database (uses DIRECT_URL)
+pnpm db:proxy        # connect to Cloud SQL on 127.0.0.1:5434 (keep it running while you work)
+pnpm db:migrate       # apply pending migrations to the database (with the proxy running)
 pnpm db:generate      # regenerate the Prisma client after editing the schema
 pnpm db:studio        # browse the data
 pnpm db:seed          # the starting list of trusted TikTok creators (there is no sample content)
@@ -53,10 +54,11 @@ eight or more characters) is filled with the design's sample history.
 
 | Variable | Where | Purpose |
 |---|---|---|
-| `OPENAI_API_KEY` or `ANTHROPIC_API_KEY` | `apps/web/.env` | Lets Lumen answer with a model. With neither, Lumen streams a few scripted replies, labelled "Demo answer". |
-| `DATABASE_URL`, `DIRECT_URL` | `apps/web/.env` | Supabase Postgres: the pooled connection for the app, and the session connection for migrations. |
-| `LUMEN_MODEL` | `apps/web/.env.local` | Optional model override (default `claude-opus-5`). |
-| `SCREENING_MODEL`, `SCREENING_OPENAI_MODEL` | `apps/web/.env.local` | Optional model for screening TikTok captions. Defaults to Lumen's model. |
+| `GOOGLE_CLOUD_PROJECT` | `apps/web/.env.local`; Cloud Run | Turns on Gemini on Vertex AI for Lumen and caption screening. No key: the server signs in as Cloud Run's service account, or locally as your `gcloud auth application-default login`. Without it, Lumen streams a few scripted replies, labelled "Demo answer". |
+| `GOOGLE_CLOUD_LOCATION` | optional | Vertex AI location, default `global` (where the newest Gemini models are served). |
+| `LUMEN_GEMINI_MODEL`, `SCREENING_GEMINI_MODEL` | optional | Model overrides; defaults `gemini-3.8-flash` (Lumen) and `gemini-3.5-flash-lite` (screening). |
+| `DATABASE_URL` | `apps/web/.env`; Cloud Run secret | Cloud SQL Postgres. On Cloud Run, the `catalysis-database-url` secret (through the `/cloudsql` socket); locally, the Cloud SQL Auth Proxy. |
+| `ANTHROPIC_API_KEY`, `LUMEN_PROVIDER=anthropic`, `LUMEN_MODEL` | optional | Claude instead of Gemini. |
 | `EXPO_PUBLIC_API_URL` | `apps/mobile/.env` | Base URL of the web app, so the mobile app can reach `/api/lumen`. Without it the mobile app uses the scripted replies. |
 
 ## How the pieces fit
@@ -80,11 +82,24 @@ eight or more characters) is filled with the design's sample history.
 
 ## Database
 
-The schema is `packages/db/prisma/schema.prisma`; the connection strings are in `apps/web/.env`
-(`DATABASE_URL` for the app, through the transaction pooler; `DIRECT_URL` for migrations). To change
-the schema: edit it, run `pnpm --filter @catalysis/db migrate:new --name <what-changed>`, review the
-SQL it writes, then `pnpm db:migrate`. Every table has row-level security enabled with no policies,
-which closes Supabase's public Data API; add `ENABLE ROW LEVEL SECURITY` for each new table.
+The database is Cloud SQL for PostgreSQL 17: instance `catalysis-db` in `study-learners-513616`
+(us-east4, db-f1-micro, daily backups). It has a public address but no authorised networks, so the
+only way in is the Cloud SQL Auth Proxy, which signs in with Google credentials. The app's password
+lives only in Secret Manager (`catalysis-database-url`).
+
+To work against it from your machine, start the proxy and point `DATABASE_URL` at it:
+
+```bash
+pnpm db:proxy   # cloud-sql-proxy --gcloud-auth --port 5434 study-learners-513616:us-east4:catalysis-db
+```
+
+`DATABASE_URL=postgresql://catalysis:<password>@127.0.0.1:5434/catalysis` (the password is in the
+secret). To change the schema: edit it, run `pnpm --filter @catalysis/db migrate:new --name
+<what-changed>`, review the SQL it writes, then `pnpm db:migrate` with the proxy running. Tables
+keep row-level security enabled with no policies, a harmless leftover from Supabase.
+
+`scripts/copy-database.mjs` copied the data from Supabase (`SOURCE_URL`, `TARGET_URL`); it refuses
+to write into tables that already have rows and checks every count before committing.
 
 The web app reads and writes the database through its own API, never from the browser directly:
 
@@ -161,8 +176,8 @@ for any day from a month back to three months ahead.
   reads and parses the hour (`apps/web/lib/server/ibreviary.ts`). Only text and three styles (rubric,
   italic, indent) are kept; none of iBreviary's HTML reaches the browser.
 - **Caching.** Each hour of each day is fetched once and kept in the `HourText` table and in memory
-  (`apps/web/lib/server/hours.ts`). `/api/hours` answers with a shared-cache header, so Vercel's CDN
-  serves repeats. iBreviary is sometimes slow (requests taking 30 seconds or more were seen), so the
+  (`apps/web/lib/server/hours.ts`). `/api/hours` answers with a shared-cache header, so a CDN in front
+  (Cloud CDN through a load balancer, for example) can serve repeats. iBreviary is sometimes slow (requests taking 30 seconds or more were seen), so the
   server tries three times and the page offers a retry and a link to iBreviary.
 - **Feasts.** iBreviary's English mobile pages follow the seasons and the psalter but not always the
   calendar of saints: on 1 November 2026 it gives the Thirty-First Sunday, not All Saints. When the
@@ -192,6 +207,15 @@ package README for the corrections the import makes.
   the `JournalEntry` table, readable only through that member's session. They are not end-to-end
   encrypted: whoever administers the database can read them.
 
+## Scripture by heart
+
+Members learn passages by heart at `/memory`. A passage is added from the reader's verse toolbar (Memorize) or from a short list of suggestions, and its text is saved with it, so practice never waits on the Bible loading.
+
+- **Learning** (`/memory/[id]`) runs in five steps: read it aloud, fill light gaps, fill heavy gaps, recite from first letters, then type it from memory. Typed recitations are checked word by word, ignoring case, punctuation and accents.
+- **Review** (`/memory/review`) follows the Leitner method: a learned passage comes back after 1, 3, 7, 14, 30, 60 and 120 days, and goes back to the first box when it slips. From box 4 (two weeks) it counts as known by heart.
+
+The scheduling, masking and checking live in `packages/api/src/memory.ts` and are covered by the tests. Passages sync as `memory.save` / `memory.delete` changes into the `MemoryVerse` table; ids are namespaced by member, as journal entries are.
+
 ## TikTok videos in Reels
 
 Videos are never downloaded or re-hosted. A video is looked up through TikTok's oEmbed endpoint and
@@ -210,20 +234,30 @@ for them and lists it for the moderators. Make yourself a moderator with `pnpm d
 
 TikTok's player sets its own cookies and is subject to TikTok's terms; say so in the privacy policy.
 
-## Deploying the web app (Vercel)
+## Deploying the web app (Cloud Run)
 
-1. Commit and push the repository to GitHub (`.env` files are ignored and must stay out of it).
-2. Import it at vercel.com/new. Set **Root Directory** to `apps/web`, and leave "Include files
-   outside the root directory" on: the app uses the packages beside it. Leave the build and install
-   commands at their defaults; the build generates the Prisma client itself.
-3. Add the environment variables from `apps/web/.env` (Production and Preview): `OPENAI_API_KEY`,
-   `DATABASE_URL` (the pooled connection, port 6543) and `DIRECT_URL`.
-4. Deploy. Later pushes to `main` deploy automatically.
-5. After a change to the schema, run `pnpm db:migrate` from your machine before deploying: the
-   deployment does not run migrations.
+The app runs as the Cloud Run service `catalysis-web` (us-east4), built from the `Dockerfile` at the
+repository root (a standalone Next.js server). It runs as the service account
+`catalysis-web@study-learners-513616.iam.gserviceaccount.com`, which may connect to Cloud SQL
+(`roles/cloudsql.client`), call Gemini (`roles/aiplatform.user`) and read the database secret, and
+nothing else. To deploy:
 
-If the install step fails on the pnpm version, add `ENABLE_EXPERIMENTAL_COREPACK=1` to the
-environment variables, which makes Vercel use the version named in `package.json`.
+```bash
+gcloud run deploy catalysis-web --source . --project study-learners-513616 --region us-east4 \
+  --service-account catalysis-web@study-learners-513616.iam.gserviceaccount.com \
+  --add-cloudsql-instances study-learners-513616:us-east4:catalysis-db \
+  --set-secrets DATABASE_URL=catalysis-database-url:latest \
+  --set-env-vars GOOGLE_CLOUD_PROJECT=study-learners-513616,GOOGLE_CLOUD_LOCATION=global \
+  --port 8080 --memory 1Gi --cpu 1 --max-instances 4 --concurrency 40 --allow-unauthenticated
+```
+
+`--max-instances 4` matters: each instance holds up to 5 database connections, and db-f1-micro
+allows about 25. Raise both together. Run `pnpm db:migrate` (with the proxy) before deploying a
+schema change: the deployment does not run migrations. `.dockerignore` and `.gcloudignore` keep
+`.env` files out of the upload and the image.
+
+The old Vercel deployment only forwards: `apps/web/vercel.json` redirects every path (307, query
+string kept) to the Cloud Run URL. Update the destination if the service gets a custom domain.
 
 ## Not yet production-ready
 
@@ -235,7 +269,7 @@ These are deliberate placeholders, each behind a seam so it can be replaced with
 | Data | In the database (web). Feeds load when the app opens, not live. The mobile app still keeps its data on the device. | Realtime feeds; point the mobile app at the API. |
 | Media | Photos are kept in the database (web). Members' own reels stay on the device that recorded them, so others cannot play them. | Move photos to object storage; upload and transcode reels (Mux or Cloudflare Stream). |
 | Bible text | The NABRE, imported from a public scrape (`packages/bible-nabre`). It is under copyright, poetry has lost its line breaks, and there are no footnotes. The design's copy names the RSV-CE. | Obtain permission from the copyright holder (CCD, through the USCCB), or license another translation and register its loader with `setBibleSource`. Prefer a licensed feed over the scrape for quality. |
-| Lumen | Needs a session, with a per-member limit kept in memory. | Set a spending limit with the model provider. |
+| Lumen | Gemini on Vertex AI. Needs a session, with a per-member limit kept in memory. A new project can meet Vertex AI's shared-capacity limits (429), which Lumen shows as "busy". | Set a budget alert in Cloud Billing; request provisioned throughput if 429s persist. |
 | Moderation | Reports are stored. TikTok videos have a review screen; posts and members' own reels do not yet. | A review screen for reported posts. |
 | Prayer book | Traditional English texts, typed in by hand. | Have the texts checked by someone competent before release. |
 | Images | The three photographs were supplied with the design. | Confirm their licences. |

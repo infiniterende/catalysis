@@ -7,7 +7,7 @@ import {
   type Verse,
 } from '@catalysis/api';
 import { loadNabreBook, type NabreBook } from '@catalysis/bible-nabre';
-import { Bookmark, CalendarDays, ChevronLeft, ChevronRight, Eraser, Headphones, Landmark, LibraryBig, Search, Sparkles, Square, X } from 'lucide-react';
+import { Bookmark, Brain, CalendarDays, ChevronLeft, ChevronRight, Eraser, Headphones, Landmark, LibraryBig, Search, Sparkles, Square, X } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
@@ -21,6 +21,7 @@ import {
 } from '@/components/ui';
 import { useIsWide } from '@/lib/hooks';
 import { useExplain } from '@/lib/lumen';
+import { passageText, selectionSpan } from '@/lib/memory';
 import { useApp } from '@/lib/store';
 
 const chapterHref = (ref: ChapterRef) => `/scripture/${ref.bookId}/${ref.chapter}`;
@@ -530,8 +531,47 @@ function useVerseActions(chapter: ChapterText | undefined, selected: number[], o
   return { verse, verses, color, highlighted, paint, clear, share, copied };
 }
 
+/**
+ * Learning the selected verses by heart: from the first selected to the last.
+ * A passage already saved opens for practice instead.
+ */
+function useMemorize(chapter: ChapterText | undefined, numbers: number[]) {
+  const router = useRouter();
+  const add = useApp((s) => s.addMemoryVerse);
+  const span = selectionSpan(numbers);
+  const saved = useApp((s) =>
+    chapter && span
+      ? (s.memory ?? []).find((v) => v.bookId === chapter.ref.bookId && v.chapter === chapter.ref.chapter && v.verseStart === span.verseStart && v.verseEnd === span.verseEnd)
+      : undefined,
+  );
+  const [notice, setNotice] = useState('');
+
+  useEffect(() => {
+    if (!notice) return;
+    const timer = window.setTimeout(() => setNotice(''), 2400);
+    return () => window.clearTimeout(timer);
+  }, [notice]);
+
+  const memorize = () => {
+    if (!chapter || !span) return;
+    if (saved) {
+      router.push(`/memory/${saved.id}`);
+      return;
+    }
+    if (span.tooLong) {
+      setNotice('Too long');
+      return;
+    }
+    const text = passageText(chapter, span.verseStart, span.verseEnd);
+    const verse = add({ bookId: chapter.ref.bookId, chapter: chapter.ref.chapter, verseStart: span.verseStart, verseEnd: span.verseEnd, text });
+    setNotice(verse ? 'Added' : 'Couldn’t add');
+  };
+
+  return { saved: Boolean(saved), notice, memorize };
+}
+
 function VerseToolbar({
-  label, color, highlighted, copied, onPaint, onClear, onNote, onShare, onExplain,
+  label, color, highlighted, copied, memorized, memoryNotice, onPaint, onClear, onNote, onShare, onMemorize, onExplain,
 }: {
   /** What is selected, e.g. `John 3:16–18`. */
   label: string;
@@ -539,10 +579,14 @@ function VerseToolbar({
   /** Any of the selected verses carries highlighting. */
   highlighted: boolean;
   copied: boolean;
+  /** The selection is already a passage being learned. */
+  memorized: boolean;
+  memoryNotice: string;
   onPaint: (tone: Tone) => void;
   onClear: () => void;
   onNote: () => void;
   onShare: () => void;
+  onMemorize: () => void;
   onExplain: () => void;
 }) {
   const action = 'hover-dim rounded-full px-[10px] py-[9px] md:px-[14px]';
@@ -592,6 +636,18 @@ function VerseToolbar({
       <button type="button" onClick={onNote} className={action}>Note</button>
       <button type="button" onClick={onShare} className={action}>
         <span role="status">{copied ? 'Copied' : 'Share'}</span>
+      </button>
+      <button
+        type="button"
+        onClick={onMemorize}
+        aria-label={memorized ? 'Practise this passage' : 'Memorize'}
+        title={memorized ? 'Practise this passage' : 'Learn by heart'}
+        className="hover-dim inline-flex items-center gap-[6px] rounded-full px-[8px] py-[9px] whitespace-nowrap md:px-[14px]"
+      >
+        <Ico icon={Brain} size={15} />
+        <span role="status" className={cx(!memoryNotice && 'sr-only xl:not-sr-only')}>
+          {memoryNotice || (memorized ? 'Practise' : 'Memorize')}
+        </span>
       </button>
       <button type="button" onClick={onExplain} className="hover-dim inline-flex items-center gap-[7px] rounded-full bg-a1 px-3 py-[9px] text-on-a md:px-4">
         <Ico icon={Sparkles} size={15} />
@@ -823,6 +879,7 @@ export function Reader({ chapterRef, edition, verse: target }: { chapterRef: Cha
   // Once a highlight is made the selection is released, so the next one can be started straight away.
   const { verse, verses, color, highlighted, paint, clear, share, copied } = useVerseActions(chapter, selected, () => select([]));
   const listen = useListen(chapter, `${chapterKey}/${chapter?.edition.id ?? ''}`);
+  const memorize = useMemorize(chapter, verses.map((v) => v.number));
 
   const seeded = useMemo(
     () => ({ [verseLabel('JHN', 1, 4)]: { ...DEMO_ANSWERS.EXPLAIN_JOHN_1_4, demo: false } }),
@@ -912,7 +969,7 @@ export function Reader({ chapterRef, edition, verse: target }: { chapterRef: Cha
         >
           <div ref={scroller} className={cx('min-h-0 flex-1 p-5 md:p-8 lg:overflow-y-auto xl:px-[60px] xl:py-[34px]', verse && 'pb-24 md:pb-24 xl:pb-24')}>
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <span className="mn min-h-[31px] rounded-full bg-inset px-3 py-2 text-ink">{chapter?.edition.short ?? '…'}</span>
                 <Pill variant="inset" aria-label="Type settings" onClick={() => setSheet('type')} className="px-3 py-[6px] text-[14px]">Aa</Pill>
                 <Pill variant="inset" icon={LibraryBig} iconSize={15} onClick={() => setSheet('books')} className="px-3 py-[6px] text-[14px] lg:hidden">
@@ -923,6 +980,9 @@ export function Reader({ chapterRef, edition, verse: target }: { chapterRef: Cha
                 </Pill>
                 <Pill href="/catechism" variant="inset" icon={Landmark} iconSize={15} className="px-3 py-[6px] text-[14px]">
                   Catechism
+                </Pill>
+                <Pill href="/memory" variant="inset" icon={Brain} iconSize={15} className="px-3 py-[6px] text-[14px]">
+                  By heart
                 </Pill>
               </div>
               <div className="flex items-center gap-2">
@@ -994,6 +1054,9 @@ export function Reader({ chapterRef, edition, verse: target }: { chapterRef: Cha
               onClear={clear}
               onNote={() => setNoteFor(reference)}
               onShare={share}
+              memorized={memorize.saved}
+              memoryNotice={memorize.notice}
+              onMemorize={memorize.memorize}
               onExplain={runExplain}
             />
           ) : null}

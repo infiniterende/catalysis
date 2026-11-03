@@ -3,7 +3,10 @@
  * client, so each change is validated before it is used, and each write is
  * scoped to the signed-in member: nobody can write to another member's data.
  */
-import { BIBLE_BOOKS, findPrayer, GROUP_NAME, MAX_GROUPS_OWNED, shortGroupName, type Change } from '@catalysis/api';
+import {
+  BIBLE_BOOKS, findPrayer, GROUP_NAME, MAX_BOX, MAX_GROUPS_OWNED, MAX_MEMORY_SPAN, MAX_MEMORY_TEXT, MAX_MEMORY_VERSES, shortGroupName,
+  type Change,
+} from '@catalysis/api';
 import { db } from '@catalysis/db';
 import { z } from 'zod';
 
@@ -56,6 +59,20 @@ const journalEntry = z.object({
   createdAt: instant,
   updatedAt: instant,
 });
+
+const memoryVerse = z
+  .object({
+    id, bookId, chapter, verseStart: verse, verseEnd: verse,
+    text: z.string().trim().min(1).max(MAX_MEMORY_TEXT),
+    box: z.number().int().min(0).max(MAX_BOX),
+    dueOn: isoDate,
+    reviews: z.number().int().min(0).max(100000),
+    lapses: z.number().int().min(0).max(100000),
+    lastReviewedOn: isoDate.optional(),
+    createdAt: instant,
+    updatedAt: instant,
+  })
+  .refine((v) => v.verseEnd >= v.verseStart && v.verseEnd - v.verseStart < MAX_MEMORY_SPAN, 'Passage too long');
 
 const change = z.discriminatedUnion('type', [
   z.object({
@@ -120,6 +137,8 @@ const change = z.discriminatedUnion('type', [
   z.object({ type: z.literal('note.delete'), bookId, chapter, verseStart: verse }),
   z.object({ type: z.literal('journal.save'), entry: journalEntry }),
   z.object({ type: z.literal('journal.delete'), entryId: id }),
+  z.object({ type: z.literal('memory.save'), verse: memoryVerse }),
+  z.object({ type: z.literal('memory.delete'), verseId: id }),
   z.object({ type: z.literal('conversation.create'), conversation: z.object({ id, title: z.string().max(120), updatedAt: instant }) }),
   z.object({ type: z.literal('conversation.rename'), conversationId: id, title: z.string().trim().min(1).max(120) }),
   z.object({ type: z.literal('conversation.delete'), conversationId: id }),
@@ -143,6 +162,7 @@ const change = z.discriminatedUnion('type', [
 export const changes = z.array(change).min(1).max(100);
 
 export const journalKey = (userId: string, entryId: string) => `${userId}:${entryId}`;
+export const memoryKey = journalKey;
 
 /** Thrown for a change that is well-formed but not allowed; the message is safe to show. */
 export class Refused extends Error {}
@@ -407,6 +427,29 @@ export async function applyChange(userId: string, input: z.infer<typeof change>)
     }
     case 'journal.delete':
       await client.journalEntry.deleteMany({ where: { id: journalKey(userId, c.entryId), userId } });
+      return;
+
+    case 'memory.save': {
+      const { verse: v } = c;
+      const key = memoryKey(userId, v.id);
+      const data = {
+        bookId: v.bookId, chapter: v.chapter, verseStart: v.verseStart, verseEnd: v.verseEnd, text: v.text,
+        box: v.box, dueOn: v.dueOn, reviews: v.reviews, lapses: v.lapses, lastReviewedOn: v.lastReviewedOn ?? null,
+        updatedAt: new Date(v.updatedAt),
+      };
+      const existing = await client.memoryVerse.findUnique({ where: { id: key }, select: { id: true } });
+      if (!existing && (await client.memoryVerse.count({ where: { userId } })) >= MAX_MEMORY_VERSES) {
+        throw new Refused('Your memory list is full. Remove a passage to add another.');
+      }
+      await client.memoryVerse.upsert({
+        where: { id: key },
+        update: data,
+        create: { id: key, userId, createdAt: new Date(v.createdAt), ...data },
+      });
+      return;
+    }
+    case 'memory.delete':
+      await client.memoryVerse.deleteMany({ where: { id: memoryKey(userId, c.verseId), userId } });
       return;
 
     case 'conversation.create': {

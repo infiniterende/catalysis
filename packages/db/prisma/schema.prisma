@@ -41,6 +41,7 @@ model User {
   highlights    Highlight[]
   notes         Note[]
   journal       JournalEntry[]
+  memoryVerses  MemoryVerse[]
   groupsOwned   Group[]            @relation("groupOwner")
   uploads       Upload[]
   bookmarks     Bookmark[]
@@ -389,6 +390,31 @@ model JournalEntry {
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, date])
+}
+
+/// A passage a member is learning by heart, and when it next comes up for review.
+model MemoryVerse {
+  /// `userId:clientId`, so one member's ids can never touch another's.
+  id             String   @id
+  userId         String
+  bookId         String
+  chapter        Int
+  verseStart     Int
+  verseEnd       Int
+  /// The passage as the member saved it.
+  text           String
+  /// 0 while learning; from 1 up, the review box.
+  box            Int      @default(0)
+  /// YYYY-MM-DD, the day the next review falls due.
+  dueOn          String
+  reviews        Int      @default(0)
+  lapses         Int      @default(0)
+  lastReviewedOn String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @default(now())
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, dueOn])
 }
 
 /// A TikTok video put forward for Reels. The video stays on TikTok and plays in

@@ -16,8 +16,10 @@ export function isDatabaseConfigured(): boolean {
 const globalForDb = globalThis as unknown as { catalysisDb?: PrismaClient };
 
 /**
- * The shared client. It connects through Supabase's transaction-mode pooler
- * (DATABASE_URL). One instance is kept per process, including across hot reloads.
+ * The shared client, connected to DATABASE_URL: on Cloud Run, Cloud SQL's
+ * socket (`?host=/cloudsql/<instance>`); locally, the Cloud SQL Auth Proxy. One
+ * instance is kept per process, including across hot reloads, and it holds at
+ * most 5 connections, so the service's instance limit bounds the total.
  */
 export function db(): PrismaClient {
   if (!isDatabaseConfigured()) throw new Error('DATABASE_URL is not set.');

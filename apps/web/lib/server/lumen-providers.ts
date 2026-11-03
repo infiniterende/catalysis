@@ -1,14 +1,16 @@
 /**
- * The models Lumen can run on. Each provider streams the reply's text to
- * `onText` and resolves when the reply is complete; the route turns that text
- * into the wire format. Server-side only: keys never reach the browser.
+ * The models Lumen can run on: Gemini on Vertex AI (the default), or Claude if
+ * an Anthropic key is set and LUMEN_PROVIDER=anthropic. Each provider streams
+ * the reply's text to `onText` and resolves when the reply is complete; the
+ * route turns that text into the wire format. Server-side only.
  */
 import Anthropic from '@anthropic-ai/sdk';
 import type { LumenRequest } from '@catalysis/api';
-import OpenAI from 'openai';
+import { FinishReason, ThinkingLevel } from '@google/genai';
 import { buildMessages, LUMEN_DEMO_SYSTEM, LUMEN_SYSTEM } from './lumen-prompt';
+import { isCredentialsError, vertex, vertexConfigured, vertexStatus } from './vertex';
 
-export type ProviderId = 'anthropic' | 'openai';
+export type ProviderId = 'vertex' | 'anthropic';
 
 export type ProviderOutcome = { ok: true; cutOff?: boolean } | { ok: false; reason: 'refused' };
 
@@ -68,45 +70,53 @@ const anthropic: Provider = {
   },
 };
 
-const openai: Provider = {
-  id: 'openai',
-  configured: () => Boolean(process.env.OPENAI_API_KEY),
+/** Reasons Gemini stops that mean it would not answer, rather than that it ran out of room. */
+const BLOCKED = new Set<string>([
+  FinishReason.SAFETY, FinishReason.PROHIBITED_CONTENT, FinishReason.BLOCKLIST, FinishReason.SPII, FinishReason.RECITATION,
+]);
+
+const gemini: Provider = {
+  id: 'vertex',
+  configured: vertexConfigured,
 
   async stream(request, signal, onText, options) {
-    const client = new OpenAI();
     const demo = options?.demoTokens;
-    const run = await client.chat.completions.create(
-      {
-        model: process.env.LUMEN_OPENAI_MODEL || 'gpt-5.5',
-        stream: true,
-        // The limit covers the model's reasoning as well as its answer, so a demo answer does no reasoning.
-        max_completion_tokens: demo ?? (request.mode === 'explain' ? 2000 : 8000),
-        reasoning_effort: demo ? 'none' : request.mode === 'explain' ? 'low' : 'medium',
-        messages: [{ role: 'developer', content: demo ? LUMEN_DEMO_SYSTEM : LUMEN_SYSTEM }, ...buildMessages(request)],
+    const run = await vertex().models.generateContentStream({
+      model: process.env.LUMEN_GEMINI_MODEL || 'gemini-3.8-flash',
+      contents: buildMessages(request).map((m) => ({ role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.content }] })),
+      config: {
+        systemInstruction: demo ? LUMEN_DEMO_SYSTEM : LUMEN_SYSTEM,
+        // The limit covers the model's thinking as well as its answer, so a demo answer does no thinking.
+        maxOutputTokens: demo ?? (request.mode === 'explain' ? 2000 : 8000),
+        thinkingConfig: demo ? { thinkingBudget: 0 } : { thinkingLevel: request.mode === 'explain' ? ThinkingLevel.LOW : ThinkingLevel.MEDIUM },
+        abortSignal: signal,
       },
-      { signal },
-    );
+    });
     let refused = false;
     let cutOff = false;
     for await (const chunk of run) {
-      const choice = chunk.choices[0];
-      if (choice?.delta?.refusal) refused = true;
-      if (choice?.delta?.content) onText(choice.delta.content);
-      if (choice?.finish_reason === 'length') cutOff = true;
+      if (chunk.promptFeedback?.blockReason) refused = true;
+      const text = chunk.text;
+      if (text) onText(text);
+      const reason = chunk.candidates?.[0]?.finishReason;
+      if (reason === FinishReason.MAX_TOKENS) cutOff = true;
+      else if (reason && BLOCKED.has(reason)) refused = true;
     }
     return refused ? { ok: false, reason: 'refused' } : { ok: true, cutOff };
   },
 
   describe(error) {
-    if (error instanceof OpenAI.AuthenticationError || error instanceof OpenAI.PermissionDeniedError) return MISCONFIGURED;
-    if (error instanceof OpenAI.RateLimitError) return BUSY;
-    if (error instanceof OpenAI.APIConnectionError) return UNREACHABLE;
-    if (error instanceof OpenAI.APIError && typeof error.status === 'number' && error.status >= 500) return UNAVAILABLE;
+    if (isCredentialsError(error)) return MISCONFIGURED;
+    const status = vertexStatus(error);
+    if (status === 401 || status === 403 || status === 404) return MISCONFIGURED;
+    if (status === 429) return BUSY;
+    if (status !== undefined && status >= 500) return UNAVAILABLE;
+    if (error instanceof TypeError && /fetch failed/i.test(error.message)) return UNREACHABLE;
     return undefined;
   },
 };
 
-const PROVIDERS: Record<ProviderId, Provider> = { anthropic, openai };
+const PROVIDERS: Record<ProviderId, Provider> = { vertex: gemini, anthropic };
 
 /**
  * The provider to use: `LUMEN_PROVIDER` when set and configured, otherwise the
@@ -115,8 +125,8 @@ const PROVIDERS: Record<ProviderId, Provider> = { anthropic, openai };
  */
 export function activeProvider(): Provider | undefined {
   const wanted = process.env.LUMEN_PROVIDER?.toLowerCase();
-  if (wanted === 'anthropic' || wanted === 'openai') {
+  if (wanted === 'vertex' || wanted === 'anthropic') {
     return PROVIDERS[wanted].configured() ? PROVIDERS[wanted] : undefined;
   }
-  return [anthropic, openai].find((provider) => provider.configured());
+  return [gemini, anthropic].find((provider) => provider.configured());
 }

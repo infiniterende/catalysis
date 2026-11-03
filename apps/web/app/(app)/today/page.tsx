@@ -2,11 +2,11 @@
 
 import {
   allEvents, bestStreak, buildRule, buildWeek, chapterLabel, compactCount, computeStreak, daysBetween,
-  defaultEditionShort, feedReels, fetchChapter, formatTime12, formatTime24, getBook, getLiturgicalDay, goingCount,
+  defaultEditionShort, dueMemory, feedReels, fetchChapter, knownMemory, learningMemory, memoryLabel, formatTime12, formatTime24, getBook, getLiturgicalDay, goingCount,
   greeting, MONTHS_SHORT, nextEvent, parseISODate, VERSE_OF_THE_DAY, WEEKDAYS_SHORT,
   type CalendarEvent, type ChapterRef,
 } from '@catalysis/api';
-import { ArrowRight, ArrowUp, Check, Flame, Share2, Sparkles } from 'lucide-react';
+import { ArrowRight, ArrowUp, Brain, Check, Flame, Share2, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, type FormEvent } from 'react';
@@ -149,6 +149,48 @@ function NextUpCard({ event, today }: { event: CalendarEvent; today: string }) {
   );
 }
 
+/** Scripture by heart: what is due to recite today, or an invitation to begin. */
+function MemoryCard({ today, wide }: { today: string; wide?: boolean }) {
+  const memory = useApp((s) => s.memory ?? []);
+  const due = dueMemory(memory, today);
+  const learning = learningMemory(memory);
+  const known = knownMemory(memory).length;
+  const [first] = due.length > 0 ? due : learning;
+  const action = due.length > 0
+    ? { href: '/memory/review', label: 'Recite' }
+    : learning[0]
+      ? { href: `/memory/${learning[0].id}`, label: 'Keep learning' }
+      : { href: '/memory', label: memory.length > 0 ? 'Open' : 'Choose a verse' };
+  return (
+    <Card
+      as="section"
+      surface="a3"
+      aria-label="Scripture by heart"
+      className={cx('flex flex-col justify-between gap-5 p-[26px]', wide ? 'md:col-span-2 lg:col-span-12 lg:flex-row lg:items-center' : 'min-h-[300px] lg:col-span-3')}
+    >
+      <div className="flex items-center justify-between gap-3">
+        <span className="gs text-[15px] font-semibold">Scripture by heart</span>
+        <Ico icon={Brain} size={22} />
+      </div>
+      <Link href="/memory" className="hover-dim block">
+        {memory.length === 0 ? (
+          <div className="bq text-[34px] leading-[.95] font-bold tracking-[-.03em]">Learn a verse by heart</div>
+        ) : (
+          <>
+            <div className="bq text-[64px] leading-[.85] font-extrabold tracking-[-.03em]">{due.length > 0 ? due.length : known}</div>
+            <div className="gs mt-2 text-[14px]">
+              {due.length > 0 ? `to recite today${first ? ` · ${memoryLabel(first)}` : ''}` : `known by heart${learning.length > 0 ? ` · ${learning.length} learning` : ''}`}
+            </div>
+          </>
+        )}
+      </Link>
+      <Pill href={action.href} variant="dark" iconAfter={ArrowRight} iconSize={14} className="self-start px-[16px] py-[10px] text-[14px]">
+        {action.label}
+      </Pill>
+    </Card>
+  );
+}
+
 function PrayersCard() {
   const { today } = useToday();
   const prayers = useApp((s) => s.prayers);
@@ -235,20 +277,36 @@ function ReadingCard() {
   );
 }
 
+/** A caption without its hashtags and @mentions (or TikTok's "#answer to @someone"), which crowd a small tile. */
+const captionOf = (title: string) =>
+  title.replace(/^#answer\s+to\s+@\S+/i, '').replace(/(^|\s)[#@][^\s]+/g, ' ').replace(/\s+/g, ' ').trim() || title;
+
 function ReelsCard() {
   const reels = useApp((s) => feedReels(s, 'forYou'));
-  const top = [...reels].filter((r) => r.media).sort((a, b) => b.likeCount - a.likeCount).slice(0, 3);
+  // Most liked first; ties keep the feed's order. TikTok videos have no picture, so their caption stands in.
+  const top = [...reels].sort((a, b) => b.likeCount - a.likeCount).slice(0, 3);
   return (
     <Card as="section" surface="solid" aria-label="Trending reels" className="flex min-h-[326px] flex-col p-[22px] md:col-span-2 lg:col-span-4">
       <div className="flex items-center justify-between px-1 pt-1">
         <CardTitle className="text-white">Trending reels</CardTitle>
         <Link href="/reels" className="gs hover-dim text-[13px] font-semibold text-a2">See all</Link>
       </div>
+      {top.length === 0 ? (
+        <p className="gs mt-4 text-[14px] text-on-solid-muted">No reels yet. Share one from Create.</p>
+      ) : null}
       <div className="mt-4 grid min-h-[220px] flex-1 grid-cols-3 gap-2">
         {top.map((reel) => (
           <Link key={reel.id} href={`/reels?reel=${reel.id}`} aria-label={`${reel.title} by ${reel.authorName}`} className="hover-lift block">
             <Photo media={reel.media} className="h-full rounded-[16px]">
-              <span className="gs absolute bottom-2 left-2 rounded-full bg-black/55 px-2 py-1 text-[11px] font-semibold text-white">{compactCount(reel.likeCount)}</span>
+              {reel.media ? null : (
+                <span className="absolute inset-0 flex flex-col justify-between p-[10px]">
+                  <span className="gs line-clamp-5 text-[12px] leading-[1.35] font-semibold break-words text-white">{captionOf(reel.title)}</span>
+                  <span className="gs block truncate text-[11px] text-on-photo">{reel.authorName}</span>
+                </span>
+              )}
+              {reel.media && reel.likeCount > 0 ? (
+                <span className="gs absolute bottom-2 left-2 rounded-full bg-black/55 px-2 py-1 text-[11px] font-semibold text-white">{compactCount(reel.likeCount)}</span>
+              ) : null}
             </Photo>
           </Link>
         ))}
@@ -306,11 +364,12 @@ export default function HomePage() {
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-12">
         <VerseCard />
         <StreakCard />
-        {next ? <NextUpCard event={next} today={today} /> : null}
+        {next ? <NextUpCard event={next} today={today} /> : <MemoryCard today={today} />}
         <MassReadingsCard today={today} />
         <PrayersCard />
         <ReadingCard />
         <ReelsCard />
+        {next ? <MemoryCard today={today} wide /> : null}
       </div>
     </Page>
   );

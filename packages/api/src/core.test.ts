@@ -7,7 +7,7 @@ import {
   allTimePrayers, roman, segmentVerse, splitReply, toISODate, DEFAULT_PRAYERS, defaultEditionShort, fetchChapter,
   setBibleSource, verseRuns, parseISODate, buildMonth, longestStreak, bestStreak, verseRanges, versesLabel,
   chapterOf, compactChanges, feedReels, findPrayer, GUIDED_PRAYERS, journalFor, rosaryFor,
-  searchPrayerBook, TONIGHT, type Change, cccForDay, cccLabel, cccPageFor, cccSpan, currentHour, isHourId, parseCccNumber, parseCccReference, sourceMissesCelebration, readingRef, parsePassage, passageChapters, passageVerses, usccbReadingsUrl, EDITIONS, cleanVerseText, followerCount, followersOf, groupFor, groupsToJoin, memberCount, milestonesFor, myGroups, personFor, postsBy,
+  searchPrayerBook, TONIGHT, type Change, cccForDay, cccLabel, cccPageFor, cccSpan, currentHour, isHourId, parseCccNumber, parseCccReference, sourceMissesCelebration, readingRef, parsePassage, passageChapters, passageVerses, usccbReadingsUrl, EDITIONS, cleanVerseText, checkRecitation, dueMemory, firstLetters, hiddenWords, learningMemory, memoryStatus, memoryTokens, newMemoryVerse, nextMemoryReview, reviewMemory, suggestedGrade, SUGGESTED_PASSAGES, followerCount, followersOf, groupFor, groupsToJoin, memberCount, milestonesFor, myGroups, personFor, postsBy,
 } from './index.ts';
 
 const memoryStorage = () => {
@@ -518,4 +518,85 @@ test('mass reading citations', () => {
   const chapter = (c: number, n: number) => ({ ref: { bookId: 'JON', chapter: c }, edition: EDITIONS.nabre, verses: Array.from({ length: n }, (_, i) => ({ number: i + 1, text: `${c}.${i + 1}` })) });
   const verses = passageVerses(passage, new Map([[1, chapter(1, 16)], [2, chapter(2, 11)]]));
   assert.deepEqual(verses.map((v) => v.text), ['1.16', '2.1', '2.2']);
+});
+
+test('scripture memory', () => {
+  const day = (iso: string, hour = 9) => new Date(Number(iso.slice(0, 4)), Number(iso.slice(5, 7)) - 1, Number(iso.slice(8, 10)), hour);
+  const text = 'For God so loved the world that he gave his only Son.';
+  let v = newMemoryVerse({ id: 'mv-1', bookId: 'JHN', chapter: 3, verseStart: 16, verseEnd: 16, text: `  ${text}  ` }, day('2026-11-03'));
+  assert.equal(v.text, text);
+  assert.deepEqual([v.box, v.dueOn, memoryStatus(v, '2026-11-03')], [0, '2026-11-03', 'Learning']);
+
+  // Learning: a slip keeps it in learning, due today; learning it sends it to box 1, due tomorrow.
+  assert.deepEqual([reviewMemory(v, 'again', day('2026-11-03')).box, reviewMemory(v, 'again', day('2026-11-03')).dueOn], [0, '2026-11-03']);
+  v = reviewMemory(v, 'good', day('2026-11-03'));
+  assert.deepEqual([v.box, v.dueOn, v.reviews, v.lastReviewedOn], [1, '2026-11-04', 1, '2026-11-03']);
+  assert.equal(memoryStatus(v, '2026-11-03'), 'Next tomorrow');
+  // The boxes widen: 3 days, then a week; "easy" skips a box; "hard" waits half as long.
+  v = reviewMemory(v, 'good', day('2026-11-04'));
+  assert.deepEqual([v.box, v.dueOn], [2, '2026-11-07']);
+  v = reviewMemory(v, 'easy', day('2026-11-07'));
+  assert.deepEqual([v.box, v.dueOn], [4, '2026-11-21']);
+  assert.deepEqual([reviewMemory(v, 'hard', day('2026-11-21')).box, reviewMemory(v, 'hard', day('2026-11-21')).dueOn], [4, '2026-11-28']);
+  // A slip after learning goes back to box 1, and is counted.
+  const slipped = reviewMemory(v, 'again', day('2026-11-21'));
+  assert.deepEqual([slipped.box, slipped.dueOn, slipped.lapses], [1, '2026-11-22', 1]);
+  // Across a change of clocks the schedule still counts whole days.
+  assert.equal(reviewMemory({ ...v, box: 2 }, 'good', day('2026-10-31', 23)).dueOn, '2026-11-07');
+
+  const learning = newMemoryVerse({ id: 'mv-2', bookId: 'PSA', chapter: 23, verseStart: 1, verseEnd: 1, text: 'The LORD is my shepherd.' }, day('2026-11-01'));
+  const list = [v, learning, { ...slipped, id: 'mv-3' }];
+  assert.deepEqual(dueMemory(list, '2026-11-22').map((x) => x.id), ['mv-1', 'mv-3'], 'the longest waiting first');
+  assert.deepEqual(dueMemory(list, '2026-11-21').map((x) => x.id), ['mv-1']);
+  assert.deepEqual(dueMemory([v], '2026-11-20'), []);
+  assert.equal(nextMemoryReview([v], '2026-11-20'), '2026-11-21');
+  assert.deepEqual(learningMemory(list).map((x) => x.id), ['mv-2']);
+
+  // Words: punctuation stays with the word, and short words are spared light rounds.
+  const quoted = '“Come to me, all you who labor — and I will give you rest.”';
+  const tokens = memoryTokens(quoted);
+  assert.deepEqual(tokens[0], { lead: '“', word: 'Come', tail: '' });
+  assert.deepEqual(tokens[2], { lead: '', word: 'me', tail: ',' });
+  assert.deepEqual(tokens[7], { lead: '—', word: '', tail: '' });
+  assert.deepEqual(tokens.at(-1), { lead: '', word: 'rest', tail: '.”' });
+  assert.equal(firstLetters('In the beginning was the Word,'), 'I t b w t W,');
+  const light = hiddenWords(quoted, 0.3);
+  assert.ok(light.size >= 2 && [...light].every((i) => (tokens[i]?.word.length ?? 0) > 2));
+  assert.deepEqual([...hiddenWords(quoted, 0.3)], [...light], 'the same round hides the same words');
+  assert.ok(hiddenWords(quoted, 1).size === tokens.filter((t) => t.word).length);
+
+  // Recitation: case, punctuation and accents don't matter; a missed word costs only itself.
+  const perfect = checkRecitation(quoted, 'come to me all you who labor and i will give you rest');
+  assert.equal(perfect.score, 1);
+  const missed = checkRecitation(quoted, 'Come to me, all who labor and I will give you rest');
+  assert.equal(missed.words.filter((w) => w.word && !w.ok).map((w) => w.word).join(), 'you');
+  assert.equal(Math.round(missed.score * 12), 11);
+  assert.equal(checkRecitation(quoted, 'Come unto me, all you who labor and I will give you rest').extra, 1);
+  assert.equal(checkRecitation(quoted, '').score, 0);
+  assert.deepEqual([suggestedGrade(1), suggestedGrade(0.9), suggestedGrade(0.5)], ['good', 'hard', 'again']);
+  assert.ok(SUGGESTED_PASSAGES.length >= 10);
+});
+
+test('scripture memory in the store', () => {
+  const changes: Change[] = [];
+  const store = createAppStore(memoryStorage(), 'memory-test', { onChange: (c) => changes.push(c) });
+  const s = () => store.getState();
+  s().startSession({ ...DEMO_USER, id: 'u-me' });
+  const now = new Date(2026, 10, 3, 9);
+  const input = { bookId: 'JHN', chapter: 3, verseStart: 16, verseEnd: 16, text: 'For God so loved the world.' };
+  const added = s().addMemoryVerse(input, now);
+  assert.ok(added);
+  assert.equal(s().addMemoryVerse(input, now)?.id, added.id, 'a passage is saved once');
+  assert.equal(s().memory.length, 1);
+  assert.equal(s().addMemoryVerse({ ...input, verseEnd: 40 }, now), undefined, 'too long');
+  s().reviewMemoryVerse(added.id, 'good', now);
+  assert.equal(s().memory[0]?.box, 1);
+  s().restartMemoryVerse(added.id, now);
+  assert.deepEqual([s().memory[0]?.box, s().memory[0]?.dueOn], [0, '2026-11-03']);
+  s().removeMemoryVerse(added.id);
+  assert.equal(s().memory.length, 0);
+  assert.deepEqual(changes.map((c) => c.type), ['memory.save', 'memory.save', 'memory.save', 'memory.delete']);
+  // Repeated saves of one passage in a batch collapse to the last.
+  const saves = changes.filter((c) => c.type === 'memory.save');
+  assert.equal(compactChanges(saves).length, 1);
 });
