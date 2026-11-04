@@ -82,7 +82,7 @@ eight or more characters) is filled with the design's sample history.
 
 ## Database
 
-The database is Cloud SQL for PostgreSQL 17: instance `catalysis-db` in `study-learners-513616`
+The database is Cloud SQL for PostgreSQL 17: instance `catalysis-db` in `catalysis-513617`
 (us-east4, db-f1-micro, daily backups). It has a public address but no authorised networks, so the
 only way in is the Cloud SQL Auth Proxy, which signs in with Google credentials. The app's password
 lives only in Secret Manager (`catalysis-database-url`).
@@ -90,7 +90,7 @@ lives only in Secret Manager (`catalysis-database-url`).
 To work against it from your machine, start the proxy and point `DATABASE_URL` at it:
 
 ```bash
-pnpm db:proxy   # cloud-sql-proxy --gcloud-auth --port 5434 study-learners-513616:us-east4:catalysis-db
+pnpm db:proxy   # cloud-sql-proxy --gcloud-auth --port 5434 catalysis-513617:us-east4:catalysis-db
 ```
 
 `DATABASE_URL=postgresql://catalysis:<password>@127.0.0.1:5434/catalysis` (the password is in the
@@ -238,16 +238,16 @@ TikTok's player sets its own cookies and is subject to TikTok's terms; say so in
 
 The app runs as the Cloud Run service `catalysis-web` (us-east4), built from the `Dockerfile` at the
 repository root (a standalone Next.js server). It runs as the service account
-`catalysis-web@study-learners-513616.iam.gserviceaccount.com`, which may connect to Cloud SQL
+`catalysis-web@catalysis-513617.iam.gserviceaccount.com`, which may connect to Cloud SQL
 (`roles/cloudsql.client`), call Gemini (`roles/aiplatform.user`) and read the database secret, and
 nothing else. To deploy:
 
 ```bash
-gcloud run deploy catalysis-web --source . --project study-learners-513616 --region us-east4 \
-  --service-account catalysis-web@study-learners-513616.iam.gserviceaccount.com \
-  --add-cloudsql-instances study-learners-513616:us-east4:catalysis-db \
+gcloud run deploy catalysis-web --source . --project catalysis-513617 --region us-east4 \
+  --service-account catalysis-web@catalysis-513617.iam.gserviceaccount.com \
+  --add-cloudsql-instances catalysis-513617:us-east4:catalysis-db \
   --set-secrets DATABASE_URL=catalysis-database-url:latest \
-  --set-env-vars GOOGLE_CLOUD_PROJECT=study-learners-513616,GOOGLE_CLOUD_LOCATION=global \
+  --set-env-vars GOOGLE_CLOUD_PROJECT=catalysis-513617,GOOGLE_CLOUD_LOCATION=global \
   --port 8080 --memory 1Gi --cpu 1 --max-instances 4 --concurrency 40 --allow-unauthenticated
 ```
 

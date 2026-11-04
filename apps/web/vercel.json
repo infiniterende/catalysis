@@ -6,12 +6,12 @@
   "redirects": [
     {
       "source": "/",
-      "destination": "https://catalysis-web-223722750367.us-east4.run.app/",
+      "destination": "https://catalysis-web-125672032345.us-east4.run.app/",
       "permanent": false
     },
     {
       "source": "/:path*",
-      "destination": "https://catalysis-web-223722750367.us-east4.run.app/:path*",
+      "destination": "https://catalysis-web-125672032345.us-east4.run.app/:path*",
       "permanent": false
     }
   ]
